@@ -1,0 +1,116 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+/* font */
+@font-face {
+  font-family: "Rubik";
+  src: url("/src/asset/font/Rubik/static/Rubik-Regular.ttf");
+}
+@font-face {
+  font-family: "Poppins";
+  src: url("/src/asset/font/Poppins/Poppins-Bold.ttf");
+}
+/* navbar */
+.navbar-menu {
+  padding: 40px 0;
+}
+/* nabar logo */
+.logo-img {
+  width: 30px;
+  height: 33px;
+}
+.logo-text {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 24px;
+  color: #0b132a;
+  margin-top: 15px;
+  margin-left: 15px;
+}
+.menu-bar {
+  display: flex;
+  width: 52%;
+  justify-content: center;
+  padding: 0 8%;
+}
+.nav-ul {
+  display: flex;
+  justify-content: space-between;
+  width: 84%;
+}
+.nav-text {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 400px;
+  font-size: 16px;
+  line-height: 19px;
+  color: #4f5665;
+}
+.text-active {
+  font-weight: bold;
+  color: #6a4029;
+}
+.nav-sign {
+  display: flex;
+  justify-content: end;
+}
+.nav-login {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 19px;
+  color: #0b132a;
+}
+.nav-signup {
+  background: #ffba33;
+  border-radius: 50px;
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 19px;
+  color: #6a4029;
+  height: 45px;
+  padding: 13px 45px;
+}
+/* nabar logo */
+
+/* navbar */
+
+/* Tablet responsive */
+@media only screen and (max-width: 950px) {
+  /* navbar */
+  .menu-bar {
+    padding: 0;
+    padding: 0px 0px;
+  }
+  .nav-sign {
+    justify-content: start;
+    padding: 0 8%;
+  }
+  .nav-signup and .nav-login {
+    margin-top: 20px 0;
+  }
+  /* navbar */
+}
+
+/* mobile responsive */
+@media only screen and (max-width: 650px) {
+  /* navbar */
+  .navbar-menu {
+    padding: 20px 0;
+  }
+  .menu-bar {
+    padding: 0;
+    padding: 0px 0px;
+  }
+  .nav-sign {
+    justify-content: start;
+    padding: 0 8%;
+  }
+  /* navbar */
+}

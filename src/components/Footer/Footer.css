@@ -1,0 +1,141 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+/* font */
+@font-face {
+  font-family: "Rubik";
+  src: url("/src/asset/font/Rubik/static/Rubik-Regular.ttf");
+}
+@font-face {
+  font-family: "Poppins";
+  src: url("/src/asset/font/Poppins/Poppins-Bold.ttf");
+}
+/* footer */
+.section-footer {
+  min-height: 528px;
+  width: 100%;
+  margin-top: -116px;
+  display: flex;
+  /* background: #9c2c2c; */
+  background: #f8f8f8;
+  column-gap: 20%;
+  padding: 0 5%;
+  padding-top: 170px;
+  padding-bottom: 90px;
+}
+/* .section-footer {
+  min-height: 528px;
+  width: 100%;
+  background: #f8f8f8;
+  padding-top: 99.2px;
+  padding-bottom: 96px;
+} */
+/* info left */
+
+.info-left {
+  flex: 1;
+  padding-top: 85px;
+}
+
+.info-left-head {
+  display: flex;
+}
+
+.info-left-text {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 30px;
+  color: #4f5665;
+}
+.info-left-icon {
+  display: flex;
+}
+.imgvektor {
+  height: 30.600006103515625px;
+  width: 30.600006103515625px;
+  border-radius: 20px;
+  background-color: #6a4029;
+  margin-right: 20px;
+}
+.vimg {
+  height: 33.600006103515625px;
+  width: 33.600006103515625px;
+  border-radius: 0px;
+  color: #6a4029;
+}
+.info-left-foot {
+  padding-top: 30px;
+}
+.foot-text {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 30px;
+  color: #afb5c0;
+}
+
+.info-right {
+  flex: 1;
+  padding-top: 75px;
+  width: 100%;
+  display: flex;
+}
+.info-right-body {
+  width: 100%;
+}
+.info-right-text-head {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 30px;
+  color: #0b132a;
+}
+.info-right-text-last {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 30px;
+  color: #4f5665;
+}
+.info-right-text {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 30px;
+  color: #4f5665;
+}
+/* footer */
+
+/* Tablet responsive */
+@media only screen and (max-width: 950px) {
+  /* section footer */
+  .section-footer {
+    padding: 0 5%;
+    padding-top: 170px;
+    padding-bottom: 90px;
+    column-gap: 10%;
+  }
+  /* section footer */
+}
+
+/* mobile responsive */
+@media only screen and (max-width: 650px) {
+  /* section footer */
+  .section-footer {
+    padding: 0 10%;
+    padding-left: 15%;
+    padding-top: 170px;
+    padding-bottom: 90px;
+    column-gap: 10%;
+    flex-direction: column-reverse;
+    justify-content: space-between;
+  }
+  /* section footer */
+}
