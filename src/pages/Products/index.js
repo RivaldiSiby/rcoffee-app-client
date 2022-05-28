@@ -1,23 +1,206 @@
 import React, { Component } from "react";
 import "./index.css";
+import axios from "axios";
 
 // img
 import product from "../../asset/img/productsPage/product.png";
-import product1 from "../../asset/img/productsPage/product1.png";
-import product2 from "../../asset/img/productsPage/product2.png";
-import product3 from "../../asset/img/productsPage/product3.png";
-import product4 from "../../asset/img/productsPage/product4.png";
-import product5 from "../../asset/img/productsPage/product5.png";
-import product6 from "../../asset/img/productsPage/product6.png";
+
 // img
 import Navbar from "../../components/Navbar/Navbar";
+import NavbarSignIn from "../../components/NavbarSignIn/Navbar";
 import Footer from "../../components/Footer/Footer";
 
 export class index extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      isLogin: false,
+      products: [],
+      pagination: [],
+      paginationNumber: [],
+      coffeeBtn: "list-menu",
+      coffeeList: "",
+      favoriteBtn: "list-menu menu-active",
+      favoriteList: "list-active",
+      foodBtn: "list-menu",
+      foodList: "",
+      noncoffeeBtn: "list-menu",
+      noncoffeeList: "",
+    };
+  }
+  async componentDidMount() {
+    try {
+      const haveToken =
+        localStorage.getItem("tokenkey") !== undefined
+          ? JSON.parse(localStorage.getItem("tokenkey"))
+          : null;
+      if (haveToken !== null) {
+        const refreshToken = JSON.parse(localStorage.getItem("refreshkey"));
+        // cek token
+
+        const result = await axios.get(
+          `http://localhost:8080/auth/${refreshToken}`,
+          {
+            headers: {
+              Authorization: `Bearer ${haveToken}`,
+            },
+          }
+        );
+
+        if (result.data !== undefined) {
+          this.setState({ isLogin: true });
+        }
+
+        if (result.data.message === "") {
+          localStorage.setItem(
+            "tokenkey",
+            JSON.stringify(result.data.data.accessToken)
+          );
+
+          return;
+        }
+      }
+      const products = await axios.get(
+        `http://localhost:8080/product/favorite?limit=12`
+      );
+      if (products.data.meta.totalPage > 1) {
+        let number = [];
+        for (let i = 1; i <= products.data.meta.totalPage; i++) {
+          number.push(i);
+        }
+        this.setState({
+          paginationNumber: number,
+        });
+      }
+      this.setState({
+        products: products.data.data,
+        pagination: products.data.meta,
+      });
+    } catch (error) {
+      console.log(error.response.data.message);
+    }
+    const products = await axios.get(
+      `http://localhost:8080/product/favorite?limit=12`
+    );
+    if (products.data.meta.totalPage > 1) {
+      let number = [];
+      for (let i = 1; i <= products.data.meta.totalPage; i++) {
+        number.push(i);
+      }
+      this.setState({
+        paginationNumber: number,
+      });
+    }
+    this.setState({
+      products: products.data.data,
+      pagination: products.data.meta,
+    });
+  }
+  async categoryHandler(category) {
+    try {
+      const products = await axios.get(
+        `http://localhost:8080/product?limit=12&category=${category}`
+      );
+      if (products.data.meta.totalPage > 1) {
+        let number = [];
+        for (let i = 1; i <= products.data.meta.totalPage; i++) {
+          number.push(i);
+        }
+        this.setState({
+          paginationNumber: number,
+        });
+      }
+      this.setState({
+        products: products.data.data,
+        pagination: products.data.meta,
+        coffeeBtn: "list-menu",
+        coffeeList: "",
+        favoriteBtn: "list-menu",
+        favoriteList: "",
+        foodBtn: "list-menu",
+        foodList: "",
+        noncoffeeBtn: "list-menu",
+        noncoffeeList: "",
+      });
+      if (category === "coffee") {
+        this.setState({
+          coffeeList: "list-active",
+          coffeeBtn: "list-menu menu-active",
+        });
+      }
+      if (category === "noncoffee") {
+        this.setState({
+          noncoffeeList: "list-active",
+          noncoffeeBtn: "list-menu menu-active",
+        });
+      }
+      if (category === "food") {
+        this.setState({
+          foodList: "list-active",
+          foodBtn: "list-menu menu-active",
+        });
+      }
+    } catch (error) {}
+  }
+  async favoriteHandler() {
+    try {
+      const products = await axios.get(
+        `http://localhost:8080/product/favorite?limit=12`
+      );
+      if (products.data.meta.totalPage > 1) {
+        let number = [];
+        for (let i = 1; i <= products.data.meta.totalPage; i++) {
+          number.push(i);
+        }
+        this.setState({
+          paginationNumber: number,
+        });
+      }
+      this.setState({
+        products: products.data.data,
+        pagination: products.data.meta,
+        coffeeBtn: "list-menu",
+        coffeeList: "",
+        favoriteBtn: "list-menu",
+        favoriteList: "",
+        foodBtn: "list-menu",
+        foodList: "",
+        noncoffeeBtn: "list-menu",
+        noncoffeeList: "",
+      });
+      this.setState({
+        favoriteList: "list-active",
+        favoriteBtn: "list-menu menu-active",
+      });
+    } catch (error) {}
+  }
+  async paginationHandler(page) {
+    try {
+      const products = await axios.get(`http://localhost:8080${page}`);
+      if (products.data.meta.totalPage > 1) {
+        let number = [];
+        for (let i = 1; i <= products.data.meta.totalPage; i++) {
+          number.push(i);
+        }
+        this.setState({
+          paginationNumber: number,
+        });
+      }
+      this.setState({
+        products: products.data.data,
+        pagination: products.data.meta,
+      });
+    } catch (error) {}
+  }
   render() {
     return (
       <div>
-        <Navbar />
+        {this.state.isLogin === true ? (
+          <NavbarSignIn navActive={"products"} />
+        ) : (
+          <Navbar navActive={"products"} />
+        )}
         <section className="products-body">
           <div className="container-fluid">
             <div className="row">
@@ -65,113 +248,136 @@ export class index extends Component {
                   </div>
                 </section>
               </div>
-              <div className="col-lg-8 products">
-                <div className="products-head">
+              <div className="col-lg-8 products-container">
+                <div className="products-favorite-head">
                   <ul className="products-menu">
-                    <li className="list-active">
-                      <section className="list-menu menu-active">
+                    <li className={this.state.favoriteList}>
+                      <button
+                        onClick={() => this.favoriteHandler()}
+                        className={this.state.favoriteBtn}
+                      >
                         Favorite Product
-                      </section>
+                      </button>
+                    </li>
+                    <li className={this.state.coffeeList}>
+                      <button
+                        onClick={() => this.categoryHandler("coffee")}
+                        className={this.state.coffeeBtn}
+                      >
+                        Coffee
+                      </button>
+                    </li>
+                    <li className={this.state.noncoffeeList}>
+                      <button
+                        onClick={() => this.categoryHandler("noncoffee")}
+                        className={this.state.noncoffeeBtn}
+                      >
+                        Non Coffee
+                      </button>
+                    </li>
+                    <li className={this.state.foodList}>
+                      <button
+                        onClick={() => this.categoryHandler("food")}
+                        className={this.state.foodBtn}
+                      >
+                        Foods
+                      </button>
                     </li>
                     <li>
-                      <section className="list-menu">Coffee</section>
-                    </li>
-                    <li>
-                      <section className="list-menu">Non Coffee</section>
-                    </li>
-                    <li>
-                      <section className="list-menu">Foods</section>
-                    </li>
-                    <li>
-                      <section className="list-menu">Add-on</section>
+                      <button className="list-menu">Add-on</button>
                     </li>
                   </ul>
                 </div>
-                <div className="products-list">
-                  <div className="box-products">
-                    <div className="box-head text-center">
-                      <img src={product1} alt="products" />
+                {this.state.pagination.totalPage > 1 ? (
+                  <section className="pagination-data w-100 d-flex justify-content-center">
+                    <nav
+                      className="pagination-box "
+                      aria-label="Page navigation example"
+                    >
+                      <ul className="pagination ">
+                        {this.state.pagination.prev !== undefined ? (
+                          <li className="page-item">
+                            <button
+                              onClick={() =>
+                                this.paginationHandler(
+                                  this.state.pagination.prev
+                                )
+                              }
+                              className="page-link bg-light text-dark fw-bold m-2 "
+                            >
+                              Previous
+                            </button>
+                          </li>
+                        ) : (
+                          ""
+                        )}
+                        {this.state.paginationNumber.map((page) =>
+                          parseInt(this.state.pagination.page) === page ? (
+                            <li className="page-item">
+                              <button
+                                onClick={() =>
+                                  this.paginationHandler(
+                                    `/product?limit=12&page=${page}`
+                                  )
+                                }
+                                className="page-link bg-dark text-light fw-bold m-2 "
+                              >
+                                {page}
+                              </button>
+                            </li>
+                          ) : (
+                            <li className="page-item">
+                              <button
+                                onClick={() =>
+                                  this.paginationHandler(
+                                    `/product?limit=12&page=${page}`
+                                  )
+                                }
+                                className="page-link bg-light text-dark fw-bold m-2 "
+                              >
+                                {page}
+                              </button>
+                            </li>
+                          )
+                        )}
+                        {this.state.pagination.next !== undefined ? (
+                          <li className="page-item">
+                            <button
+                              onClick={() =>
+                                this.paginationHandler(
+                                  this.state.pagination.next
+                                )
+                              }
+                              className="page-link bg-light text-dark fw-bold m-2 "
+                            >
+                              Next
+                            </button>
+                          </li>
+                        ) : (
+                          ""
+                        )}
+                      </ul>
+                    </nav>
+                  </section>
+                ) : (
+                  ""
+                )}
+                <div className="products-list-box">
+                  {this.state.products.map((product) => (
+                    <div className="box-products text-center">
+                      <div className="box-head text-center">
+                        <img
+                          src={"http://localhost:8080" + product.img}
+                          alt="products"
+                        />
+                      </div>
+                      <h5>{product.name}</h5>
+                      <span className="text-center fw-bold">
+                        {product.size}
+                      </span>
+                      <p>IDR {product.price}</p>
                     </div>
-                    <h5>Veggie tomato mix</h5>
-                    <p>IDR 34.000</p>
-                  </div>
-                  <div className="box-products">
-                    <div className="box-head text-center">
-                      <img src={product2} alt="products" />
-                    </div>
-                    <h5>Hazelnut Latte</h5>
-                    <p>IDR 25.000</p>
-                  </div>
-                  <div className="box-products">
-                    <div className="box-head text-center">
-                      <img src={product3} alt="products" />
-                    </div>
-                    <h5>Summer fried rice</h5>
-                    <p>IDR 32.000</p>
-                  </div>
-                  <div className="box-products">
-                    <div className="box-head text-center">
-                      <img src={product4} alt="products" />
-                    </div>
-                    <h5>Creamy Ice Latte</h5>
-                    <p>IDR 27.000</p>
-                  </div>
-                  <div className="box-products">
-                    <div className="box-head text-center">
-                      <img src={product5} alt="products" />
-                    </div>
-                    <h5>Drum Sticks</h5>
-                    <p>IDR 30.000</p>
-                  </div>
-                  <div className="box-products">
-                    <div className="box-head text-center">
-                      <img src={product6} alt="products" />
-                    </div>
-                    <h5>Salty Rice</h5>
-                    <p>IDR 20.000</p>
-                  </div>
-                  <div className="box-products">
-                    <div className="box-head text-center">
-                      <img src={product1} alt="products" />
-                    </div>
-                    <h5>Veggie tomato mix</h5>
-                    <p>IDR 34.000</p>
-                  </div>
-                  <div className="box-products">
-                    <div className="box-head text-center">
-                      <img src={product2} alt="products" />
-                    </div>
-                    <h5>Hazelnut Latte</h5>
-                    <p>IDR 25.000</p>
-                  </div>
-                  <div className="box-products">
-                    <div className="box-head text-center">
-                      <img src={product3} alt="products" />
-                    </div>
-                    <h5>Summer fried rice</h5>
-                    <p>IDR 32.000</p>
-                  </div>
-                  <div className="box-products">
-                    <div className="box-head text-center">
-                      <img src={product4} alt="products" />
-                    </div>
-                    <h5>Creamy Ice Latte</h5>
-                    <p>IDR 27.000</p>
-                  </div>
-                  <div className="box-products">
-                    <div className="box-head text-center">
-                      <img src={product5} alt="products" />
-                    </div>
-                    <h5>Drum Sticks</h5>
-                    <p>IDR 30.000</p>
-                  </div>
-                  <div className="box-products">
-                    <div className="box-head text-center">
-                      <img src={product6} alt="products" />
-                    </div>
-                    <h5>Salty Rice</h5>
-                    <p>IDR 20.000</p>
-                  </div>
+                  ))}
                 </div>
               </div>
             </div>

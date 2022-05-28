@@ -41,7 +41,7 @@
   justify-content: space-between;
   width: 84%;
 }
-.nav-text {
+.nav-text-nav {
   font-family: "Rubik";
   font-style: normal;
   font-weight: 400px;
@@ -49,13 +49,61 @@
   line-height: 19px;
   color: #4f5665;
 }
-.text-active-nav {
+.text-active {
   font-weight: bold;
   color: #6a4029;
 }
-.nav-sign {
+.nav-sign-in {
   display: flex;
   justify-content: end;
+}
+.nav-ul {
+  display: flex;
+  justify-content: space-between;
+  width: 84%;
+}
+/* nabar logo */
+.icon-nav {
+  width: 30px;
+  height: 30px;
+  margin-left: 34px;
+}
+.icon-chat {
+  display: flex;
+}
+.icon-chat > img {
+  margin-left: -5px;
+}
+.icon-chat > p {
+  margin-top: -7px;
+}
+
+.icon-find {
+  margin-right: 34px;
+}
+
+.icon-chat-text {
+  width: 15px;
+  height: 15px;
+  background: #6a4029;
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 8px;
+  line-height: 9px;
+  color: #ffffff;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+}
+.nav-photos {
+  width: 34px;
+  height: 34px;
+  border: 3px solid #6a4029;
+  filter: drop-shadow(0px 6px 20px rgba(106, 64, 41, 0.8));
+  border-radius: 50%;
 }
 .nav-login {
   font-family: "Rubik";
@@ -88,12 +136,36 @@
     padding: 0;
     padding: 0px 0px;
   }
-  .nav-sign {
-    padding: 0 8%;
+  .nav-sign-in {
+    width: 100%;
+    justify-content: end;
+  }
+  .profile-menu-sign {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
     justify-content: start;
   }
-  .nav-signup and .nav-login {
-    margin-top: 20px 0;
+  .profile-menu-sign > li {
+    margin-left: 7.5%;
+  }
+  .icon-nav {
+    margin-left: 0px;
+    /* position: absolute; */
+    top: 290px;
+  }
+  .icon-find {
+    margin: 0;
+    padding: 0;
+    margin-right: 34px;
+    left: 10%;
+  }
+  .icon-chat {
+    margin-right: 15px;
+  }
+  .icon-chat-text {
+    margin-left: -7%;
+    z-index: 99;
   }
   /* navbar */
 }
@@ -104,13 +176,25 @@
   .navbar-menu {
     padding: 20px 0;
   }
+  .icon-nav {
+    top: 267px;
+  }
+  .icon-find {
+    left: 20%;
+  }
+  .nav-photos {
+    left: 50%;
+  }
+  .icon-chat {
+    left: 37%;
+  }
+  .icon-chat-text {
+    position: absolute;
+    left: 35%;
+  }
   .menu-bar {
     padding: 0;
     padding: 0px 0px;
-  }
-  .nav-sign {
-    justify-content: start;
-    padding: 0 8%;
   }
   /* navbar */
 }

@@ -3,20 +3,13 @@ import ReactDOM from "react-dom/client";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle";
-// import Home from "./pages/Home";
-// import Profile from "./pages/Profile";
-// import Products from "./pages/Products";
-import Sign from "./pages/Sign";
+import Router from "./Router";
 import reportWebVitals from "./reportWebVitals";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    {/* <Home /> */}
-    {/* <Products /> */}
-    {/* <Profile /> */}
-    {/* <Sign pageSign={"login"} /> */}
-    <Sign pageSign={"regis"} />
+    <Router />
   </React.StrictMode>
 );
 

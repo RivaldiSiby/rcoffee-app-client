@@ -17,8 +17,6 @@
   width: 100%;
   margin-top: -116px;
   display: flex;
-  /* background: #9c2c2c; */
-  background: #f8f8f8;
   column-gap: 20%;
   padding: 0 5%;
   padding-top: 170px;
@@ -111,13 +109,27 @@
   line-height: 30px;
   color: #4f5665;
 }
+.logo-img {
+  width: 30px;
+  height: 33px;
+}
+.logo-text {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 24px;
+  color: #0b132a;
+  margin-top: 15px;
+  margin-left: 15px;
+}
 /* footer */
 
 /* Tablet responsive */
 @media only screen and (max-width: 950px) {
   /* section footer */
   .section-footer {
-    padding: 0 5%;
+    padding: 0 10%;
     padding-top: 170px;
     padding-bottom: 90px;
     column-gap: 10%;

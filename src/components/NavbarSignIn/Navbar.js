@@ -2,16 +2,21 @@ import React from "react";
 import "./Navbar.css";
 import { Link } from "react-router-dom";
 import logo from "../../asset/img/homePage/coffee icon.png";
+import search from "../../asset/img/profilePage/search.svg";
+import chat from "../../asset/img/profilePage/chat.svg";
+import profile from "../../asset/img/profilePage/profile.png";
 
 function Navbar(props) {
   const activeHome =
-    props.navActive === "home" ? "nav-text text-active-nav" : "nav-text";
+    props.navActive === "home" ? "nav-text-nav text-active" : "nav-text-nav";
   const activeProducts =
-    props.navActive === "products" ? "nav-text text-active-nav" : "nav-text";
+    props.navActive === "products"
+      ? "nav-text-nav text-active"
+      : "nav-text-nav";
   const activeChart =
-    props.navActive === "chart" ? "nav-text text-active-nav" : "nav-text";
+    props.navActive === "chart" ? "nav-text-nav text-active" : "nav-text-nav";
   const activeHistory =
-    props.navActive === "history" ? "nav-text text-active-nav" : "nav-text";
+    props.navActive === "history" ? "nav-text-nav text-active" : "nav-text-nav";
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-light bg-white navbar-menu">
@@ -55,16 +60,30 @@ function Navbar(props) {
               </li>
             </ul>
           </div>
-          <div className="collapse navbar-collapse nav-sign" id="navbarNav">
-            <ul className="navbar-nav d-flex">
-              <li className="nav-item">
-                <Link to="/login" className="nav-link" href="./Login.html">
-                  <span className="nav-login">Login</span>
+          <div className="collapse navbar-collapse nav-sign-in" id="navbarNav">
+            <ul className="navbar-nav profile-menu-sign d-flex">
+              <li className="nav-item icon-menu">
+                <Link to="/" className="nav-link">
+                  <img
+                    src={search}
+                    alt="search"
+                    className="icon-nav icon-find"
+                  />
                 </Link>
               </li>
-              <li className="nav-item">
-                <Link to="/regis" className="nav-link" href="./signUp.html">
-                  <span className="nav-signup">Sign Up</span>
+              <li className="nav-item icon-menu">
+                <Link to="/" className="nav-link icon-chat">
+                  <p className="icon-chat-text">1</p>
+                  <img src={chat} alt="chat" className="icon-nav icon-chat" />
+                </Link>
+              </li>
+              <li className="nav-item icon-menu">
+                <Link to="/profile" className="nav-link">
+                  <img
+                    src={profile}
+                    alt="profile"
+                    className="icon-nav nav-photos"
+                  />
                 </Link>
               </li>
             </ul>

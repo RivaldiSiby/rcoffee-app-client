@@ -218,6 +218,8 @@ body {
 }
 .products-head > img {
   border-radius: 50%;
+  width: 129px;
+  height: 129px;
 }
 .products-head > p {
   font-family: "Rubik";
@@ -509,101 +511,6 @@ body {
   text-decoration: none;
 }
 /* section promo */
-
-/* footer */
-.section-footer {
-  min-height: 528px;
-  width: 100%;
-  background: #f8f8f8;
-  margin-top: -116px;
-  display: flex;
-  background: #f8f8f8;
-  column-gap: 20%;
-  padding: 0 5%;
-  padding-top: 170px;
-  padding-bottom: 90px;
-}
-/* info left */
-
-.info-left {
-  flex: 1;
-  padding-top: 85px;
-}
-
-.info-left-head {
-  display: flex;
-}
-
-.info-left-text {
-  font-family: "Rubik";
-  font-style: normal;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 30px;
-  color: #4f5665;
-}
-.info-left-icon {
-  display: flex;
-}
-.imgvektor {
-  height: 30.600006103515625px;
-  width: 30.600006103515625px;
-  border-radius: 20px;
-  background-color: #6a4029;
-  margin-right: 20px;
-}
-.vimg {
-  height: 33.600006103515625px;
-  width: 33.600006103515625px;
-  border-radius: 0px;
-  color: #6a4029;
-}
-.info-left-foot {
-  padding-top: 30px;
-}
-.foot-text {
-  font-family: "Rubik";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 30px;
-  color: #afb5c0;
-}
-
-.info-right {
-  flex: 1;
-  padding-top: 75px;
-  width: 100%;
-  display: flex;
-}
-.info-right-body {
-  width: 100%;
-}
-.info-right-text-head {
-  font-family: "Rubik";
-  font-style: normal;
-  font-weight: bold;
-  font-size: 18px;
-  line-height: 30px;
-  color: #0b132a;
-}
-.info-right-text-last {
-  font-family: "Rubik";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 18px;
-  line-height: 30px;
-  color: #4f5665;
-}
-.info-right-text {
-  font-family: "Rubik";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 18px;
-  line-height: 30px;
-  color: #4f5665;
-}
-/* footer */
 
 /* tablet responsiv */
 @media only screen and (max-width: 950px) {

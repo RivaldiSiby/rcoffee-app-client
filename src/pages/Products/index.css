@@ -179,11 +179,11 @@
 }
 
 /* products */
-.products {
+.products-container {
   height: auto;
   min-height: 1039px;
 }
-.products-head {
+.products-favorite-head {
   height: 65px;
 }
 .products-menu {
@@ -194,8 +194,11 @@
   margin-right: 10%;
   list-style: none;
 }
-/* .products-menu > li {
-    } */
+.products-menu > li > button {
+  background-color: white;
+  border: none;
+  cursor: pointer;
+}
 .list-menu {
   font-family: "Rubik";
   font-style: normal;
@@ -225,22 +228,24 @@
   border-bottom: 2px solid #6a4029;
   box-shadow: 0px 6px 20px -10px rgba(106, 64, 41, 0.67);
 }
-.products-list {
-  height: 974px;
+.products-list-box {
+  height: auto;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
-  margin-right: 10%;
-  margin-left: 2%;
+  justify-content: flex-start;
+  column-gap: 4%;
+  margin-right: 5%;
+  margin-left: 4%;
   padding-top: 60px;
 }
 .box-products {
-  height: 212px;
+  height: 232px;
   border: 2px solid white;
   width: 22%;
   background: #ffffff;
   box-shadow: 0px 30px 60px rgba(57, 57, 57, 0.1);
   border-radius: 30px;
+  margin-bottom: 80px;
 }
 .box-head {
   width: 100%;
@@ -253,6 +258,7 @@
   border-radius: 50%;
 }
 .box-products > h5 {
+  justify-content: center;
   font-family: "Poppins";
   font-style: normal;
   font-weight: bolder;
@@ -280,6 +286,9 @@
 /* table responsiv */
 @media only screen and (max-width: 1000px) {
   /* products body */
+  .products-container {
+    min-height: auto;
+  }
   .products-menu {
     margin-top: 0;
     margin-right: 5%;
@@ -302,14 +311,13 @@
   .menu-active {
     font-size: 18px;
   }
-  .products-list {
+  .products-list-box {
     height: auto;
-    min-height: 974px;
     margin-right: 5%;
   }
   .box-products {
     width: 30%;
-    margin-bottom: 75px;
+    margin-bottom: 80px;
   }
 
   /* products */
@@ -375,7 +383,7 @@
     font-size: 15px;
   }
   /* promo */
-  .products-head {
+  .products-favorite-head {
     min-height: 65px;
     height: auto;
   }
@@ -392,7 +400,7 @@
     margin: 0;
     margin-bottom: 20px;
   }
-  .products-list {
+  .products-list-box {
     margin: 0 5%;
   }
   /* products body */

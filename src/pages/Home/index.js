@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import Footer from "../../components/Footer/Footer";
 import Navbar from "../../components/Navbar/Navbar";
+import NavbarSignIn from "../../components/NavbarSignIn/Navbar";
+import axios from "axios";
 import "./index.css";
 
 // img
@@ -10,9 +12,6 @@ import costumer from "../../asset/img/homePage/lovv.svg";
 import teamwork from "../../asset/img/homePage/teamwork.png";
 import list from "../../asset/img/homePage/listv.svg";
 import plist from "../../asset/img/homePage/plist.svg";
-import product1 from "../../asset/img/homePage/product1.svg";
-import product2 from "../../asset/img/homePage/product2.svg";
-import product3 from "../../asset/img/homePage/product3.svg";
 import maps from "../../asset/img/homePage/maps.png";
 import partner1 from "../../asset/img/homePage/partner1.png";
 import partner2 from "../../asset/img/homePage/partner2.png";
@@ -26,13 +25,68 @@ import star from "../../asset/img/homePage/starv.svg";
 import arrowleft from "../../asset/img/homePage/arrowleft.svg";
 import arrowright from "../../asset/img/homePage/arrowright.svg";
 import border from "../../asset/img/homePage/border.png";
+import { Link } from "react-router-dom";
 // img
 
+// cek token
+
 export class index extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      isLogin: false,
+      products: [],
+    };
+  }
+  async componentDidMount() {
+    try {
+      const haveToken =
+        localStorage.getItem("tokenkey") !== undefined
+          ? JSON.parse(localStorage.getItem("tokenkey"))
+          : null;
+      if (haveToken !== null) {
+        const refreshToken = JSON.parse(localStorage.getItem("refreshkey"));
+        // cek token
+
+        const result = await axios.get(
+          `http://localhost:8080/auth/${refreshToken}`,
+          {
+            headers: {
+              Authorization: `Bearer ${haveToken}`,
+            },
+          }
+        );
+
+        if (result.data !== undefined) {
+          await this.setState({ isLogin: true });
+        }
+
+        if (result.data.message === "") {
+          localStorage.setItem(
+            "tokenkey",
+            JSON.stringify(result.data.data.accessToken)
+          );
+
+          return;
+        }
+      }
+      const products = await axios.get(
+        `http://localhost:8080/product/favorite?limit=3`
+      );
+      this.setState({ products: products.data.data });
+    } catch (error) {
+      console.log(error);
+    }
+  }
   render() {
     return (
       <div>
-        <Navbar />
+        {this.state.isLogin === true ? (
+          <NavbarSignIn navActive={"home"} />
+        ) : (
+          <Navbar navActive={"home"} />
+        )}
         <section className="section-header">
           <div className="container w-100">
             <div className="row">
@@ -51,9 +105,9 @@ export class index extends Component {
                     </p>
                   </div>
                   <div className="col-lg-12 mt-5">
-                    <section href="#" className="btn-section">
+                    <Link to="/" className="btn-section">
                       Get Started
-                    </section>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -162,110 +216,45 @@ export class index extends Component {
         <section className="section-product">
           <div className="container">
             <div className="row products d-flex justify-content-around">
-              <div className="col-lg-3 products-list d-flex flex-column justify-content-center align-items-center">
-                <div className="products-head text-center ">
-                  <img src={product1} alt="product" />
-                  <p>Hazelnut Latte</p>
+              {this.state.products.map((product) => (
+                <div className="col-lg-3 products-list d-flex flex-column justify-content-center align-items-center">
+                  <div className="products-head text-center ">
+                    <img
+                      src={"http://localhost:8080" + product.img}
+                      alt="product"
+                    />
+                    <p>{product.name}</p>
+                  </div>
+                  <div className="info-list">
+                    <section>
+                      <img src={plist} alt="list" />
+                      <span className="list-items">Size : {product.size}</span>
+                    </section>
+                    <section>
+                      <img src={plist} alt="list" />
+                      <span className="list-items">
+                        Category : {product.category}
+                      </span>
+                    </section>
+                    <section>
+                      <img src={plist} alt="list" />
+                      <span className="list-items">
+                        Quantity : {product.quantity}
+                      </span>
+                    </section>
+                    <section>
+                      <img src={plist} alt="list" />
+                      <span className="list-items">{product.description}</span>
+                    </section>
+                  </div>
+                  <div className="products-foot">
+                    <p className="price-text">IDR {product.price}</p>
+                    <section href="#" className="btn-product">
+                      Select
+                    </section>
+                  </div>
                 </div>
-                <div className="info-list">
-                  <section>
-                    <img src={plist} alt="list" />
-                    <span className="list-items">HazelnutSyrup</span>
-                  </section>
-                  <section>
-                    <img src={plist} alt="list" />
-                    <span className="list-items">Wanilla Whipped Cream</span>
-                  </section>
-                  <section>
-                    <img src={plist} alt="list" />
-                    <span className="list-items">CIce / Hot</span>
-                  </section>
-                  <section>
-                    <img src={plist} alt="list" />
-                    <span className="list-items">Sliced Banana on Top</span>
-                  </section>
-                </div>
-                <div className="products-foot">
-                  <p className="price-text">IDR 25.000</p>
-                  <section href="#" className="btn-product">
-                    Order Now
-                  </section>
-                </div>
-              </div>
-              <div className="col-lg-3 products-list d-flex flex-column justify-content-center align-items-center">
-                <div className="products-head text-center ">
-                  <img src={product2} alt="product" />
-                  <p>Pinky Promise</p>
-                </div>
-                <div className="info-list">
-                  <section>
-                    <img src={plist} alt="list" />
-                    <span className="list-items">1 Shot of Coffee</span>
-                  </section>
-                  <section>
-                    <img src={plist} alt="list" />
-                    <span className="list-items">Vanilla Whipped Cream</span>
-                  </section>
-                  <section>
-                    <img src={plist} alt="list" />
-                    <span className="list-items">Chocolate Biscuits</span>
-                  </section>
-                  <section>
-                    <img src={plist} alt="list" />
-                    <span className="list-items">Strawberry Syrup</span>
-                  </section>
-                  <section>
-                    <img src={plist} alt="list" />
-                    <span className="list-items">Sliced strawberry on Top</span>
-                  </section>
-                </div>
-                <div className="products-foot">
-                  <p className="price-text">IDR 30.000</p>
-                  <section href="#" className="btn-product">
-                    Select
-                  </section>
-                </div>
-              </div>
-              <div className="col-lg-3 products-list d-flex flex-column justify-content-center align-items-center">
-                <div className="products-head text-center ">
-                  <img src={product3} alt="product" />
-                  <p>Chicken Wings</p>
-                </div>
-                <div className="info-list">
-                  <section>
-                    <img src={plist} alt="list" />
-                    <span className="list-items">Wings</span>
-                  </section>
-                  <section>
-                    <img src={plist} alt="list" />
-                    <span className="list-items">Drum Sticks</span>
-                  </section>
-                  <section>
-                    <img src={plist} alt="list" />
-                    <span className="list-items">Mayonaise and Lemon</span>
-                  </section>
-                  <section>
-                    <img src={plist} alt="list" />
-                    <span className="list-items">Hot Fried</span>
-                  </section>
-                  <section>
-                    <img src={plist} alt="list" />
-                    <span className="list-items">Secret Recipe</span>
-                  </section>
-                  <section>
-                    <img src={plist} alt="list" />
-                    <span className="list-items">
-                      Buy 1 Get 1 only for Dine in
-                    </span>
-                  </section>
-                </div>
-                <div className="products-foot">
-                  <p className="price-text">IDR 40.000</p>
-                  <section href="#" className="btn-product">
-                    Select
-                  </section>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </section>
