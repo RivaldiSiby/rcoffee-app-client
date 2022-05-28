@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Navbar.css";
 import { Link } from "react-router-dom";
 import logo from "../../asset/img/homePage/coffee icon.png";
 import search from "../../asset/img/profilePage/search.svg";
 import chat from "../../asset/img/profilePage/chat.svg";
-import profile from "../../asset/img/profilePage/profile.png";
 
 function Navbar(props) {
+  const img =
+    "http://localhost:8080" + JSON.parse(localStorage.getItem("datauser"));
+  const [profile] = useState(img);
   const activeHome =
     props.navActive === "home" ? "nav-text-nav text-active" : "nav-text-nav";
   const activeProducts =

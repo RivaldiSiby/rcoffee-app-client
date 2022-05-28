@@ -438,7 +438,7 @@ body {
   background: #dde0e4;
   border-radius: 50%;
 }
-.list-active > img {
+.list-active-foot > img {
   width: 60px;
   height: 15px;
 }

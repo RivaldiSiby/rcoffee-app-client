@@ -18,10 +18,13 @@ function Sign(props) {
   const navigate = useNavigate();
   const [Email, setEmail] = useState("");
   const [Pass, setPass] = useState("");
+  const [Phone, setPhone] = useState("");
   const [msg, setMsg] = useState("");
+  const [msgSuccess, setMsgSuccess] = useState("");
+  const [input, setInput] = useState("form-control form-input-sign ");
+  // const [type, setType] = useState("password");
+
   const loginHandler = async (e) => {
-    const input_email = document.getElementById("email");
-    const input_pass = document.getElementById("pass");
     try {
       e.preventDefault();
       const result = await axios.post("http://localhost:8080/auth", {
@@ -29,18 +32,46 @@ function Sign(props) {
         password: Pass,
       });
       localStorage.setItem("tokenkey", JSON.stringify(result.data.data.token));
+      localStorage.setItem("datauser", JSON.stringify(result.data.data.img));
       localStorage.setItem(
         "refreshkey",
         JSON.stringify(result.data.data.refreshToken)
       );
+      setMsg("");
       navigate("/");
     } catch (error) {
-      input_email.classList.add("border-danger");
-      input_pass.classList.add("border-danger");
       setMsg("Failed Login. " + error.response.data.message);
+      setInput("form-control form-input-sign border-danger");
     }
   };
   // login
+  // regis
+  const regisHandler = async (e) => {
+    try {
+      e.preventDefault();
+      await axios.post("http://localhost:8080/auth/register", {
+        email: Email,
+        password: Pass,
+        phone: Phone,
+      });
+      setMsg("");
+      setEmail("");
+      setPass("");
+      setPhone("");
+      setMsgSuccess("Sign Up Success");
+      setInput("form-control form-input-sign ");
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+      setInput("form-control form-input-sign border-danger");
+      setMsg("Failed Login. " + error.response.data.message);
+    }
+  };
+  // regis
+  // show pass
+  // const showPassHandler = (e) => {
+  //   type === "password" ? setType("text") : setType("password");
+  // };
 
   const title = props.pageSign === "login" ? "Login" : "Sign Up";
   const formBody =
@@ -53,7 +84,8 @@ function Sign(props) {
               <input
                 type="text"
                 id="email"
-                className="form-control form-input-sign"
+                value={Email}
+                className={input}
                 placeholder="Enter your email adress"
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -63,6 +95,7 @@ function Sign(props) {
               <input
                 type="password"
                 id="pass"
+                value={Pass}
                 className="form-control form-input-sign "
                 placeholder="Enter your password"
                 onChange={(e) => setPass(e.target.value)}
@@ -70,6 +103,7 @@ function Sign(props) {
               <p className="forgetpass-text">Forgot password?</p>
             </div>
             <p className="fw-bold text-danger text-center">{msg}</p>
+            <p className="fw-bold text-success text-center">{msgSuccess}</p>
             <div className="mb-3">
               <button
                 onClick={loginHandler}
@@ -108,28 +142,42 @@ function Sign(props) {
               <label className="form-label form-text">Email Address :</label>
               <input
                 type="text"
-                className="form-control form-input-sign"
+                id="email"
+                value={Email}
+                className={input}
                 placeholder="Enter your email adress"
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="mb-3">
               <label className="form-label form-text">Password :</label>
               <input
                 type="password"
-                className="form-control form-input-sign"
+                id="pass"
+                value={Pass}
+                className={input}
                 placeholder="Enter your password"
+                onChange={(e) => setPass(e.target.value)}
               />
             </div>
             <div className="mb-3">
               <label className="form-label form-text">Phone Number :</label>
               <input
-                type="text"
-                className="form-control form-input-sign"
-                placeholder="Enter your phone number"
+                type="number"
+                id="phone"
+                value={Phone}
+                className={input}
+                placeholder="Enter your Phone"
+                onChange={(e) => setPhone(e.target.value)}
               />
             </div>
+            <p className="fw-bold text-danger text-center">{msg}</p>
             <div className="mb-3">
-              <button type="button" className="form-control form-btn-sign">
+              <button
+                onClick={regisHandler}
+                type="button"
+                className="form-control form-btn-sign"
+              >
                 Sign Up
               </button>
             </div>

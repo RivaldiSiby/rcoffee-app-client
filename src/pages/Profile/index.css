@@ -11,7 +11,11 @@
   font-family: "Poppins";
   src: url("/src/asset/font/Poppins/Poppins-Bold.ttf");
 }
-
+/* img loading */
+.img-loading {
+  margin-top: 25vh;
+  width: 100%;
+}
 /* section profile */
 .profile-body {
   background-image: url("../../asset/img/profilePage/bgprofile.jpg");
