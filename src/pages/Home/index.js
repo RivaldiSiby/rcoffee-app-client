@@ -3,6 +3,7 @@ import Footer from "../../components/Footer/Footer";
 import Navbar from "../../components/Navbar/Navbar";
 import NavbarSignIn from "../../components/NavbarSignIn/Navbar";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import "./index.css";
 
 // img
@@ -25,7 +26,6 @@ import star from "../../asset/img/homePage/starv.svg";
 import arrowleft from "../../asset/img/homePage/arrowleft.svg";
 import arrowright from "../../asset/img/homePage/arrowright.svg";
 import border from "../../asset/img/homePage/border.png";
-import { Link } from "react-router-dom";
 import loadingImg from "../../asset/img/loading.gif";
 // img
 

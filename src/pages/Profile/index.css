@@ -13,8 +13,10 @@
 }
 /* img loading */
 .img-loading {
-  margin-top: 25vh;
-  width: 100%;
+  position: absolute;
+  left: 25%;
+  top: 25vh;
+  width: 50%;
 }
 /* section profile */
 .profile-body {
@@ -46,8 +48,9 @@
   padding: 30px 4%;
 }
 .profile-info {
-  min-height: 841px;
+  min-height: 550px;
   height: auto;
+  padding-bottom: 25px;
 }
 .profile-head > img {
   height: 192px;
@@ -87,6 +90,7 @@
   line-height: 22px;
   border-radius: 10px;
   margin-top: 11px;
+  border: none;
 }
 .c-yellow {
   color: #6a4029;
@@ -119,6 +123,7 @@
   line-height: 27px;
   border-radius: 20px;
   margin-top: 11px;
+  border: none;
 }
 
 .c-white {
@@ -210,6 +215,14 @@
   padding-left: 0px;
   margin-bottom: 47px;
   border-bottom: 2px solid black;
+}
+.form-input:disabled {
+  background-color: white;
+  border-bottom: 2px solid #6a4029;
+}
+.area-input:disabled {
+  background-color: white;
+  border-bottom: 2px solid #6a4029;
 }
 .area-input {
   font-family: "Rubik";
@@ -347,7 +360,7 @@
 }
 /* table responsiv */
 
-@media only screen and (max-width: 650px) {
+@media only screen and (max-width: 770px) {
   /* profile-body */
   .form-foot > div {
     display: flex;
