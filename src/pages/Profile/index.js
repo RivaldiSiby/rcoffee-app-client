@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "./index.css";
+import "./profile.css";
 // img
 import edit from "../../asset/img/profilePage/edit.svg";
 import loadingImg from "../../asset/img/loading.gif";
@@ -95,7 +95,6 @@ function Index() {
         setPhone(profile.data.data.phone);
         setDate(profile.data.data.date_birth);
         setProfile(profile.data.data);
-        console.log(profile.data.data);
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -156,7 +155,6 @@ function Index() {
     const file = e.target.files[0];
     const remove = document.getElementById("remove-img");
     setfile(file);
-    console.log(file);
     remove.classList.toggle("d-none");
   };
   const removeFile = () => {
@@ -246,7 +244,6 @@ function Index() {
       setPhone(profile.data.data.phone);
       setDate(profile.data.data.date_birth);
       setProfile(profile.data.data);
-      console.log(profile.data.data);
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -279,13 +276,6 @@ function Index() {
       Name !== "" ? formData.append("name", Name) : setName("");
       Phone !== "" ? formData.append("phone", Phone) : setPhone("");
       Date !== "" ? formData.append("date_birth", Date) : setDate("");
-      console.log(formData.get("photo"));
-      console.log(formData.get("email"));
-      console.log(formData.get("address"));
-      console.log(formData.get("name"));
-      console.log(formData.get("phone"));
-      console.log(formData.get("password"));
-      console.log(formData.get("date_birth"));
 
       setLoading(true);
       setEditPass(false);

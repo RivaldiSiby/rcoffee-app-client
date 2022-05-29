@@ -1,0 +1,125 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+/* font */
+@font-face {
+  font-family: "Rubik";
+  src: url("/src/asset/font/Rubik/static/Rubik-Regular.ttf");
+}
+@font-face {
+  font-family: "Poppins";
+  src: url("/src/asset/font/Poppins/Poppins-Bold.ttf");
+}
+
+/* payment body */
+.payment-body {
+  min-height: 1102px;
+  height: auto;
+  background-image: url("../../asset/img/paymentPage/bgs.png");
+  background-size: cover;
+}
+.payment-box {
+  min-height: 1102px;
+}
+.order-head {
+  height: 198px;
+  border: 2px solid black;
+}
+/* payment order */
+.order-head > h5 {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 47px;
+  padding: 52px 0;
+  color: #ffffff;
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.8);
+  margin-right: 30%;
+}
+.order-body {
+  height: 737px;
+  background: #ffffff;
+  box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.35);
+  border-radius: 20px;
+}
+.order-body-head {
+  height: 218px;
+  border: 2px solid black;
+}
+.order-body-list {
+  height: 225px;
+  border: 2px solid black;
+}
+.order-body-cost {
+  height: 163px;
+  border: 2px solid black;
+}
+.order-body-foot {
+  height: 131px;
+  border: 2px solid black;
+}
+/* payment order */
+/* payment option */
+.option-address {
+  margin-top: 198px;
+  height: 246px;
+  border: 2px solid black;
+}
+.option-address-head {
+  height: 48px;
+  border: 2px solid black;
+}
+.option-address-head > h5 {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 25px;
+  line-height: 38px;
+  color: #ffffff;
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.8);
+}
+.option-address-head > p {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 22px;
+
+  color: #ffffff;
+}
+.option-address-body {
+  height: 199px;
+  border: 2px solid black;
+  background-color: #ffffff;
+}
+.option-method {
+  margin-top: 46px;
+  height: 310px;
+  border: 2px solid black;
+}
+.option-method-head {
+  height: 51px;
+  border: 2px solid black;
+}
+.option-method-head > h5 {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 25px;
+  line-height: 38px;
+  color: #ffffff;
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.8);
+}
+.option-method-body {
+  height: 259px;
+  border: 2px solid black;
+  background-color: #ffffff;
+}
+.option-foot {
+  height: 131px;
+  border: 2px solid black;
+}
+/* payment option */
+/* payment body */

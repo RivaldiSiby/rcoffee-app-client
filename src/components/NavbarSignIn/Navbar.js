@@ -51,7 +51,7 @@ function Navbar(props) {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link to="/" className="nav-link">
+                <Link to="/chart" className="nav-link">
                   <span className={activeChart}>Your Chart</span>
                 </Link>
               </li>
