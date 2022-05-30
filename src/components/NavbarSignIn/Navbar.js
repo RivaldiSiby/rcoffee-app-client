@@ -56,7 +56,7 @@ function Navbar(props) {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link to="/" className="nav-link">
+                <Link to="/history" className="nav-link">
                   <span className={activeHistory}>History</span>
                 </Link>
               </li>

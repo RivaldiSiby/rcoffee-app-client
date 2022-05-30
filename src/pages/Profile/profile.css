@@ -9,7 +9,7 @@
 }
 @font-face {
   font-family: "Poppins";
-  src: url("/src/asset/font/Poppins/Poppins-Bold.ttf");
+  src: url("/src/asset/font/Poppins/Poppins-Regular.ttf");
 }
 /* img loading */
 .img-loading {

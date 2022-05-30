@@ -5,6 +5,7 @@ import Products from "../pages/Products";
 import Sign from "../pages/Sign/Sign";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Payment from "../pages/Payment/Payment";
+import History from "../pages/History/History";
 
 function index() {
   return (
@@ -16,6 +17,7 @@ function index() {
         <Route path="/login" element={<Sign pageSign={"login"} />} />
         <Route path="/regis" element={<Sign pageSign={"regis"} />} />
         <Route path="/chart" element={<Payment />} />
+        <Route path="/history" element={<History />} />
       </Routes>
     </BrowserRouter>
   );
