@@ -376,6 +376,23 @@ export class index extends Component {
                       </div>
                     ) : (
                       <>
+                        <div className="products-list-box">
+                          {this.state.products.map((product) => (
+                            <div className="box-products text-center">
+                              <div className="box-head text-center">
+                                <img
+                                  src={"http://localhost:8080" + product.img}
+                                  alt="products"
+                                />
+                              </div>
+                              <h5>{product.name}</h5>
+                              <span className="text-center fw-bold">
+                                {product.size}
+                              </span>
+                              <p>IDR {product.price}</p>
+                            </div>
+                          ))}
+                        </div>
                         {this.state.pagination.totalPage > 1 ? (
                           <section className="pagination-data w-100 d-flex justify-content-center">
                             <nav
@@ -451,23 +468,6 @@ export class index extends Component {
                         ) : (
                           ""
                         )}
-                        <div className="products-list-box">
-                          {this.state.products.map((product) => (
-                            <div className="box-products text-center">
-                              <div className="box-head text-center">
-                                <img
-                                  src={"http://localhost:8080" + product.img}
-                                  alt="products"
-                                />
-                              </div>
-                              <h5>{product.name}</h5>
-                              <span className="text-center fw-bold">
-                                {product.size}
-                              </span>
-                              <p>IDR {product.price}</p>
-                            </div>
-                          ))}
-                        </div>
                       </>
                     )}
                   </div>

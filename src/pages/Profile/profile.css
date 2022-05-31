@@ -75,6 +75,7 @@
   color: #000000;
 }
 .btn-photo {
+  cursor: pointer;
   width: 207px;
   display: block;
   height: 44px;
@@ -181,6 +182,7 @@
   justify-content: center;
   align-items: center;
   border-radius: 50%;
+  cursor: pointer;
 }
 .form-head > section > img {
   width: 18px;
@@ -273,6 +275,7 @@
   width: 30px;
   height: 30px;
   border: 4px solid #9f9f9f;
+  cursor: pointer;
 }
 .input-radio:active {
   box-sizing: border-box;

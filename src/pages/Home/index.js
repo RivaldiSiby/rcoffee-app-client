@@ -5,6 +5,7 @@ import NavbarSignIn from "../../components/NavbarSignIn/Navbar";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import "./index.css";
+import Swal from "sweetalert2";
 
 // img
 import staf from "../../asset/img/homePage/userv.svg";
@@ -77,6 +78,9 @@ export class index extends Component {
       }
       // tarik data
       this.setState({ loading: false });
+      if (this.state.isLogin === true) {
+        Swal.fire("Success", "Success Login", "success");
+      }
     } catch (error) {
       this.setState({ loading: false });
       console.log(error);

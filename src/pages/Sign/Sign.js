@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./index.css";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import swal from "sweetalert2";
 
 // img
 import bgsign from "../../asset/img/signPage//robert-bye-95vx5QVl9x4-unsplash 2.png";
@@ -20,10 +21,28 @@ function Sign(props) {
   const [Pass, setPass] = useState("");
   const [Phone, setPhone] = useState("");
   const [msg, setMsg] = useState("");
-  const [msgSuccess, setMsgSuccess] = useState("");
   const [input, setInput] = useState("form-control form-input-sign ");
+  const [RegisSuccess, setRegisSuccess] = useState(false);
   // const [type, setType] = useState("password");
 
+  useEffect(() => {
+    if (RegisSuccess === true) {
+      swal.fire("Success", "Registrasi success", "success");
+    }
+    setMsg("");
+    setEmail("");
+    setPass("");
+    setPhone("");
+    setRegisSuccess(false);
+  }, [RegisSuccess]);
+
+  const setNormalInput = () => {
+    setInput("form-control form-input-sign ");
+    setMsg("");
+    setEmail("");
+    setPass("");
+    setPhone("");
+  };
   const loginHandler = async (e) => {
     try {
       e.preventDefault();
@@ -38,7 +57,7 @@ function Sign(props) {
         JSON.stringify(result.data.data.refreshToken)
       );
       setMsg("");
-      navigate("/");
+      navigate("/", { loginStatus: true });
     } catch (error) {
       setMsg("Failed Login. " + error.response.data.message);
       setInput("form-control form-input-sign border-danger");
@@ -54,12 +73,8 @@ function Sign(props) {
         password: Pass,
         phone: Phone,
       });
-      setMsg("");
-      setEmail("");
-      setPass("");
-      setPhone("");
-      setMsgSuccess("Sign Up Success");
-      setInput("form-control form-input-sign ");
+      setRegisSuccess(true);
+
       navigate("/login");
     } catch (error) {
       console.log(error);
@@ -96,14 +111,13 @@ function Sign(props) {
                 type="password"
                 id="pass"
                 value={Pass}
-                className="form-control form-input-sign "
+                className={input}
                 placeholder="Enter your password"
                 onChange={(e) => setPass(e.target.value)}
               />
               <p className="forgetpass-text">Forgot password?</p>
             </div>
             <p className="fw-bold text-danger text-center">{msg}</p>
-            <p className="fw-bold text-success text-center">{msgSuccess}</p>
             <div className="mb-3">
               <button
                 onClick={loginHandler}
@@ -127,6 +141,7 @@ function Sign(props) {
               <Link
                 to="/regis"
                 className="form-control form-btn-login d-flex justify-content-center align-items-center"
+                onClick={setNormalInput}
               >
                 Sign up here
               </Link>
@@ -196,6 +211,7 @@ function Sign(props) {
               <Link
                 to="/login"
                 className="form-control form-btn-login d-flex justify-content-center align-items-center"
+                onClick={setNormalInput}
               >
                 Login Here
               </Link>

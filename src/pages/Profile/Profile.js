@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./profile.css";
+import swal from "sweetalert2";
 // img
 import edit from "../../asset/img/profilePage/edit.svg";
 import loadingImg from "../../asset/img/loading.gif";
@@ -11,13 +12,13 @@ import NavbarSignIn from "../../components/NavbarSignIn/Navbar";
 import Footer from "../../components/Footer/Footer";
 
 function Profile() {
-  const [checked, setChecked] = useState(true);
   const [isLogin, setisLogin] = useState(false);
   const [loading, setLoading] = useState(false);
   const [disable, setDisable] = useState(true);
   const [editPass, setEditPass] = useState(false);
   const [MsgPass, setMsgPass] = useState("");
   const [MsgCPass, setMsgCPass] = useState("");
+  const [UpdateSuccess, setUpdateSuccess] = useState(false);
   const Navigate = useNavigate();
 
   // user data
@@ -89,12 +90,32 @@ function Profile() {
             )}`,
           },
         });
+        profile.data.data.address !== null
+          ? setAddress(profile.data.data.address)
+          : setAddress("");
+        profile.data.data.name !== null
+          ? setName(profile.data.data.name)
+          : setName("");
+        profile.data.data.date_birth !== null
+          ? setDate(profile.data.data.date_birth)
+          : setDate("");
+        profile.data.data.gender !== null
+          ? setGender(profile.data.data.gender)
+          : setGender("");
+
         setEmail(profile.data.data.email);
-        setName(profile.data.data.name);
-        setAddress(profile.data.data.address);
         setPhone(profile.data.data.phone);
-        setDate(profile.data.data.date_birth);
         setProfile(profile.data.data);
+        // cek checked user gender
+
+        const male = document.getElementById("male");
+        const female = document.getElementById("female");
+        if (profile.data.data.gender === "male") {
+          male.setAttribute("checked", "");
+        }
+        if (profile.data.data.gender === "female") {
+          female.setAttribute("checked", "");
+        }
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -103,6 +124,13 @@ function Profile() {
     checkLogin();
     getProfileData();
   }, []);
+
+  useEffect(() => {
+    if (UpdateSuccess === true) {
+      swal.fire("Success", "Profile Update success", "success");
+    }
+    setUpdateSuccess(false);
+  }, [UpdateSuccess]);
 
   const editProfileHandler = () => {
     const edit = document.getElementById("edit-data");
@@ -121,6 +149,7 @@ function Profile() {
       area.removeAttribute("disabled");
       setDisable(false);
     }
+    console.log(disable);
     if (disable === false) {
       for (let i = 0; i < input.length; i++) {
         input[i].setAttribute("disabled", "");
@@ -196,28 +225,45 @@ function Profile() {
   };
   // logout handler
   const logoutHandler = async () => {
-    try {
-      setLoading(true);
-      // cek token
-      await checkToken();
+    const logout = async () => {
+      try {
+        setLoading(true);
+        // cek token
+        await checkToken();
 
-      // logout API
-      const refreshToken = JSON.parse(localStorage.getItem("refreshkey"));
-      await axios.delete(`http://localhost:8080/auth/${refreshToken}`, {
-        headers: {
-          Authorization: `Bearer ${JSON.parse(
-            localStorage.getItem("tokenkey")
-          )}`,
-        },
-      });
-    } catch (error) {
+        // logout API
+        const refreshToken = JSON.parse(localStorage.getItem("refreshkey"));
+        await axios.delete(`http://localhost:8080/auth/${refreshToken}`, {
+          headers: {
+            Authorization: `Bearer ${JSON.parse(
+              localStorage.getItem("tokenkey")
+            )}`,
+          },
+        });
+      } catch (error) {
+        setLoading(false);
+      }
+      // clear storage
+      setisLogin(false);
+      localStorage.clear();
       setLoading(false);
-    }
-    // clear storage
-    setisLogin(false);
-    localStorage.clear();
-    setLoading(false);
-    Navigate("/");
+      Navigate("/");
+    };
+    swal
+      .fire({
+        title: "Are you sure?",
+        text: " By clicking this you will logout",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, Logout Now!",
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          logout();
+        }
+      });
   };
   const getUserData = async () => {
     setLoading(true);
@@ -238,12 +284,35 @@ function Profile() {
         setProfileImg(img);
       }
 
+      profile.data.data.address !== null
+        ? setAddress(profile.data.data.address)
+        : setAddress("");
+      profile.data.data.name !== null
+        ? setName(profile.data.data.name)
+        : setName("");
+      profile.data.data.date_birth !== null
+        ? setDate(profile.data.data.date_birth)
+        : setDate("");
+      profile.data.data.gender !== null
+        ? setGender(profile.data.data.gender)
+        : setGender("");
+
       setEmail(profile.data.data.email);
-      setName(profile.data.data.name);
-      setAddress(profile.data.data.address);
       setPhone(profile.data.data.phone);
-      setDate(profile.data.data.date_birth);
       setProfile(profile.data.data);
+      // cek checked user gender
+      console.log(profile.data.data.gender === "female");
+
+      if (profile.data.data.gender === "male") {
+        console.log("masuk pria");
+
+        document.getElementById("male").setAttribute("checked", "");
+        console.log("berhasil");
+      }
+      if (profile.data.data.gender === "female") {
+        console.log("masuk wanita");
+        document.getElementById("male").setAttribute("checked", "");
+      }
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -276,6 +345,7 @@ function Profile() {
       Name !== "" ? formData.append("name", Name) : setName("");
       Phone !== "" ? formData.append("phone", Phone) : setPhone("");
       Date !== "" ? formData.append("date_birth", Date) : setDate("");
+      Gender !== "" ? formData.append("gender", Gender) : setGender("");
 
       setLoading(true);
       setEditPass(false);
@@ -293,9 +363,12 @@ function Profile() {
           "Content-type": "multipart/form-data",
         },
       });
-      // get User Data
+      // get User Data dan normalisasi state
       await getUserData();
+      setDisable(true);
+      setEditPass(false);
       setLoading(false);
+      setUpdateSuccess(true);
     } catch (error) {
       setLoading(false);
     }
@@ -420,6 +493,7 @@ function Profile() {
                                         className="form-control form-input detail-form"
                                         id="new-pass"
                                         aria-describedby="nameHelp"
+                                        placeholder="New Password"
                                       />
                                       <p className="fw-bold text-danger">
                                         {MsgPass}
@@ -440,6 +514,7 @@ function Profile() {
                                         className="form-control form-input detail-form"
                                         id="confirm-pass"
                                         aria-describedby="nameHelp"
+                                        placeholder="Confirm New Password"
                                       />
                                       <p className="fw-bold text-danger">
                                         {MsgCPass}
@@ -507,6 +582,7 @@ function Profile() {
                                           setName(e.target.value)
                                         }
                                         aria-describedby="nameHelp"
+                                        placeholder="Display Name"
                                         value={Name}
                                         disabled
                                       />
@@ -524,6 +600,7 @@ function Profile() {
                                         id="firstname"
                                         aria-describedby="firstnameHelp"
                                         value={Name}
+                                        placeholder="First Name"
                                         disabled
                                       />
                                     </div>
@@ -540,6 +617,7 @@ function Profile() {
                                         id="lastname"
                                         aria-describedby="lastnameHelp"
                                         value={Name}
+                                        placeholder="Last Name"
                                         disabled
                                       />
                                     </div>
@@ -550,7 +628,7 @@ function Profile() {
                                         htmlFor="Mobile"
                                         className="form-label label-input"
                                       >
-                                        Mobile number :
+                                        Mobile Number :
                                       </label>
                                       <input
                                         type="text"
@@ -560,6 +638,7 @@ function Profile() {
                                           setPhone(e.target.value)
                                         }
                                         aria-describedby="MobileHelp"
+                                        placeholder="Phone"
                                         value={Phone}
                                         disabled
                                       />
@@ -607,9 +686,8 @@ function Profile() {
                                     type="radio"
                                     name="flexRadioDefault"
                                     id="male"
+                                    onChange={() => setGender("male")}
                                     disabled
-                                    checked={checked}
-                                    onChange={() => setChecked(!checked)}
                                   />
                                   <label
                                     className="form-check-labe label-radio d-flex justify-content-center align-items-center"
@@ -625,7 +703,8 @@ function Profile() {
                                     className="form-check-input input-radio"
                                     type="radio"
                                     name="flexRadioDefault"
-                                    id="Female"
+                                    id="female"
+                                    onChange={() => setGender("female")}
                                     disabled
                                   />
                                   <label
