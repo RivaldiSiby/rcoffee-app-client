@@ -608,6 +608,8 @@ function Profile() {
                                     name="flexRadioDefault"
                                     id="male"
                                     disabled
+                                    checked={checked}
+                                    onChange={() => setChecked(!checked)}
                                   />
                                   <label
                                     className="form-check-labe label-radio d-flex justify-content-center align-items-center"
@@ -624,8 +626,6 @@ function Profile() {
                                     type="radio"
                                     name="flexRadioDefault"
                                     id="Female"
-                                    checked={checked}
-                                    onChange={() => setChecked(!checked)}
                                     disabled
                                   />
                                   <label
