@@ -10,7 +10,7 @@ import loadingImg from "../../asset/img/loading.gif";
 import NavbarSignIn from "../../components/NavbarSignIn/Navbar";
 import Footer from "../../components/Footer/Footer";
 
-function Index() {
+function Profile() {
   const [checked, setChecked] = useState(true);
   const [isLogin, setisLogin] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -654,4 +654,4 @@ function Index() {
   );
 }
 
-export default Index;
+export default Profile;

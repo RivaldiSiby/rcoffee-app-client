@@ -1,6 +1,6 @@
 import React from "react";
 import Home from "../pages/Home";
-import Profile from "../pages/Profile/Index";
+import Profile from "../pages/Profile/Profile";
 import Products from "../pages/Products";
 import Sign from "../pages/Sign/Sign";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
