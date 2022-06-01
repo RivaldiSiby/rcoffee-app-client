@@ -14,7 +14,7 @@ function Navbar(props) {
     props.navActive === "history" ? "nav-text text-active-nav" : "nav-text";
   return (
     <div>
-      <nav className="navbar navbar-expand-lg navbar-light bg-white navbar-menu">
+      <nav className="navbar navbar-expand-lg navbar-light bg-white navbar-menu shadow-sm">
         <div className="container">
           <section className="navbar-brand d-flex align-items-center">
             <img className="logo-img-nav" src={logo} alt="iconcoffe" />

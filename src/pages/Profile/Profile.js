@@ -29,6 +29,8 @@ function Profile() {
   const [Email, setEmail] = useState("");
   const [Address, setAddress] = useState("");
   const [Name, setName] = useState("");
+  const [LastName, setLastName] = useState("");
+  const [FirstName, setFirstName] = useState("");
   const [Phone, setPhone] = useState("");
   const [Date, setDate] = useState("");
   const [Gender, setGender] = useState("");
@@ -41,8 +43,8 @@ function Profile() {
 
   useEffect(() => {
     const checkLogin = async () => {
-      setLoading(true);
       try {
+        setLoading(true);
         const haveToken =
           localStorage.getItem("tokenkey") !== undefined
             ? JSON.parse(localStorage.getItem("tokenkey"))
@@ -72,12 +74,15 @@ function Profile() {
           return;
         }
         Navigate("/");
-      } catch (error) {
+
         setLoading(false);
+      } catch (error) {
         console.log(error);
         if (isLogin === false) {
           Navigate("/");
         }
+
+        setLoading(false);
       }
     };
     const getProfileData = async () => {
@@ -96,6 +101,12 @@ function Profile() {
         profile.data.data.name !== null
           ? setName(profile.data.data.name)
           : setName("");
+        profile.data.data.first_name !== null
+          ? setFirstName(profile.data.data.first_name)
+          : setFirstName("");
+        profile.data.data.last_name !== null
+          ? setLastName(profile.data.data.last_name)
+          : setLastName("");
         profile.data.data.date_birth !== null
           ? setDate(profile.data.data.date_birth)
           : setDate("");
@@ -107,15 +118,10 @@ function Profile() {
         setPhone(profile.data.data.phone);
         setProfile(profile.data.data);
         // cek checked user gender
-
-        const male = document.getElementById("male");
-        const female = document.getElementById("female");
-        if (profile.data.data.gender === "male") {
-          male.setAttribute("checked", "");
-        }
-        if (profile.data.data.gender === "female") {
-          female.setAttribute("checked", "");
-        }
+        console.log();
+        document
+          .getElementById(`${profile.data.data.gender}`)
+          .setAttribute("checked", "");
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -128,7 +134,10 @@ function Profile() {
   useEffect(() => {
     if (UpdateSuccess === true) {
       swal.fire("Success", "Profile Update success", "success");
+
+      document.getElementById(`${Gender}`).setAttribute("checked", "");
     }
+
     setUpdateSuccess(false);
   }, [UpdateSuccess]);
 
@@ -149,7 +158,6 @@ function Profile() {
       area.removeAttribute("disabled");
       setDisable(false);
     }
-    console.log(disable);
     if (disable === false) {
       for (let i = 0; i < input.length; i++) {
         input[i].setAttribute("disabled", "");
@@ -290,6 +298,12 @@ function Profile() {
       profile.data.data.name !== null
         ? setName(profile.data.data.name)
         : setName("");
+      profile.data.data.first_name !== null
+        ? setFirstName(profile.data.data.first_name)
+        : setFirstName("");
+      profile.data.data.last_name !== null
+        ? setLastName(profile.data.data.last_name)
+        : setLastName("");
       profile.data.data.date_birth !== null
         ? setDate(profile.data.data.date_birth)
         : setDate("");
@@ -301,18 +315,7 @@ function Profile() {
       setPhone(profile.data.data.phone);
       setProfile(profile.data.data);
       // cek checked user gender
-      console.log(profile.data.data.gender === "female");
 
-      if (profile.data.data.gender === "male") {
-        console.log("masuk pria");
-
-        document.getElementById("male").setAttribute("checked", "");
-        console.log("berhasil");
-      }
-      if (profile.data.data.gender === "female") {
-        console.log("masuk wanita");
-        document.getElementById("male").setAttribute("checked", "");
-      }
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -343,6 +346,12 @@ function Profile() {
       Email !== "" ? formData.append("email", Email) : setEmail("");
       Address !== "" ? formData.append("address", Address) : setAddress("");
       Name !== "" ? formData.append("name", Name) : setName("");
+      FirstName !== ""
+        ? formData.append("first_name", FirstName)
+        : setFirstName("");
+      LastName !== ""
+        ? formData.append("last_name", LastName)
+        : setLastName("");
       Phone !== "" ? formData.append("phone", Phone) : setPhone("");
       Date !== "" ? formData.append("date_birth", Date) : setDate("");
       Gender !== "" ? formData.append("gender", Gender) : setGender("");
@@ -365,6 +374,7 @@ function Profile() {
       });
       // get User Data dan normalisasi state
       await getUserData();
+
       setDisable(true);
       setEditPass(false);
       setLoading(false);
@@ -592,14 +602,17 @@ function Profile() {
                                         htmlFor="firstname"
                                         className="form-label label-input"
                                       >
-                                        First name :
+                                        First Name :
                                       </label>
                                       <input
                                         type="text"
                                         className="form-control form-input detail-form"
                                         id="firstname"
                                         aria-describedby="firstnameHelp"
-                                        value={Name}
+                                        onChange={(e) =>
+                                          setFirstName(e.target.value)
+                                        }
+                                        value={FirstName}
                                         placeholder="First Name"
                                         disabled
                                       />
@@ -616,7 +629,10 @@ function Profile() {
                                         className="form-control form-input detail-form"
                                         id="lastname"
                                         aria-describedby="lastnameHelp"
-                                        value={Name}
+                                        onChange={(e) =>
+                                          setLastName(e.target.value)
+                                        }
+                                        value={LastName}
                                         placeholder="Last Name"
                                         disabled
                                       />
