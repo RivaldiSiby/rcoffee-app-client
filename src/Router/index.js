@@ -6,6 +6,8 @@ import Sign from "../pages/Sign/Sign";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Payment from "../pages/Payment/Payment";
 import History from "../pages/History/History";
+import ForgetPass from "../pages/Forget-pass/FotgetPass";
+import ProductDetails from "../pages/ProductDetails/ProductDetails";
 
 function index() {
   return (
@@ -18,6 +20,8 @@ function index() {
         <Route path="/regis" element={<Sign pageSign={"regis"} />} />
         <Route path="/chart" element={<Payment />} />
         <Route path="/history" element={<History />} />
+        <Route path="/forgetPassword" element={<ForgetPass />} />
+        <Route path="/products/:id" element={<ProductDetails />} />
       </Routes>
     </BrowserRouter>
   );

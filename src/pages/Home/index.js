@@ -681,7 +681,7 @@ export class index extends Component {
                 </div>
               </div>
             </section>
-            <Footer />
+            <Footer foot={"home"} />
           </>
         )}
       </div>

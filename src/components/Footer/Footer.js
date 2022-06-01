@@ -5,10 +5,15 @@ import facebook from "../../asset/img/signPage/vfb.svg";
 import twiter from "../../asset/img/signPage/vtw.svg";
 import instagram from "../../asset/img/signPage/vig.svg";
 
-function Footer() {
+function Footer(props) {
+  console.log(props.foot);
   return (
     <div>
-      <footer className="section-footer">
+      <footer
+        className={
+          props.foot === "home" ? "section-footer-home" : "section-footer"
+        }
+      >
         <section className="info-left">
           <section className="info-left-head">
             <img className="logo-img" src={logo} alt="iconcoffe" />

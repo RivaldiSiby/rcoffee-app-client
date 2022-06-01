@@ -115,7 +115,15 @@ function Sign(props) {
                 placeholder="Enter your password"
                 onChange={(e) => setPass(e.target.value)}
               />
-              <p className="forgetpass-text">Forgot password?</p>
+              {msg !== "" ? (
+                <>
+                  <Link to={"/forgetPassword"} className="forgetpass-text">
+                    Forgot password?
+                  </Link>
+                </>
+              ) : (
+                ""
+              )}
             </div>
             <p className="fw-bold text-danger text-center">{msg}</p>
             <div className="mb-3">
