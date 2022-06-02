@@ -231,12 +231,17 @@
 .products-options {
   font-family: "Rubik";
 }
+.select-form-sort {
+  height: 50px;
+  max-height: 50px;
+}
 .products-options-btn {
   color: #6a4029;
   background-color: #ffba33;
   padding: 0 20px;
   border: none;
   border-radius: 10px;
+  height: 50px;
 }
 .products-list-box {
   height: auto;
@@ -290,6 +295,24 @@
   text-align: center;
   color: #6a4029;
 }
+.not-found-error > h5 {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: bolder;
+  font-size: 52px;
+  line-height: 101.34%;
+  text-align: center;
+  color: #000000;
+}
+.not-found-error > p {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: bold;
+  font-size: 17px;
+  line-height: 26px;
+  text-align: center;
+  color: #6a4029;
+}
 /* products */
 /* products-body */
 
@@ -328,6 +351,12 @@
   .box-products {
     width: 30%;
     margin-bottom: 80px;
+  }
+  .not-found-error > h5 {
+    font-size: 32px;
+  }
+  .not-found-error > p {
+    font-size: 16px;
   }
 
   /* products */
@@ -443,5 +472,19 @@
   .box-products > h5 {
     font-size: 19px;
   }
+  .not-found-error > h5 {
+    font-size: 25px;
+  }
+  .not-found-error > p {
+    font-size: 15px;
+  }
+  .products-options-btn {
+    width: 100%;
+    margin: 20px 0;
+  }
+  .options-product-list {
+    flex-direction: column;
+  }
+
   /* products body */
 }

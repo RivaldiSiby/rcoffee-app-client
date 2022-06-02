@@ -33,6 +33,11 @@ export class index extends Component {
       allList: "",
       noncoffeeBtn: "list-menu",
       noncoffeeList: "",
+      search: "",
+      searchKey: "",
+      sort: "",
+      order: "asc",
+      linkUrl: "http://localhost:8080/product?limit=12",
     };
   }
   async componentDidMount() {
@@ -107,6 +112,9 @@ export class index extends Component {
     }
   }
   async categoryHandler(category) {
+    this.setState({
+      products: [],
+    });
     try {
       this.setState({ load: true });
       const products = await axios.get(
@@ -122,6 +130,7 @@ export class index extends Component {
         });
       }
       this.setState({
+        linkUrl: `http://localhost:8080/product?limit=12&category=${category}`,
         products: products.data.data,
         pagination: products.data.meta,
         coffeeBtn: "list-menu",
@@ -134,6 +143,7 @@ export class index extends Component {
         allList: "",
         noncoffeeBtn: "list-menu",
         noncoffeeList: "",
+        search: "",
       });
       if (category === "coffee") {
         this.setState({
@@ -155,10 +165,13 @@ export class index extends Component {
       }
       this.setState({ load: false });
     } catch (error) {
-      this.setState({ load: false });
+      this.setState({ load: false, products: [], searchKey: category });
     }
   }
   async favoriteHandler() {
+    this.setState({
+      products: [],
+    });
     try {
       this.setState({ load: true });
       const products = await axios.get(
@@ -174,6 +187,7 @@ export class index extends Component {
         });
       }
       this.setState({
+        linkUrl: `http://localhost:8080/product?limit=12`,
         products: products.data.data,
         pagination: products.data.meta,
         coffeeBtn: "list-menu",
@@ -194,47 +208,61 @@ export class index extends Component {
       });
       this.setState({ load: false });
     } catch (error) {
-      this.setState({ load: false });
+      this.setState({ load: false, products: [], searchKey: "Favorite" });
     }
   }
   async searchHandler() {
+    this.setState({
+      products: [],
+    });
     try {
       this.setState({ load: true });
-      console.log(this.state.search);
-      const products = await axios.get(
-        `http://localhost:8080/product?name=${this.state.search}&limit=12`
-      );
-      if (products.data.meta.totalPage > 1) {
-        let number = [];
-        for (let i = 1; i <= products.data.meta.totalPage; i++) {
-          number.push(i);
+      if (this.state.search !== "") {
+        const products = await axios.get(
+          `http://localhost:8080/product?name=${this.state.search}`
+        );
+        if (products.data.meta.totalPage > 1) {
+          let number = [];
+          for (let i = 1; i <= products.data.meta.totalPage; i++) {
+            number.push(i);
+          }
+          this.setState({
+            paginationNumber: number,
+          });
         }
         this.setState({
-          paginationNumber: number,
+          linkUrl: `http://localhost:8080/product?name=${this.state.search}&limit=12`,
+          products: products.data.data,
+          pagination: products.data.meta,
+          coffeeBtn: "list-menu",
+          coffeeList: "",
+          favoriteBtn: "list-menu",
+          favoriteList: "",
+          foodBtn: "list-menu",
+          foodList: "",
+          noncoffeeBtn: "list-menu",
+          noncoffeeList: "",
         });
+        this.setState({
+          allList: "list-active",
+          allBtn: "list-menu menu-active",
+        });
+
+        this.setState({ load: false });
+        return;
       }
-      this.setState({
-        products: products.data.data,
-        pagination: products.data.meta,
-        coffeeBtn: "list-menu",
-        coffeeList: "",
-        favoriteBtn: "list-menu",
-        favoriteList: "",
-        foodBtn: "list-menu",
-        foodList: "",
-        noncoffeeBtn: "list-menu",
-        noncoffeeList: "",
-      });
-      this.setState({
-        allList: "list-active",
-        allBtn: "list-menu menu-active",
-      });
-      this.setState({ load: false });
     } catch (error) {
-      this.setState({ load: false });
+      this.setState({
+        load: false,
+        products: [],
+        searchKey: this.state.search,
+      });
     }
   }
   async allHandler() {
+    this.setState({
+      products: [],
+    });
     try {
       this.setState({ load: true });
       const products = await axios.get(
@@ -250,6 +278,7 @@ export class index extends Component {
         });
       }
       this.setState({
+        linkUrl: `http://localhost:8080/product?limit=12`,
         products: products.data.data,
         pagination: products.data.meta,
         coffeeBtn: "list-menu",
@@ -267,13 +296,47 @@ export class index extends Component {
       });
       this.setState({ load: false });
     } catch (error) {
-      this.setState({ load: false });
+      this.setState({
+        load: false,
+        products: [],
+        searchKey: "All ",
+      });
     }
   }
   async paginationHandler(page) {
+    this.setState({
+      products: [],
+    });
     try {
       this.setState({ load: true });
       const products = await axios.get(`http://localhost:8080${page}`);
+      if (products.data.meta.totalPage > 1) {
+        let number = [];
+        for (let i = 1; i <= products.data.meta.totalPage; i++) {
+          number.push(i);
+        }
+        this.setState({
+          paginationNumber: number,
+        });
+      }
+      this.setState({
+        linkUrl: `http://localhost:8080${page}`,
+        products: products.data.data,
+        pagination: products.data.meta,
+      });
+      this.setState({ load: false });
+    } catch (error) {
+      this.setState({ load: false });
+    }
+  }
+  async sortHandler() {
+    try {
+      this.setState({ load: true });
+      const products = await axios.get(
+        `${this.state.linkUrl}${
+          this.state.sort !== "" ? "&sort=" + this.state.sort : ""
+        }&order=${this.state.order}`
+      );
       if (products.data.meta.totalPage > 1) {
         let number = [];
         for (let i = 1; i <= products.data.meta.totalPage; i++) {
@@ -406,9 +469,9 @@ export class index extends Component {
                     </div>
                     <section className="products-options ">
                       <div className="row m-2 ms-5 me-5">
-                        <div className="col-md-6 d-flex mb-4">
+                        <div className="col-md-6 d-flex mb-4 options-product-list">
                           <input
-                            class="form-control me-2"
+                            className="form-control me-2 select-form-sort"
                             type="search"
                             placeholder="Search"
                             aria-label="Search"
@@ -419,31 +482,48 @@ export class index extends Component {
                             }
                           />
                           <button
-                            class="products-options-btn fw-bold"
+                            className="products-options-btn fw-bold"
                             type="submit"
                             onClick={() => this.searchHandler()}
                           >
                             Search
                           </button>
                         </div>
-                        <div className="col-md-6 d-flex mb-4">
+                        <div className="col-md-6 d-flex mb-4 options-product-list">
                           <select
-                            className="form-select fw-bold me-2"
+                            className="form-select select-form-sort fw-bold me-2 mb-2"
                             aria-label="Default select example"
+                            onChange={(e) =>
+                              this.setState({
+                                sort: e.target.value,
+                              })
+                            }
                           >
-                            <option selected>Sort</option>
+                            <option value="" selected>
+                              Sort
+                            </option>
                             <option value="price">Price</option>
                             <option value="time">Time</option>
                           </select>
                           <select
-                            className="form-select fw-bold me-2"
+                            className="form-select select-form-sort fw-bold me-2 mb-2"
                             aria-label="Default select example"
+                            onChange={(e) =>
+                              this.setState({
+                                order: e.target.value,
+                              })
+                            }
                           >
-                            <option selected>Order</option>
+                            <option value="asc" selected>
+                              Order
+                            </option>
                             <option value="asc">Asc</option>
                             <option value="desc">Desc</option>
                           </select>
-                          <button className="products-options-btn fw-bold">
+                          <button
+                            onClick={() => this.sortHandler()}
+                            className="products-options-btn fw-bold"
+                          >
                             Sorting
                           </button>
                         </div>
@@ -460,21 +540,34 @@ export class index extends Component {
                     ) : (
                       <>
                         <div className="products-list-box">
-                          {this.state.products.map((product) => (
-                            <div className="box-products text-center">
-                              <div className="box-head text-center">
-                                <img
-                                  src={"http://localhost:8080" + product.img}
-                                  alt="products"
-                                />
-                              </div>
-                              <h5>{product.name}</h5>
-                              <span className="text-center fw-bold">
-                                {product.size}
-                              </span>
-                              <p>IDR {product.price}</p>
-                            </div>
-                          ))}
+                          {this.state.products.length > 0 ? (
+                            <>
+                              {this.state.products.map((product) => (
+                                <div className="box-products text-center">
+                                  <div className="box-head text-center">
+                                    <img
+                                      src={
+                                        "http://localhost:8080" + product.img
+                                      }
+                                      alt="products"
+                                    />
+                                  </div>
+                                  <h5>{product.name}</h5>
+                                  <span className="text-center fw-bold">
+                                    {product.size}
+                                  </span>
+                                  <p>IDR {product.price}</p>
+                                </div>
+                              ))}
+                            </>
+                          ) : (
+                            <>
+                              <section className="not-found-error text-center w-100 m-5">
+                                <h5>SEARCH : "{this.state.searchKey}"</h5>
+                                <p>Product Not Found</p>
+                              </section>
+                            </>
+                          )}
                         </div>
                         {this.state.pagination.totalPage > 1 ? (
                           <section className="pagination-data w-100 d-flex justify-content-center">
@@ -506,7 +599,11 @@ export class index extends Component {
                                       <button
                                         onClick={() =>
                                           this.paginationHandler(
-                                            `/product?limit=12&page=${page}`
+                                            `/product?limit=12&page=${page}${
+                                              this.state.sort !== ""
+                                                ? "&sort=" + this.state.sort
+                                                : ""
+                                            }&order=${this.state.order}`
                                           )
                                         }
                                         className="page-link bg-dark text-light fw-bold m-2 "
@@ -519,7 +616,11 @@ export class index extends Component {
                                       <button
                                         onClick={() =>
                                           this.paginationHandler(
-                                            `/product?limit=12&page=${page}`
+                                            `/product?limit=12&page=${page}${
+                                              this.state.sort !== ""
+                                                ? "&sort=" + this.state.sort
+                                                : ""
+                                            }&order=${this.state.order}`
                                           )
                                         }
                                         className="page-link bg-light text-dark fw-bold m-2 "
