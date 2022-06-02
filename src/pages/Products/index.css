@@ -228,6 +228,16 @@
   border-bottom: 2px solid #6a4029;
   box-shadow: 0px 6px 20px -10px rgba(106, 64, 41, 0.67);
 }
+.products-options {
+  font-family: "Rubik";
+}
+.products-options-btn {
+  color: #6a4029;
+  background-color: #ffba33;
+  padding: 0 20px;
+  border: none;
+  border-radius: 10px;
+}
 .products-list-box {
   height: auto;
   display: flex;

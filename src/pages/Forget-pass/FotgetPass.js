@@ -29,8 +29,10 @@ function ForgetPass() {
           <div className="form-body">
             <div className="container">
               <form className="form-main">
-                <h5>Forgot your password?</h5>
-                <p>Don’t worry, we got your back!</p>
+                <h5 className="title-form-forget">Forgot your password?</h5>
+                <p className="text-form-forget">
+                  Don’t worry, we got your back!
+                </p>
                 <div className="mb-3 fp-input-form">
                   <input
                     type="text"

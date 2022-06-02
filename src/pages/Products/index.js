@@ -186,10 +186,48 @@ export class index extends Component {
         allList: "",
         noncoffeeBtn: "list-menu",
         noncoffeeList: "",
+        search: "",
       });
       this.setState({
         favoriteList: "list-active",
         favoriteBtn: "list-menu menu-active",
+      });
+      this.setState({ load: false });
+    } catch (error) {
+      this.setState({ load: false });
+    }
+  }
+  async searchHandler() {
+    try {
+      this.setState({ load: true });
+      console.log(this.state.search);
+      const products = await axios.get(
+        `http://localhost:8080/product?name=${this.state.search}&limit=12`
+      );
+      if (products.data.meta.totalPage > 1) {
+        let number = [];
+        for (let i = 1; i <= products.data.meta.totalPage; i++) {
+          number.push(i);
+        }
+        this.setState({
+          paginationNumber: number,
+        });
+      }
+      this.setState({
+        products: products.data.data,
+        pagination: products.data.meta,
+        coffeeBtn: "list-menu",
+        coffeeList: "",
+        favoriteBtn: "list-menu",
+        favoriteList: "",
+        foodBtn: "list-menu",
+        foodList: "",
+        noncoffeeBtn: "list-menu",
+        noncoffeeList: "",
+      });
+      this.setState({
+        allList: "list-active",
+        allBtn: "list-menu menu-active",
       });
       this.setState({ load: false });
     } catch (error) {
@@ -366,6 +404,51 @@ export class index extends Component {
                         </li>
                       </ul>
                     </div>
+                    <section className="products-options ">
+                      <div className="row m-2 ms-5 me-5">
+                        <div className="col-md-6 d-flex mb-4">
+                          <input
+                            class="form-control me-2"
+                            type="search"
+                            placeholder="Search"
+                            aria-label="Search"
+                            onChange={(e) =>
+                              this.setState({
+                                search: e.target.value,
+                              })
+                            }
+                          />
+                          <button
+                            class="products-options-btn fw-bold"
+                            type="submit"
+                            onClick={() => this.searchHandler()}
+                          >
+                            Search
+                          </button>
+                        </div>
+                        <div className="col-md-6 d-flex mb-4">
+                          <select
+                            className="form-select fw-bold me-2"
+                            aria-label="Default select example"
+                          >
+                            <option selected>Sort</option>
+                            <option value="price">Price</option>
+                            <option value="time">Time</option>
+                          </select>
+                          <select
+                            className="form-select fw-bold me-2"
+                            aria-label="Default select example"
+                          >
+                            <option selected>Order</option>
+                            <option value="asc">Asc</option>
+                            <option value="desc">Desc</option>
+                          </select>
+                          <button className="products-options-btn fw-bold">
+                            Sorting
+                          </button>
+                        </div>
+                      </div>
+                    </section>
                     {this.state.load === true ? (
                       <div className="w-100 d-flex justify-content-center">
                         <img

@@ -205,6 +205,7 @@
   color: #9f9f9f;
 }
 .form-input {
+  background-color: white;
   font-family: "Rubik";
   font-style: normal;
   font-weight: 400;
@@ -217,6 +218,16 @@
   padding-left: 0px;
   margin-bottom: 47px;
   border-bottom: 2px solid black;
+}
+.form-input > img {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+.msg-error-new-pass {
+  font-family: "Rubik";
+  font-size: 18px;
+  margin-top: -27px;
 }
 .form-input:disabled {
   background-color: white;
@@ -348,6 +359,14 @@
   }
   .form-input {
     font-size: 18px;
+  }
+  .form-input > img {
+    width: 30px;
+    height: 30px;
+  }
+
+  .msg-error-new-pass {
+    font-size: 16px;
   }
   .right-form {
     height: auto;

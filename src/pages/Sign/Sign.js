@@ -11,6 +11,8 @@ import google from "../../asset/img/signPage/google.png";
 import facebook from "../../asset/img/signPage/vfb.svg";
 import twiter from "../../asset/img/signPage/vtw.svg";
 import instagram from "../../asset/img/signPage/vig.svg";
+import iconHide from "../../asset/img/signPage/iconHide.png";
+import iconShow from "../../asset/img/signPage/iconShow.jpg";
 
 // img
 
@@ -22,8 +24,14 @@ function Sign(props) {
   const [Phone, setPhone] = useState("");
   const [msg, setMsg] = useState("");
   const [input, setInput] = useState("form-control form-input-sign ");
+  const [inputPass, setInputPass] = useState(
+    "form-control form-input-sign-pass "
+  );
+  const [spanPass, setSpanPass] = useState("input-group-text form-span-pass ");
+  const [iconPass, setIconPass] = useState(iconShow);
+  const [showPass, setShowPass] = useState(false);
   const [RegisSuccess, setRegisSuccess] = useState(false);
-  // const [type, setType] = useState("password");
+  const [type, setType] = useState("password");
 
   useEffect(() => {
     if (RegisSuccess === true) {
@@ -42,6 +50,7 @@ function Sign(props) {
     setEmail("");
     setPass("");
     setPhone("");
+    setShowPass(false);
   };
   const loginHandler = async (e) => {
     try {
@@ -61,6 +70,8 @@ function Sign(props) {
     } catch (error) {
       setMsg("Failed Login. " + error.response.data.message);
       setInput("form-control form-input-sign border-danger");
+      setInputPass("form-control form-input-sign-pass not-valid-input-pass");
+      setSpanPass("input-group-text form-span-pass not-valid-span-pass");
     }
   };
   // login
@@ -80,13 +91,24 @@ function Sign(props) {
       console.log(error);
       setInput("form-control form-input-sign border-danger");
       setMsg("Failed Login. " + error.response.data.message);
+      setInputPass("form-control form-input-sign-pass not-valid-input-pass");
+      setSpanPass("input-group-text form-span-pass not-valid-span-pass");
     }
   };
   // regis
   // show pass
-  // const showPassHandler = (e) => {
-  //   type === "password" ? setType("text") : setType("password");
-  // };
+  const showPassHandler = (e) => {
+    if (showPass === true) {
+      setIconPass(iconShow);
+      setShowPass(false);
+    }
+    if (showPass === false) {
+      setIconPass(iconHide);
+      setShowPass(true);
+    }
+
+    type === "password" ? setType("text") : setType("password");
+  };
 
   const title = props.pageSign === "login" ? "Login" : "Sign Up";
   const formBody =
@@ -105,27 +127,35 @@ function Sign(props) {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-            <div className="mb-3">
-              <label className="form-label form-text">Password :</label>
+            <label className="form-label form-text">Password :</label>
+            <div className="input-group mb-3">
               <input
-                type="password"
-                id="pass"
+                type={type}
                 value={Pass}
-                className={input}
+                className={inputPass}
                 placeholder="Enter your password"
+                aria-label="Password"
+                aria-describedby="basic-addon1"
                 onChange={(e) => setPass(e.target.value)}
               />
-              {msg !== "" ? (
-                <>
-                  <Link to={"/forgetPassword"} className="forgetpass-text">
-                    Forgot password?
-                  </Link>
-                </>
-              ) : (
-                ""
-              )}
+              <span
+                className={spanPass}
+                id="basic-addon1"
+                onClick={showPassHandler}
+              >
+                <img src={iconPass} alt="icon-pass" />
+              </span>
             </div>
-            <p className="fw-bold text-danger text-center">{msg}</p>
+            {msg !== "" ? (
+              <>
+                <Link to={"/forgetPassword"} className="forgetpass-text">
+                  Forgot password?
+                </Link>
+              </>
+            ) : (
+              ""
+            )}
+            <p className="msg-error-form text-center fw-bold ">{msg}</p>
             <div className="mb-3">
               <button
                 onClick={loginHandler}
@@ -172,16 +202,24 @@ function Sign(props) {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-            <div className="mb-3">
-              <label className="form-label form-text">Password :</label>
+            <label className="form-label form-text">Password :</label>
+            <div className="input-group mb-3">
               <input
-                type="password"
-                id="pass"
+                type={type}
                 value={Pass}
-                className={input}
+                className={inputPass}
                 placeholder="Enter your password"
+                aria-label="Password"
+                aria-describedby="basic-addon1"
                 onChange={(e) => setPass(e.target.value)}
               />
+              <span
+                className={spanPass}
+                id="basic-addon1"
+                onClick={showPassHandler}
+              >
+                <img src={iconPass} alt="icon-pass" />
+              </span>
             </div>
             <div className="mb-3">
               <label className="form-label form-text">Phone Number :</label>
@@ -194,7 +232,9 @@ function Sign(props) {
                 onChange={(e) => setPhone(e.target.value)}
               />
             </div>
-            <p className="fw-bold text-danger text-center">{msg}</p>
+            <p className="msg-error-form text-center fw-bold text-danger">
+              {msg}
+            </p>
             <div className="mb-3">
               <button
                 onClick={regisHandler}

@@ -73,7 +73,7 @@ main {
 .form-main {
   padding: 0 3%;
 }
-.form-main > h5 {
+.title-form-forget {
   font-family: "Poppins";
   font-style: normal;
   font-weight: 700;
@@ -83,7 +83,7 @@ main {
   color: #000000;
 }
 
-.form-main > p {
+.text-form-forget {
   font-family: "Poppins";
   font-style: normal;
   font-weight: 200;

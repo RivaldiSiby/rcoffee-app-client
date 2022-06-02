@@ -82,8 +82,8 @@ main {
   color: #4f5665;
 }
 .form-input-sign {
-  background: #ffffff;
   border: 1px solid #4f5665;
+  background: #ffffff;
   color: #9f9f9f;
   height: 75px;
   border-radius: 20px;
@@ -92,6 +92,58 @@ main {
   font-weight: 400;
   font-size: 20px;
   line-height: 24px;
+}
+.form-input-sign-pass {
+  border: none;
+  background: #ffffff;
+  border-top: 1px solid #4f5665;
+  border-left: 1px solid #4f5665;
+  border-bottom: 1px solid #4f5665;
+  color: #9f9f9f;
+  height: 75px;
+  border-radius: 20px;
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+}
+.form-span-pass {
+  border: none;
+  height: 75px;
+  background: #ffffff;
+  border-top: 1px solid #4f5665;
+  border-right: 1px solid #4f5665;
+  border-bottom: 1px solid #4f5665;
+  cursor: pointer;
+  color: #9f9f9f;
+  border-radius: 20px;
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+}
+.not-valid-input-pass {
+  border-top: 1px solid #dc3545;
+  border-left: 1px solid #dc3545;
+  border-bottom: 1px solid #dc3545;
+}
+.not-valid-span-pass {
+  border-top: 1px solid #dc3545;
+  border-right: 1px solid #dc3545;
+  border-bottom: 1px solid #dc3545;
+}
+.form-span-pass > img {
+  width: 40px;
+  height: 40px;
+}
+.msg-error-form {
+  font-family: "Rubik";
+  font-size: 18px;
+  margin-top: 20px;
+  line-height: 30px;
+  color: #dc3545;
 }
 
 .forgetpass-text {
@@ -329,6 +381,24 @@ main {
     height: 65px;
     border-radius: 18px;
   }
+  .form-input-sign-pass,
+  .form-span-pass {
+    font-size: 18px;
+    height: 65px;
+    border-radius: 18px;
+  }
+  .form-span-pass {
+    font-size: 18px;
+    height: 65px;
+    border-radius: 18px;
+  }
+  .msg-error-form {
+    font-size: 16px;
+  }
+  .form-span-pass > img {
+    height: 30px;
+    width: 30px;
+  }
   .forgetpass-text {
     font-size: 18px;
     margin-top: 15px;
@@ -449,6 +519,15 @@ main {
     font-size: 15px;
     height: 50px;
     border-radius: 15px;
+  }
+  .form-input-sign-pass,
+  .form-span-pass {
+    font-size: 15px;
+    height: 50px;
+    border-radius: 15px;
+  }
+  .msg-error-form {
+    font-size: 15px;
   }
   .form-btn-sign {
     font-size: 15px;

@@ -6,6 +6,9 @@ import swal from "sweetalert2";
 // img
 import edit from "../../asset/img/profilePage/edit.svg";
 import loadingImg from "../../asset/img/loading.gif";
+
+import iconHide from "../../asset/img/signPage/iconHide.png";
+import iconShow from "../../asset/img/signPage/iconShow.jpg";
 // img
 
 import NavbarSignIn from "../../components/NavbarSignIn/Navbar";
@@ -18,6 +21,7 @@ function Profile() {
   const [editPass, setEditPass] = useState(false);
   const [MsgPass, setMsgPass] = useState("");
   const [MsgCPass, setMsgCPass] = useState("");
+  const [iconPass, setIconPass] = useState(iconShow);
   const [UpdateSuccess, setUpdateSuccess] = useState(false);
   const Navigate = useNavigate();
 
@@ -37,6 +41,8 @@ function Profile() {
   const [Pass, setPass] = useState("");
   const [Cpass, setCpass] = useState("");
   const [file, setfile] = useState("");
+  const [showPass, setShowPass] = useState(false);
+  const [type, setType] = useState("password");
   // const [Password, setPassword] = useState("");
 
   // update data
@@ -187,6 +193,7 @@ function Profile() {
     edit.classList.toggle("d-none");
     head.classList.toggle("d-none");
     radio.classList.toggle("d-none");
+    setShowPass(false);
   };
   const fileHandler = (e) => {
     const file = e.target.files[0];
@@ -383,6 +390,18 @@ function Profile() {
       setLoading(false);
     }
   };
+  const showPassHandler = (e) => {
+    if (showPass === true) {
+      setIconPass(iconShow);
+      setShowPass(false);
+    }
+    if (showPass === false) {
+      setIconPass(iconHide);
+      setShowPass(true);
+    }
+
+    type === "password" ? setType("text") : setType("password");
+  };
 
   return (
     <div>
@@ -488,48 +507,56 @@ function Profile() {
                                 <>
                                   <div className="col-lg-7 left-form">
                                     <p className="form-title">Edit Password</p>
-                                    <div className="mb-3">
-                                      <label
-                                        htmlFor="new-pass"
-                                        className="form-label label-input"
-                                      >
-                                        New Password :
-                                      </label>
+                                    <label className="form-label form-text">
+                                      New Password :
+                                    </label>
+                                    <div className="input-group mb-3">
                                       <input
+                                        type={type}
+                                        className="form-control form-input "
+                                        placeholder="Enter your new password"
+                                        aria-label="Password"
+                                        aria-describedby="basic-addon1"
                                         onChange={(e) =>
                                           setPass(e.target.value)
                                         }
-                                        type="password"
-                                        className="form-control form-input detail-form"
-                                        id="new-pass"
-                                        aria-describedby="nameHelp"
-                                        placeholder="New Password"
                                       />
-                                      <p className="fw-bold text-danger">
-                                        {MsgPass}
-                                      </p>
-                                    </div>
-                                    <div className="mb-3">
-                                      <label
-                                        htmlFor="confirm-pass"
-                                        className="form-label label-input"
+                                      <span
+                                        className="input-group-text form-input "
+                                        id="basic-addon1"
+                                        onClick={showPassHandler}
                                       >
-                                        Confirm New Password :
-                                      </label>
+                                        <img src={iconPass} alt="icon-pass" />
+                                      </span>
+                                    </div>
+                                    <p className="fw-bold text-danger msg-error-new-pass">
+                                      {MsgPass}
+                                    </p>
+                                    <label className="form-label form-text">
+                                      Confirm New Password :
+                                    </label>
+                                    <div className="input-group mb-3">
                                       <input
-                                        type="password"
+                                        type={type}
+                                        className="form-control form-input "
+                                        placeholder="Confirm your new password"
+                                        aria-label="Password"
+                                        aria-describedby="basic-addon1"
                                         onChange={(e) =>
                                           setCpass(e.target.value)
                                         }
-                                        className="form-control form-input detail-form"
-                                        id="confirm-pass"
-                                        aria-describedby="nameHelp"
-                                        placeholder="Confirm New Password"
                                       />
-                                      <p className="fw-bold text-danger">
-                                        {MsgCPass}
-                                      </p>
+                                      <span
+                                        className="input-group-text form-input"
+                                        id="basic-addon1"
+                                        onClick={showPassHandler}
+                                      >
+                                        <img src={iconPass} alt="icon-pass" />
+                                      </span>
                                     </div>
+                                    <p className="fw-bold text-danger msg-error-new-pass">
+                                      {MsgCPass}
+                                    </p>
                                   </div>
                                 </>
                               ) : (
