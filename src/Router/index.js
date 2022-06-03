@@ -21,7 +21,7 @@ function index() {
         <Route path="/chart" element={<Payment />} />
         <Route path="/history" element={<History />} />
         <Route path="/forgetPassword" element={<ForgetPass />} />
-        <Route path="/products/:id" element={<ProductDetails />} />
+        <Route path="/products/:id/:size" element={<ProductDetails />} />
       </Routes>
     </BrowserRouter>
   );

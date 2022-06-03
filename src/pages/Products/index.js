@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import "./index.css";
 import axios from "axios";
 
@@ -10,8 +11,9 @@ import loadImg from "../../asset/img/load.gif";
 import Navbar from "../../components/Navbar/Navbar";
 import NavbarSignIn from "../../components/NavbarSignIn/Navbar";
 import Footer from "../../components/Footer/Footer";
+import Hooks from "../../helper/Hooks";
 
-export class index extends Component {
+class index extends Component {
   constructor() {
     super();
 
@@ -41,6 +43,7 @@ export class index extends Component {
     };
   }
   async componentDidMount() {
+    this.props.navigate("/products");
     try {
       this.setState({ loading: true });
       const haveToken =
@@ -163,9 +166,12 @@ export class index extends Component {
           foodBtn: "list-menu menu-active",
         });
       }
+
+      this.props.navigate(`/products?category=${category}`);
       this.setState({ load: false });
     } catch (error) {
       this.setState({ load: false, products: [], searchKey: category });
+      this.props.navigate(`/products?category=${category}`);
     }
   }
   async favoriteHandler() {
@@ -206,9 +212,11 @@ export class index extends Component {
         favoriteList: "list-active",
         favoriteBtn: "list-menu menu-active",
       });
+      this.props.navigate(`/products?category=favorite`);
       this.setState({ load: false });
     } catch (error) {
       this.setState({ load: false, products: [], searchKey: "Favorite" });
+      this.props.navigate(`/products?category=favorite`);
     }
   }
   async searchHandler() {
@@ -219,7 +227,7 @@ export class index extends Component {
       this.setState({ load: true });
       if (this.state.search !== "") {
         const products = await axios.get(
-          `http://localhost:8080/product?name=${this.state.search}`
+          `http://localhost:8080/product?limit=12&name=${this.state.search}`
         );
         if (products.data.meta.totalPage > 1) {
           let number = [];
@@ -231,7 +239,7 @@ export class index extends Component {
           });
         }
         this.setState({
-          linkUrl: `http://localhost:8080/product?name=${this.state.search}&limit=12`,
+          linkUrl: `http://localhost:8080/product?limit=12&search=${this.state.search}`,
           products: products.data.data,
           pagination: products.data.meta,
           coffeeBtn: "list-menu",
@@ -247,7 +255,7 @@ export class index extends Component {
           allList: "list-active",
           allBtn: "list-menu menu-active",
         });
-
+        this.props.navigate(`/products?search=${this.state.search}`);
         this.setState({ load: false });
         return;
       }
@@ -257,6 +265,7 @@ export class index extends Component {
         products: [],
         searchKey: this.state.search,
       });
+      this.props.navigate(`/products?search=${this.state.search}`);
     }
   }
   async allHandler() {
@@ -295,6 +304,7 @@ export class index extends Component {
         allBtn: "list-menu menu-active",
       });
       this.setState({ load: false });
+      this.props.navigate(`/products`);
     } catch (error) {
       this.setState({
         load: false,
@@ -324,6 +334,9 @@ export class index extends Component {
         products: products.data.data,
         pagination: products.data.meta,
       });
+      // pecahkan link
+      const pageNow = page.split("&");
+      this.props.navigate(`/products?${pageNow[1]}`);
       this.setState({ load: false });
     } catch (error) {
       this.setState({ load: false });
@@ -350,6 +363,15 @@ export class index extends Component {
         products: products.data.data,
         pagination: products.data.meta,
       });
+      // atur url
+      let urlQuery = this.state.linkUrl.split("&");
+      urlQuery = urlQuery[1];
+      console.log(urlQuery);
+      this.props.navigate(
+        `/products?${urlQuery}${
+          this.state.sort !== "" ? "&sort=" + this.state.sort : ""
+        }&order=${this.state.order}`
+      );
       this.setState({ load: false });
     } catch (error) {
       this.setState({ load: false });
@@ -543,7 +565,15 @@ export class index extends Component {
                           {this.state.products.length > 0 ? (
                             <>
                               {this.state.products.map((product) => (
-                                <div className="box-products text-center">
+                                <Link
+                                  to={
+                                    "/products/" +
+                                    product.id +
+                                    "/" +
+                                    product.size
+                                  }
+                                  className="box-products text-center"
+                                >
                                   <div className="box-head text-center">
                                     <img
                                       src={
@@ -553,11 +583,11 @@ export class index extends Component {
                                     />
                                   </div>
                                   <h5>{product.name}</h5>
-                                  <span className="text-center fw-bold">
+                                  <span className="text-center fw-bold text-dark">
                                     {product.size}
                                   </span>
                                   <p>IDR {product.price}</p>
-                                </div>
+                                </Link>
                               ))}
                             </>
                           ) : (
@@ -666,4 +696,4 @@ export class index extends Component {
   }
 }
 
-export default index;
+export default Hooks(index);

@@ -261,6 +261,7 @@
   box-shadow: 0px 30px 60px rgba(57, 57, 57, 0.1);
   border-radius: 30px;
   margin-bottom: 80px;
+  text-decoration: none;
 }
 .box-head {
   width: 100%;
@@ -295,6 +296,9 @@
   text-align: center;
   color: #6a4029;
 }
+.box-products > span {
+  font-family: "Poppins";
+}
 .not-found-error > h5 {
   font-family: "Poppins";
   font-style: normal;
@@ -323,7 +327,7 @@
     min-height: auto;
   }
   .products-menu {
-    margin-top: 0;
+    margin-top: 20px;
     margin-right: 5%;
   }
   .promo-info-1 {
@@ -430,6 +434,7 @@
     flex-wrap: wrap;
     margin: 0;
     padding: 0;
+    margin-top: 20px;
     justify-content: center;
   }
   .products-menu > li {
@@ -462,6 +467,7 @@
   }
   .products-menu {
     margin: 0 10%;
+    margin-top: 20px;
   }
   .products-menu > li {
     width: 75%;

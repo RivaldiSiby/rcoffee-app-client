@@ -66,7 +66,7 @@ function Sign(props) {
         JSON.stringify(result.data.data.refreshToken)
       );
       setMsg("");
-      navigate("/", { loginStatus: true });
+      navigate("/", { state: { loginSuccess: true } });
     } catch (error) {
       setMsg("Failed Login. " + error.response.data.message);
       setInput("form-control form-input-sign border-danger");

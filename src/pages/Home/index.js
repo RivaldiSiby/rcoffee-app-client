@@ -6,6 +6,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import "./index.css";
 import Swal from "sweetalert2";
+import Hooks from "../../helper/Hooks";
 
 // img
 import staf from "../../asset/img/homePage/userv.svg";
@@ -32,7 +33,7 @@ import loadingImg from "../../asset/img/loading.gif";
 
 // cek token
 
-export class index extends Component {
+class index extends Component {
   constructor() {
     super();
 
@@ -43,6 +44,15 @@ export class index extends Component {
     };
   }
   async componentDidMount() {
+    // cek pesan login
+    if (this.props.location.state !== null) {
+      if (this.props.location.state.loginSuccess === true) {
+        Swal.fire("Success", "Success Login", "success");
+      }
+      if (this.props.location.state.logoutSuccess === true) {
+        Swal.fire("Success", "Logout Success", "success");
+      }
+    }
     try {
       this.setState({ loading: true });
       const haveToken =
@@ -78,9 +88,6 @@ export class index extends Component {
       }
       // tarik data
       this.setState({ loading: false });
-      if (this.state.isLogin === true) {
-        Swal.fire("Success", "Success Login", "success");
-      }
     } catch (error) {
       this.setState({ loading: false });
       console.log(error);
@@ -689,4 +696,4 @@ export class index extends Component {
   }
 }
 
-export default index;
+export default Hooks(index);

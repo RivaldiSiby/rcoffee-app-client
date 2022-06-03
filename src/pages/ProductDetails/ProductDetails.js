@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useParams, Link } from "react-router-dom";
 import "./ProductDetails.css";
 import axios from "axios";
 
@@ -13,8 +14,14 @@ import iconCek from "../../asset/img/productsDetailPage/iconCek.svg";
 // img
 
 function ProductDetails() {
+  let params = useParams();
   const [isLogin, setisLogin] = useState(false);
   const [loading, setLoading] = useState(false);
+  // data
+  const [products, setProducts] = useState([]);
+  const [productDetail, setProductDetail] = useState([]);
+  const [quantity, setQuantity] = useState(1);
+  // data
 
   useEffect(() => {
     const checkLogin = async () => {
@@ -46,6 +53,7 @@ function ProductDetails() {
               JSON.stringify(result.data.data.accessToken)
             );
           }
+          setLoading(false);
           return;
         }
 
@@ -56,8 +64,50 @@ function ProductDetails() {
         setLoading(false);
       }
     };
+    const getProduct = async () => {
+      try {
+        setLoading(true);
+        const product = await axios.get(
+          `http://localhost:8080/product/${params.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${JSON.parse(
+                localStorage.getItem("tokenkey")
+              )}`,
+            },
+          }
+        );
+        setProducts(product.data.data);
+        // get product detail
+        product.data.data.map((product) =>
+          product.size === params.size ? setProductDetail(product) : ""
+        );
+        // get product detail
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+        setLoading(false);
+      }
+    };
+    getProduct();
     checkLogin();
   }, []);
+
+  useEffect(() => {
+    const btn = document.getElementById("btn-min");
+    if (quantity <= 1) {
+      btn.classList.add("d-none");
+    }
+    if (quantity > 1) {
+      btn.classList.remove("d-none");
+    }
+  }, [quantity]);
+  const sizeHandler = (size) => {
+    products.map((product) =>
+      product.size === size ? setProductDetail(product) : ""
+    );
+    setQuantity(1);
+  };
   return (
     <div>
       {loading === true ? (
@@ -83,10 +133,18 @@ function ProductDetails() {
                 <div className="col-md product-detail-left">
                   <section className="product-detail-left-head">
                     <p>
-                      Favorite & Promo <span>{"> Cold Brew"}</span>
+                      <Link className="link-products-detail" to="/products">
+                        Favorite & Promo
+                      </Link>{" "}
+                      <span className="span-product-name">{`> ${productDetail.name}`}</span>
                     </p>
                   </section>
                   <section className="product-detail-left-body d-flex justify-content-end">
+                    <img
+                      className="product-detail-img"
+                      src={"http://localhost:8080" + productDetail.img}
+                      alt="product-img"
+                    />
                     <section className="d-flex justify-content-center align-items-center">
                       <img src={iconMsg} alt="iconMsg" />
                     </section>
@@ -99,7 +157,7 @@ function ProductDetails() {
                   </section>
                 </div>
                 <div className="col-md product-detail-right">
-                  <section className="product-detail-right-head">
+                  <section className="product-detail-right-head ">
                     <section className="step-order-product d-flex align-items-center row">
                       <section className="step-icon col-1">
                         <img src={iconCek} alt="iconCek" />
@@ -112,30 +170,29 @@ function ProductDetails() {
                       <section className="step-icon col-1"></section>
                     </section>
                     <section className="step-order-product-text d-flex row">
-                      <p className="col-2">Order</p>
-                      <p className="col-2">Checkout</p>
-                      <p className="col-2 fw-bold">Payment</p>
+                      <p className="col-2 text-center p-0">Order</p>
+                      <p className="col-2 text-start p-0">Checkout</p>
+                      <p className="col-2 fw-bold text-start p-0">Payment</p>
                     </section>
                   </section>
                   <section className="product-detail-right-body">
-                    <h4>COLD BREW</h4>
-                    <h5>IDR 30.000</h5>
-                    <p>
-                      Cold brewing is a method of brewing that combines ground
-                      coffee and cool water and uses time instead of heat to
-                      extract the flavor. It is brewed in small batches and
-                      steeped for as long as 48 hours.
-                    </p>
+                    <h4>{productDetail.name}</h4>
+                    <h5>IDR {productDetail.price}</h5>
+                    <p>{productDetail.description}</p>
                   </section>
                   <section className="product-detail-right-foot">
                     <form>
                       <select
                         className="form-select input-form-detail"
                         aria-label="Default select example"
+                        onChange={(e) => sizeHandler(e.target.value)}
                       >
-                        <option selected>Select Size</option>
-                        <option value="small">Small</option>
-                        <option value="large">Large</option>
+                        <option value="" selected>
+                          Select Size
+                        </option>
+                        {products.map((product) => (
+                          <option value={product.size}>{product.size}</option>
+                        ))}
                       </select>
                       <select
                         className="form-select input-form-detail"
@@ -149,11 +206,24 @@ function ProductDetails() {
                       <div className="row ">
                         <div className="col-md-4">
                           <section className="input-number-quantity d-flex justify-content-between align-items-center">
-                            <h5 className="btn-plus-quantity"> + </h5>
-                            <h5 className="quantity-value fw-bold text-dark">
-                              2
+                            <h5
+                              onClick={() => setQuantity(quantity + 1)}
+                              className="btn-plus-quantity"
+                            >
+                              {" "}
+                              +{" "}
                             </h5>
-                            <h5 className="btn-min-quantity"> - </h5>
+                            <h5 className="quantity-value fw-bold text-dark">
+                              {quantity}
+                            </h5>
+                            <h5
+                              id="btn-min"
+                              onClick={() => setQuantity(quantity - 1)}
+                              className="btn-min-quantity"
+                            >
+                              {" "}
+                              -{" "}
+                            </h5>
                           </section>
                         </div>
                         <div className="col-md-8">

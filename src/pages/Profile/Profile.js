@@ -262,7 +262,7 @@ function Profile() {
       setisLogin(false);
       localStorage.clear();
       setLoading(false);
-      Navigate("/");
+      Navigate("/", { state: { logoutSuccess: true } });
     };
     swal
       .fire({
