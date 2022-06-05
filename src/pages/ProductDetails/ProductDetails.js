@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import "./ProductDetails.css";
 import axios from "axios";
 
@@ -17,6 +17,7 @@ function ProductDetails() {
   let params = useParams();
   const [isLogin, setisLogin] = useState(false);
   const [loading, setLoading] = useState(false);
+  const Navigate = useNavigate();
   // data
   const [products, setProducts] = useState([]);
   const [productDetail, setProductDetail] = useState([]);
@@ -107,6 +108,36 @@ function ProductDetails() {
       product.size === size ? setProductDetail(product) : ""
     );
     setQuantity(1);
+  };
+
+  // add cart
+  const addChartHandler = (e) => {
+    e.preventDefault();
+    // add data ke card locastorage
+    const dataProduct = {
+      id: productDetail.stock_id,
+      name: productDetail.name,
+      price: productDetail.price,
+      size: productDetail.size,
+      img: productDetail.img,
+      quantity: quantity,
+    };
+    console.log(JSON.parse(localStorage.getItem("chart")));
+    console.log(dataProduct);
+    setQuantity(1);
+    if (localStorage.getItem("chart") !== null) {
+      const oldData = JSON.parse(localStorage.getItem("chart"));
+      const data = [...oldData, dataProduct];
+      localStorage.setItem("chart", JSON.stringify(data));
+
+      return;
+    }
+
+    localStorage.setItem("chart", JSON.stringify([dataProduct]));
+  };
+  const checkoutHandler = (e) => {
+    addChartHandler(e);
+    Navigate("/chart");
   };
   return (
     <div>
@@ -227,12 +258,18 @@ function ProductDetails() {
                           </section>
                         </div>
                         <div className="col-md-8">
-                          <button className="btn-product-detail-cart">
+                          <button
+                            onClick={addChartHandler}
+                            className="btn-product-detail-cart"
+                          >
                             Add to Cart
                           </button>
                         </div>
                         <div className="col-md-12">
-                          <button className="btn-product-detail-checkout">
+                          <button
+                            onClick={checkoutHandler}
+                            className="btn-product-detail-checkout"
+                          >
                             Checkout
                           </button>
                         </div>

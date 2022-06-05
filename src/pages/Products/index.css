@@ -191,7 +191,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-right: 10%;
+  margin-right: 17.5%;
   list-style: none;
 }
 .products-menu > li > button {
@@ -230,6 +230,7 @@
 }
 .products-options {
   font-family: "Rubik";
+  margin-right: 5%;
 }
 .select-form-sort {
   height: 50px;
@@ -249,7 +250,7 @@
   flex-wrap: wrap;
   justify-content: flex-start;
   column-gap: 4%;
-  margin-right: 5%;
+  margin-right: 10%;
   margin-left: 4%;
   padding-top: 60px;
 }
@@ -361,6 +362,9 @@
   }
   .not-found-error > p {
     font-size: 16px;
+  }
+  .products-options {
+    margin-right: 0px;
   }
 
   /* products */

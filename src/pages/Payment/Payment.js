@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import NavbarSignIn from "../../components/NavbarSignIn/Navbar";
 import Footer from "../../components/Footer/Footer";
@@ -6,8 +6,6 @@ import "./Payment.css";
 
 // img
 import loadingImg from "../../asset/img/loading.gif";
-import product1 from "../../asset/img/paymentPage/product1.png";
-import product2 from "../../asset/img/paymentPage/product2.png";
 import card from "../../asset/img/paymentPage/card.svg";
 import bank from "../../asset/img/paymentPage/bank.svg";
 import deliv from "../../asset/img/paymentPage/deliv.svg";
@@ -15,6 +13,25 @@ import deliv from "../../asset/img/paymentPage/deliv.svg";
 
 function Payment() {
   const [loading, setLoading] = useState(false);
+  const [chart, setChart] = useState([]);
+  const [subtotal, setSubtotal] = useState(0);
+  const [tax, setTax] = useState(0);
+  const [delivery, setDelivery] = useState(0);
+  useEffect(() => {
+    if (localStorage.getItem("chart") !== null) {
+      const dataChart = JSON.parse(localStorage.getItem("chart"));
+      setChart(dataChart);
+      // jumlahkan sub total
+      let subtotal = [];
+      dataChart.map((item) => subtotal.push(item.quantity * item.price));
+      setSubtotal(subtotal.reduce((total, value) => total + value));
+
+      // atur pajak dan ongkos kirim
+      setTax(0.1);
+      setDelivery(10000);
+    }
+  }, []);
+
   return (
     <div>
       {loading === true ? (
@@ -38,36 +55,29 @@ function Payment() {
                       </section>
                       <section className="order-body-list ">
                         <div class="row d-flex justify-content-center">
-                          <section class="col-md-11 box-order-list p-0">
-                            <section class="order-product-img">
-                              <img src={product1} alt="product-list" />
-                            </section>
-                            <section class="order-info">
-                              <section class="order-products-info">
-                                <p>Hazelnut Latte</p>
-                                <p>x 1</p>
-                                <p>Regular</p>
-                              </section>
+                          {chart.map((product) => (
+                            <>
+                              <section class="col-md-11 box-order-list p-0">
+                                <section class="order-product-img">
+                                  <img
+                                    src={"http://localhost:8080" + product.img}
+                                    alt="product-list"
+                                  />
+                                </section>
+                                <section class="order-info">
+                                  <section class="order-products-info">
+                                    <p>{product.name}</p>
+                                    <p>x {product.quantity}</p>
+                                    <p>{product.size}</p>
+                                  </section>
 
-                              <section class="order-price  d-flex align-items-center">
-                                <p>IDR 24.0</p>
+                                  <section class="order-price  d-flex align-items-center">
+                                    <p>IDR {product.price}</p>
+                                  </section>
+                                </section>
                               </section>
-                            </section>
-                          </section>
-                          <section class="col-md-11 box-order-list p-0">
-                            <section class="order-product-img">
-                              <img src={product2} alt="product-list" />
-                            </section>
-                            <section class="order-info">
-                              <section class="order-products-info">
-                                <p>Chicken Fire Wings</p>
-                                <p>x 2</p>
-                              </section>
-                              <section class="order-price  d-flex align-items-center">
-                                <p>IDR 30.0</p>
-                              </section>
-                            </section>
-                          </section>
+                            </>
+                          ))}
                         </div>
                       </section>
                       <section className="order-body-cost">
@@ -77,14 +87,17 @@ function Payment() {
                           <p>SHIPPING</p>
                         </section>
                         <section class="price-order-cost">
-                          <p>IDR 120.000</p>
-                          <p>IDR 20.000</p>
-                          <p>IDR 10.000</p>
+                          <p>IDR {subtotal}</p>
+                          <p>IDR {(delivery + subtotal) * tax}</p>
+                          <p>IDR {delivery}</p>
                         </section>
                       </section>
                       <section className="order-body-foot">
                         <h5>TOTAL</h5>
-                        <h5>IDR 150.000</h5>
+                        <h5>
+                          IDR{" "}
+                          {delivery + subtotal + (delivery + subtotal) * tax}
+                        </h5>
                       </section>
                     </div>
                   </section>
