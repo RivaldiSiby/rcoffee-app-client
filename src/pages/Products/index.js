@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import "./index.css";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 // img
 import product from "../../asset/img/productsPage/product.png";
@@ -43,6 +44,11 @@ class index extends Component {
     };
   }
   async componentDidMount() {
+    if (this.props.location.state !== null) {
+      if (this.props.location.state.successToPay === true) {
+        Swal.fire("Success", "Payment Success", "success");
+      }
+    }
     this.props.navigate("/products");
     try {
       this.setState({ loading: true });

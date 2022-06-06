@@ -11,6 +11,24 @@
   font-family: "Poppins";
   src: url("/src/asset/font/Poppins/Poppins-Regular.ttf");
 }
+/* no order */
+.no-order-chart {
+  min-height: 500px;
+  padding-top: 15vh;
+  padding-bottom: 50px;
+}
+.no-order-chart > img {
+  width: 50%;
+  margin: 0 25%;
+}
+.no-order-chart > h5 {
+  font-family: "Rubik";
+  font-weight: bold;
+  color: #362115;
+  font-size: 25px;
+}
+
+/* no order */
 
 /* payment body */
 .payment-body {

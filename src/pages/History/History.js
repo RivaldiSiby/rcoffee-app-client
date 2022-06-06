@@ -1,15 +1,88 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import NavbarSignIn from "../../components/NavbarSignIn/Navbar";
 import Footer from "../../components/Footer/Footer";
+import { useNavigate, Link } from "react-router-dom";
 import "./History.css";
+import axios from "axios";
 
 // img
 import loadingImg from "../../asset/img/loading.gif";
-import product from "../../asset/img/historyPage/product.png";
+import icon from "../../asset/img/historyPage/icon.png";
 // img
 
 function History() {
+  const Navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [isLogin, setisLogin] = useState(false);
+  const [select, setSelect] = useState(false);
+
+  // data
+  const [history, setHistory] = useState([]);
+  // data
+
+  useEffect(() => {
+    const checkLogin = async () => {
+      try {
+        setLoading(true);
+        const haveToken =
+          localStorage.getItem("tokenkey") !== undefined
+            ? JSON.parse(localStorage.getItem("tokenkey"))
+            : null;
+        if (haveToken !== null) {
+          const refreshToken = JSON.parse(localStorage.getItem("refreshkey"));
+          // cek token
+
+          const result = await axios.get(
+            `http://localhost:8080/auth/${refreshToken}`,
+            {
+              headers: {
+                Authorization: `Bearer ${haveToken}`,
+              },
+            }
+          );
+          if (result.data !== undefined) {
+            setisLogin(true);
+          }
+
+          if (result.data.message === "token generate" && isLogin === true) {
+            await localStorage.setItem(
+              "tokenkey",
+              JSON.stringify(result.data.data.accessToken)
+            );
+          }
+          return;
+        }
+        Navigate("/", { replace: true });
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+        if (isLogin === false) {
+          Navigate("/", { replace: true });
+        }
+
+        setLoading(false);
+      }
+    };
+    const getTransaction = async () => {
+      try {
+        setLoading(true);
+        const data = await axios.get("http://localhost:8080/transaction", {
+          headers: {
+            Authorization: `Bearer ${JSON.parse(
+              localStorage.getItem("tokenkey")
+            )}`,
+          },
+        });
+        setHistory(data.data.data);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+      }
+    };
+    checkLogin();
+    getTransaction();
+  }, []);
+
   return (
     <div>
       {loading === true ? (
@@ -24,370 +97,99 @@ function History() {
               <section className="history-bought-products">
                 <section className="history-bought-head">
                   <h5>Let’s see what you have bought!</h5>
-                  <p className="select-history">Select item to delete</p>
-                  <p className="delete-history">Delete</p>
+                  <p
+                    onClick={() => setSelect(select === false ? true : false)}
+                    className="select-history"
+                  >
+                    Select item to delete
+                  </p>
+                  {select === true ? (
+                    <>
+                      <p className="delete-history">Delete</p>
+                    </>
+                  ) : (
+                    <></>
+                  )}
                 </section>
                 <section className="history-bought-list ">
-                  <section className="box-history">
-                    <div className="row">
-                      <div className="col-3 box-history-img">
-                        <img src={product} alt="product-img" />
-                      </div>
-                      <div className="col-9 ">
-                        <div className="row ">
-                          <div className="col-12 box-history-title ps-3">
-                            <h5>Veggie tomato mix</h5>
-                          </div>
-                          <div className="col box-history-info ps-3">
-                            <p>IDR 34.000</p>
-                            <p>Delivered</p>
-                          </div>
-                          <div className="col-2 d-flex align-items-center">
-                            <input
-                              type="checkbox"
-                              className="check-history-product"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
-                  <section className="box-history">
-                    <div className="row">
-                      <div className="col-3 box-history-img">
-                        <img src={product} alt="product-img" />
-                      </div>
-                      <div className="col-9 ">
-                        <div className="row ">
-                          <div className="col-12 box-history-title ps-3">
-                            <h5>Veggie tomato mix</h5>
-                          </div>
-                          <div className="col box-history-info ps-3">
-                            <p>IDR 34.000</p>
-                            <p>Delivered</p>
-                          </div>
-                          <div className="col-2 d-flex align-items-center">
-                            <input
-                              type="checkbox"
-                              className="check-history-product"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
-                  <section className="box-history">
-                    <div className="row">
-                      <div className="col-3 box-history-img">
-                        <img src={product} alt="product-img" />
-                      </div>
-                      <div className="col-9 ">
-                        <div className="row ">
-                          <div className="col-12 box-history-title ps-3">
-                            <h5>Veggie tomato mix</h5>
-                          </div>
-                          <div className="col box-history-info ps-3">
-                            <p>IDR 34.000</p>
-                            <p>Delivered</p>
-                          </div>
-                          <div className="col-2 d-flex align-items-center">
-                            <input
-                              type="checkbox"
-                              className="check-history-product"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
-                  <section className="box-history">
-                    <div className="row">
-                      <div className="col-3 box-history-img">
-                        <img src={product} alt="product-img" />
-                      </div>
-                      <div className="col-9 ">
-                        <div className="row ">
-                          <div className="col-12 box-history-title ps-3">
-                            <h5>Veggie tomato mix</h5>
-                          </div>
-                          <div className="col box-history-info ps-3">
-                            <p>IDR 34.000</p>
-                            <p>Delivered</p>
-                          </div>
-                          <div className="col-2 d-flex align-items-center">
-                            <input
-                              type="checkbox"
-                              className="check-history-product"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
-                  <section className="box-history">
-                    <div className="row">
-                      <div className="col-3 box-history-img">
-                        <img src={product} alt="product-img" />
-                      </div>
-                      <div className="col-9 ">
-                        <div className="row ">
-                          <div className="col-12 box-history-title ps-3">
-                            <h5>Veggie tomato mix</h5>
-                          </div>
-                          <div className="col box-history-info ps-3">
-                            <p>IDR 34.000</p>
-                            <p>Delivered</p>
-                          </div>
-                          <div className="col-2 d-flex align-items-center">
-                            <input
-                              type="checkbox"
-                              className="check-history-product"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
-                  <section className="box-history">
-                    <div className="row">
-                      <div className="col-3 box-history-img">
-                        <img src={product} alt="product-img" />
-                      </div>
-                      <div className="col-9 ">
-                        <div className="row ">
-                          <div className="col-12 box-history-title ps-3">
-                            <h5>Veggie tomato mix</h5>
-                          </div>
-                          <div className="col box-history-info ps-3">
-                            <p>IDR 34.000</p>
-                            <p>Delivered</p>
-                          </div>
-                          <div className="col-2 d-flex align-items-center">
-                            <input
-                              type="checkbox"
-                              className="check-history-product"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
-                  <section className="box-history">
-                    <div className="row">
-                      <div className="col-3 box-history-img">
-                        <img src={product} alt="product-img" />
-                      </div>
-                      <div className="col-9 ">
-                        <div className="row ">
-                          <div className="col-12 box-history-title ps-3">
-                            <h5>Veggie tomato mix</h5>
-                          </div>
-                          <div className="col box-history-info ps-3">
-                            <p>IDR 34.000</p>
-                            <p>Delivered</p>
-                          </div>
-                          <div className="col-2 d-flex align-items-center">
-                            <input
-                              type="checkbox"
-                              className="check-history-product"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
-                  <section className="box-history">
-                    <div className="row">
-                      <div className="col-3 box-history-img">
-                        <img src={product} alt="product-img" />
-                      </div>
-                      <div className="col-9 ">
-                        <div className="row ">
-                          <div className="col-12 box-history-title ps-3">
-                            <h5>Veggie tomato mix</h5>
-                          </div>
-                          <div className="col box-history-info ps-3">
-                            <p>IDR 34.000</p>
-                            <p>Delivered</p>
-                          </div>
-                          <div className="col-2 d-flex align-items-center">
-                            <input
-                              type="checkbox"
-                              className="check-history-product"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
-                  <section className="box-history">
-                    <div className="row">
-                      <div className="col-3 box-history-img">
-                        <img src={product} alt="product-img" />
-                      </div>
-                      <div className="col-9 ">
-                        <div className="row ">
-                          <div className="col-12 box-history-title ps-3">
-                            <h5>Veggie tomato mix</h5>
-                          </div>
-                          <div className="col box-history-info ps-3">
-                            <p>IDR 34.000</p>
-                            <p>Delivered</p>
-                          </div>
-                          <div className="col-2 d-flex align-items-center">
-                            <input
-                              type="checkbox"
-                              className="check-history-product"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
-                  <section className="box-history">
-                    <div className="row">
-                      <div className="col-3 box-history-img">
-                        <img src={product} alt="product-img" />
-                      </div>
-                      <div className="col-9 ">
-                        <div className="row ">
-                          <div className="col-12 box-history-title ps-3">
-                            <h5>Veggie tomato mix</h5>
-                          </div>
-                          <div className="col box-history-info ps-3">
-                            <p>IDR 34.000</p>
-                            <p>Delivered</p>
-                          </div>
-                          <div className="col-2 d-flex align-items-center">
-                            <input
-                              type="checkbox"
-                              className="check-history-product"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
-                  <section className="box-history">
-                    <div className="row">
-                      <div className="col-3 box-history-img">
-                        <img src={product} alt="product-img" />
-                      </div>
-                      <div className="col-9 ">
-                        <div className="row ">
-                          <div className="col-12 box-history-title ps-3">
-                            <h5>Veggie tomato mix</h5>
-                          </div>
-                          <div className="col box-history-info ps-3">
-                            <p>IDR 34.000</p>
-                            <p>Delivered</p>
-                          </div>
-                          <div className="col-2 d-flex align-items-center">
-                            <input
-                              type="checkbox"
-                              className="check-history-product"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
-                  <section className="box-history">
-                    <div className="row">
-                      <div className="col-3 box-history-img">
-                        <img src={product} alt="product-img" />
-                      </div>
-                      <div className="col-9 ">
-                        <div className="row ">
-                          <div className="col-12 box-history-title ps-3">
-                            <h5>Veggie tomato mix</h5>
-                          </div>
-                          <div className="col box-history-info ps-3">
-                            <p>IDR 34.000</p>
-                            <p>Delivered</p>
-                          </div>
-                          <div className="col-2 d-flex align-items-center">
-                            <input
-                              type="checkbox"
-                              className="check-history-product"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
-                  <section className="box-history">
-                    <div className="row">
-                      <div className="col-3 box-history-img">
-                        <img src={product} alt="product-img" />
-                      </div>
-                      <div className="col-9 ">
-                        <div className="row ">
-                          <div className="col-12 box-history-title ps-3">
-                            <h5>Veggie tomato mix</h5>
-                          </div>
-                          <div className="col box-history-info ps-3">
-                            <p>IDR 34.000</p>
-                            <p>Delivered</p>
-                          </div>
-                          <div className="col-2 d-flex align-items-center">
-                            <input
-                              type="checkbox"
-                              className="check-history-product"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
-                  <section className="box-history">
-                    <div className="row">
-                      <div className="col-3 box-history-img">
-                        <img src={product} alt="product-img" />
-                      </div>
-                      <div className="col-9 ">
-                        <div className="row ">
-                          <div className="col-12 box-history-title ps-3">
-                            <h5>Veggie tomato mix</h5>
-                          </div>
-                          <div className="col box-history-info ps-3">
-                            <p>IDR 34.000</p>
-                            <p>Delivered</p>
-                          </div>
-                          <div className="col-2 d-flex align-items-center">
-                            <input
-                              type="checkbox"
-                              className="check-history-product"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
-                  <section className="box-history">
-                    <div className="row">
-                      <div className="col-3 box-history-img">
-                        <img src={product} alt="product-img" />
-                      </div>
-                      <div className="col-9 ">
-                        <div className="row ">
-                          <div className="col-12 box-history-title ps-3">
-                            <h5>Veggie tomato mix</h5>
-                          </div>
-                          <div className="col box-history-info ps-3">
-                            <p>IDR 34.000</p>
-                            <p>Delivered</p>
-                          </div>
-                          <div className="col-2 d-flex align-items-center">
-                            <input
-                              type="checkbox"
-                              className="check-history-product"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
+                  {select === true ? (
+                    <>
+                      {history.map((item) => (
+                        <>
+                          <section className="box-history ">
+                            <div className="row">
+                              <div className="col-3 box-history-img">
+                                <img src={icon} alt="product-img" />
+                              </div>
+                              <div className="col-9 ">
+                                <div className="row ">
+                                  <div className="col-12 box-history-title ps-3">
+                                    <h5>{item.payment_method}</h5>
+                                  </div>
+                                  <div className="col box-history-info ps-3">
+                                    <p>IDR {item.total}</p>
+                                    <p>{item.created_at.split("T")[0]}</p>
+                                  </div>
+                                  <div className="col-2 d-flex align-items-center">
+                                    {select === true ? (
+                                      <>
+                                        <input
+                                          type="checkbox"
+                                          className="check-history-product"
+                                        />
+                                      </>
+                                    ) : (
+                                      <></>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </section>
+                        </>
+                      ))}
+                    </>
+                  ) : (
+                    <>
+                      {history.map((item) => (
+                        <>
+                          <Link
+                            to={"/history/" + item.id}
+                            className="box-history box-cursor-pointer"
+                          >
+                            <div className="row">
+                              <div className="col-3 box-history-img">
+                                <img src={icon} alt="product-img" />
+                              </div>
+                              <div className="col-9 ">
+                                <div className="row ">
+                                  <div className="col-12 box-history-title ps-3">
+                                    <h5>{item.payment_method}</h5>
+                                  </div>
+                                  <div className="col box-history-info ps-3">
+                                    <p>IDR {item.total}</p>
+                                    <p>{item.created_at.split("T")[0]}</p>
+                                  </div>
+                                  <div className="col-2 d-flex align-items-center">
+                                    {select === true ? (
+                                      <>
+                                        <input
+                                          type="checkbox"
+                                          className="check-history-product"
+                                        />
+                                      </>
+                                    ) : (
+                                      <></>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </Link>
+                        </>
+                      ))}
+                    </>
+                  )}
                 </section>
               </section>
             </div>

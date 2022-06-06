@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import "./ProductDetails.css";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 import Navbar from "../../components/Navbar/Navbar";
 import NavbarSignIn from "../../components/NavbarSignIn/Navbar";
@@ -17,6 +18,7 @@ function ProductDetails() {
   let params = useParams();
   const [isLogin, setisLogin] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isadd, setIsadd] = useState(false);
   const Navigate = useNavigate();
   // data
   const [products, setProducts] = useState([]);
@@ -103,6 +105,17 @@ function ProductDetails() {
       btn.classList.remove("d-none");
     }
   }, [quantity]);
+
+  useEffect(() => {
+    if (isadd === true) {
+      Swal.fire(
+        "Success",
+        `Success add ${productDetail.name} to chart`,
+        "success"
+      );
+      setIsadd(false);
+    }
+  }, [isadd]);
   const sizeHandler = (size) => {
     products.map((product) =>
       product.size === size ? setProductDetail(product) : ""
@@ -122,18 +135,17 @@ function ProductDetails() {
       img: productDetail.img,
       quantity: quantity,
     };
-    console.log(JSON.parse(localStorage.getItem("chart")));
-    console.log(dataProduct);
     setQuantity(1);
     if (localStorage.getItem("chart") !== null) {
       const oldData = JSON.parse(localStorage.getItem("chart"));
       const data = [...oldData, dataProduct];
       localStorage.setItem("chart", JSON.stringify(data));
 
-      return;
+      return setIsadd(true);
     }
 
     localStorage.setItem("chart", JSON.stringify([dataProduct]));
+    return setIsadd(true);
   };
   const checkoutHandler = (e) => {
     addChartHandler(e);
