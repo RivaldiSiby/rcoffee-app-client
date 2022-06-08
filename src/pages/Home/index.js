@@ -57,34 +57,24 @@ class index extends Component {
       this.setState({ loading: true });
       const haveToken =
         localStorage.getItem("tokenkey") !== undefined
-          ? JSON.parse(localStorage.getItem("tokenkey"))
+          ? localStorage.getItem("tokenkey")
           : null;
       if (haveToken !== null) {
         const refreshToken = JSON.parse(localStorage.getItem("refreshkey"));
         // cek token
 
         const result = await axios.get(
-          `http://localhost:8080/auth/${refreshToken}`,
-          {
-            headers: {
-              Authorization: `Bearer ${haveToken}`,
-            },
-          }
+          `http://localhost:8080/auth/${refreshToken}`
         );
 
+        console.log(result);
         if (result.data !== undefined) {
           await this.setState({ isLogin: true });
         }
-
-        if (
-          result.data.message === "token generate" &&
-          this.state.isLogin === true
-        ) {
-          await localStorage.setItem(
-            "tokenkey",
-            JSON.stringify(result.data.data.accessToken)
-          );
-        }
+        await localStorage.setItem(
+          "tokenkey",
+          JSON.stringify(result.data.data.token)
+        );
       }
       // tarik data
       this.setState({ loading: false });

@@ -13,73 +13,33 @@ import icon from "../../asset/img/historyPage/icon.png";
 function History() {
   const Navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [isLogin, setisLogin] = useState(false);
   const [select, setSelect] = useState(false);
 
   // data
   const [history, setHistory] = useState([]);
   // data
-
   useEffect(() => {
-    const checkLogin = async () => {
-      try {
-        setLoading(true);
-        const haveToken =
-          localStorage.getItem("tokenkey") !== undefined
-            ? JSON.parse(localStorage.getItem("tokenkey"))
-            : null;
-        if (haveToken !== null) {
-          const refreshToken = JSON.parse(localStorage.getItem("refreshkey"));
-          // cek token
-
-          const result = await axios.get(
-            `http://localhost:8080/auth/${refreshToken}`,
-            {
-              headers: {
-                Authorization: `Bearer ${haveToken}`,
-              },
-            }
-          );
-          if (result.data !== undefined) {
-            setisLogin(true);
-          }
-
-          if (result.data.message === "token generate" && isLogin === true) {
-            await localStorage.setItem(
-              "tokenkey",
-              JSON.stringify(result.data.data.accessToken)
-            );
-          }
-          return;
-        }
-        Navigate("/", { replace: true });
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-        if (isLogin === false) {
-          Navigate("/", { replace: true });
-        }
-
-        setLoading(false);
-      }
-    };
     const getTransaction = async () => {
       try {
         setLoading(true);
-        const data = await axios.get("http://localhost:8080/transaction", {
-          headers: {
-            Authorization: `Bearer ${JSON.parse(
-              localStorage.getItem("tokenkey")
-            )}`,
-          },
-        });
-        setHistory(data.data.data);
-        setLoading(false);
+        console.log(JSON.parse(localStorage.getItem("tokenkey")));
+        if (JSON.parse(localStorage.getItem("tokenkey")) !== undefined) {
+          const data = await axios.get("http://localhost:8080/transaction", {
+            headers: {
+              Authorization: `Bearer ${JSON.parse(
+                localStorage.getItem("tokenkey")
+              )}`,
+            },
+          });
+          if (data !== undefined) {
+            setHistory(data.data.data);
+            setLoading(false);
+          }
+        }
       } catch (error) {
         setLoading(false);
       }
     };
-    checkLogin();
     getTransaction();
   }, []);
 

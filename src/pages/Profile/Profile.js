@@ -48,49 +48,6 @@ function Profile() {
   // update data
 
   useEffect(() => {
-    const checkLogin = async () => {
-      try {
-        setLoading(true);
-        const haveToken =
-          localStorage.getItem("tokenkey") !== undefined
-            ? JSON.parse(localStorage.getItem("tokenkey"))
-            : null;
-        if (haveToken !== null) {
-          const refreshToken = JSON.parse(localStorage.getItem("refreshkey"));
-          // cek token
-
-          const result = await axios.get(
-            `http://localhost:8080/auth/${refreshToken}`,
-            {
-              headers: {
-                Authorization: `Bearer ${haveToken}`,
-              },
-            }
-          );
-          if (result.data !== undefined) {
-            setisLogin(true);
-          }
-
-          if (result.data.message === "token generate" && isLogin === true) {
-            await localStorage.setItem(
-              "tokenkey",
-              JSON.stringify(result.data.data.accessToken)
-            );
-          }
-          return;
-        }
-        Navigate("/");
-
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-        if (isLogin === false) {
-          Navigate("/");
-        }
-
-        setLoading(false);
-      }
-    };
     const getProfileData = async () => {
       setLoading(true);
       try {
@@ -133,7 +90,6 @@ function Profile() {
         setLoading(false);
       }
     };
-    checkLogin();
     getProfileData();
   }, []);
 
