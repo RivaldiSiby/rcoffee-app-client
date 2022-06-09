@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-
+import GenerateToken from "../../helper/GenerateToken";
 import NavbarSignIn from "../../components/NavbarSignIn/Navbar";
 import Footer from "../../components/Footer/Footer";
 import "./Payment.css";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // img
 import loadingImg from "../../asset/img/loading.gif";
@@ -13,13 +13,10 @@ import noorder from "../../asset/img/bgchart.png";
 import Main from "../../components/Payment/Main";
 // img
 
-function Payment(props) {
+function Payment() {
   const navigate = useNavigate();
-  const params = useParams();
-  const [isLogin, setisLogin] = useState(false);
   const [loading, setLoading] = useState(false);
   const [chart, setChart] = useState(null);
-  const [transaction, setTransaction] = useState(null);
   const [subtotal, setSubtotal] = useState(0);
   const [tax, setTax] = useState(null);
   const [delivery, setDelivery] = useState(null);
@@ -38,48 +35,17 @@ function Payment(props) {
       // atur pajak dan ongkos kirim
       setTax(0.1);
       setDelivery(10000);
-
+      setCoupon(null);
       setLoading(false);
       return;
     }
   }, []);
-  const checkToken = async () => {
-    try {
-      const refreshToken = JSON.parse(localStorage.getItem("refreshkey"));
-      const result = await axios.get(
-        `http://localhost:8080/auth/${refreshToken}`,
-        {
-          headers: {
-            Authorization: `Bearer ${JSON.parse(
-              localStorage.getItem("tokenkey")
-            )}`,
-          },
-        }
-      );
-      if (result.data !== undefined) {
-        setisLogin(true);
-      }
 
-      if (result.data.message === "token generate" && isLogin === true) {
-        await localStorage.setItem(
-          "tokenkey",
-          JSON.stringify(result.data.data.accessToken)
-        );
-      }
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      console.log(error);
-      if (isLogin === false) {
-        navigate("/", { replace: true, state: { isLogin: false } });
-      }
-    }
-  };
   const confirmPayment = async () => {
     try {
       setLoading(true);
       // cek token
-      await checkToken();
+      await GenerateToken();
       // jalankan operasi
       let products = [];
       chart.map((item) =>

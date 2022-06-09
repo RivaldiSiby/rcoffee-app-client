@@ -4,6 +4,7 @@ import Footer from "../../components/Footer/Footer";
 import { useNavigate, Link } from "react-router-dom";
 import "./History.css";
 import axios from "axios";
+import GenerateToken from "../../helper/GenerateToken";
 
 // img
 import loadingImg from "../../asset/img/loading.gif";
@@ -22,8 +23,9 @@ function History() {
     const getTransaction = async () => {
       try {
         setLoading(true);
-        console.log(JSON.parse(localStorage.getItem("tokenkey")));
+
         if (JSON.parse(localStorage.getItem("tokenkey")) !== undefined) {
+          await GenerateToken();
           const data = await axios.get("http://localhost:8080/transaction", {
             headers: {
               Authorization: `Bearer ${JSON.parse(
@@ -38,6 +40,7 @@ function History() {
         }
       } catch (error) {
         setLoading(false);
+        Navigate("/login");
       }
     };
     getTransaction();

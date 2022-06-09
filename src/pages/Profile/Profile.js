@@ -13,9 +13,9 @@ import iconShow from "../../asset/img/signPage/iconShow.jpg";
 
 import NavbarSignIn from "../../components/NavbarSignIn/Navbar";
 import Footer from "../../components/Footer/Footer";
+import GenerateToken from "../../helper/GenerateToken";
 
 function Profile() {
-  const [isLogin, setisLogin] = useState(false);
   const [loading, setLoading] = useState(false);
   const [disable, setDisable] = useState(true);
   const [editPass, setEditPass] = useState(false);
@@ -51,6 +51,7 @@ function Profile() {
     const getProfileData = async () => {
       setLoading(true);
       try {
+        await GenerateToken();
         const profile = await axios.get(`http://localhost:8080/users/profile`, {
           headers: {
             Authorization: `Bearer ${JSON.parse(
@@ -163,44 +164,13 @@ function Profile() {
     remove.classList.toggle("d-none");
   };
 
-  const checkToken = async () => {
-    try {
-      const refreshToken = JSON.parse(localStorage.getItem("refreshkey"));
-      const result = await axios.get(
-        `http://localhost:8080/auth/${refreshToken}`,
-        {
-          headers: {
-            Authorization: `Bearer ${JSON.parse(
-              localStorage.getItem("tokenkey")
-            )}`,
-          },
-        }
-      );
-      if (result.data !== undefined) {
-        setisLogin(true);
-      }
-
-      if (result.data.message === "token generate" && isLogin === true) {
-        await localStorage.setItem(
-          "tokenkey",
-          JSON.stringify(result.data.data.accessToken)
-        );
-      }
-    } catch (error) {
-      setLoading(false);
-      console.log(error);
-      if (isLogin === false) {
-        Navigate("/");
-      }
-    }
-  };
   // logout handler
   const logoutHandler = async () => {
     const logout = async () => {
       try {
         setLoading(true);
         // cek token
-        await checkToken();
+        await GenerateToken();
 
         // logout API
         const refreshToken = JSON.parse(localStorage.getItem("refreshkey"));
@@ -215,7 +185,7 @@ function Profile() {
         setLoading(false);
       }
       // clear storage
-      setisLogin(false);
+
       localStorage.clear();
       setLoading(false);
       Navigate("/", { state: { logoutSuccess: true } });
@@ -325,7 +295,7 @@ function Profile() {
       setMsgCPass("");
       setMsgPass("");
       // cek token
-      await checkToken();
+      await GenerateToken();
       // post data
       await axios.patch("http://localhost:8080/users", formData, {
         headers: {
