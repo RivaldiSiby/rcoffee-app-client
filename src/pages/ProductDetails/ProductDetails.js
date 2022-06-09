@@ -12,10 +12,12 @@ import Footer from "../../components/Footer/Footer";
 import loadingImg from "../../asset/img/loading.gif";
 import iconMsg from "../../asset/img/productsDetailPage/iconMsg.png";
 import iconCek from "../../asset/img/productsDetailPage/iconCek.svg";
+import GenerateToken from "../../helper/GenerateToken";
 // img
 
 function ProductDetails() {
   let params = useParams();
+  const navigate = useNavigate();
   const [isLogin, setisLogin] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isadd, setIsadd] = useState(false);
@@ -27,49 +29,11 @@ function ProductDetails() {
   // data
 
   useEffect(() => {
-    const checkLogin = async () => {
-      try {
-        setLoading(true);
-        const haveToken =
-          localStorage.getItem("tokenkey") !== undefined
-            ? JSON.parse(localStorage.getItem("tokenkey"))
-            : null;
-        if (haveToken !== null) {
-          const refreshToken = JSON.parse(localStorage.getItem("refreshkey"));
-          // cek token
-
-          const result = await axios.get(
-            `http://localhost:8080/auth/${refreshToken}`,
-            {
-              headers: {
-                Authorization: `Bearer ${haveToken}`,
-              },
-            }
-          );
-          if (result.data !== undefined) {
-            setisLogin(true);
-          }
-
-          if (result.data.message === "token generate" && isLogin === true) {
-            await localStorage.setItem(
-              "tokenkey",
-              JSON.stringify(result.data.data.accessToken)
-            );
-          }
-          setLoading(false);
-          return;
-        }
-
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-
-        setLoading(false);
-      }
-    };
     const getProduct = async () => {
       try {
         setLoading(true);
+        await GenerateToken();
+        setisLogin(true);
         const product = await axios.get(
           `http://localhost:8080/product/${params.id}`,
           {
@@ -89,11 +53,26 @@ function ProductDetails() {
         setLoading(false);
       } catch (error) {
         console.log(error);
-        setLoading(false);
+        axios
+          .get(`http://localhost:8080/product/${params.id}`, {
+            headers: {
+              Authorization: `Bearer ${JSON.parse(
+                localStorage.getItem("tokenkey")
+              )}`,
+            },
+          })
+          .then((product) => {
+            setProducts(product.data.data);
+            // get product detail
+            product.data.data.map((product) =>
+              product.size === params.size ? setProductDetail(product) : ""
+            );
+
+            setLoading(false);
+          });
       }
     };
     getProduct();
-    checkLogin();
   }, []);
 
   useEffect(() => {
@@ -124,32 +103,42 @@ function ProductDetails() {
   };
 
   // add cart
-  const addChartHandler = (e) => {
+  const addChartHandler = async (e) => {
     e.preventDefault();
-    // add data ke card locastorage
-    const dataProduct = {
-      id: productDetail.stock_id,
-      name: productDetail.name,
-      price: productDetail.price,
-      size: productDetail.size,
-      img: productDetail.img,
-      quantity: quantity,
-    };
-    setQuantity(1);
-    if (localStorage.getItem("chart") !== null) {
-      const oldData = JSON.parse(localStorage.getItem("chart"));
-      const data = [...oldData, dataProduct];
-      localStorage.setItem("chart", JSON.stringify(data));
+    try {
+      await GenerateToken();
+      // add data ke card locastorage
+      const dataProduct = {
+        id: productDetail.stock_id,
+        name: productDetail.name,
+        price: productDetail.price,
+        size: productDetail.size,
+        img: productDetail.img,
+        quantity: quantity,
+      };
+      setQuantity(1);
+      if (localStorage.getItem("chart") !== null) {
+        const oldData = JSON.parse(localStorage.getItem("chart"));
+        const data = [...oldData, dataProduct];
+        localStorage.setItem("chart", JSON.stringify(data));
 
+        return setIsadd(true);
+      }
+
+      localStorage.setItem("chart", JSON.stringify([dataProduct]));
       return setIsadd(true);
+    } catch (error) {
+      navigate("/login", { replace: true });
     }
-
-    localStorage.setItem("chart", JSON.stringify([dataProduct]));
-    return setIsadd(true);
   };
-  const checkoutHandler = (e) => {
-    addChartHandler(e);
-    Navigate("/chart");
+  const checkoutHandler = async (e) => {
+    try {
+      await GenerateToken();
+      addChartHandler(e);
+      Navigate("/chart");
+    } catch (error) {
+      navigate("/login", { replace: true });
+    }
   };
   return (
     <div>

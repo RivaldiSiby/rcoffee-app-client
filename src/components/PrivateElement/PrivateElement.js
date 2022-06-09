@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import React, { Navigate } from "react-router-dom";
 
 function PrivateElement({
   children,
@@ -8,25 +8,17 @@ function PrivateElement({
   isRouteReplaced = true,
   extraData = null,
 }) {
-  const Navigate = useNavigate();
+  console.log(publicPage);
 
-  if (publicPage === "sign" && isLogin === true) {
-    return Navigate("/", {
-      replace: { isRouteReplaced },
-      state: { extraData },
-    });
+  if (publicPage === "sign") {
+    return children;
   }
-  console.log(isLogin);
   if (publicPage === "public") {
     return children;
   }
-  if (isLogin === false) {
-    return Navigate(`${redirectedTo}`, {
-      replace: { isRouteReplaced },
-      state: { extraData },
-    });
+  if (publicPage === "private" && isLogin === true) {
+    return children;
   }
-  return children;
 }
 
 export default PrivateElement;

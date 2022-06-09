@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./index.css";
 import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import axios from "axios";
 import swal from "sweetalert2";
 
@@ -18,6 +19,8 @@ import iconShow from "../../asset/img/signPage/iconShow.jpg";
 
 function Sign(props) {
   // login
+  const state = useSelector((state) => state);
+  console.log(state);
   const navigate = useNavigate();
   const [Email, setEmail] = useState("");
   const [Pass, setPass] = useState("");

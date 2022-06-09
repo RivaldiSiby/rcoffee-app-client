@@ -11,6 +11,7 @@ function Hooks(Component) {
     let params = useParams();
     const [searchParams, setSearchParams] = useSearchParams();
     let navigate = useNavigate();
+    console.log(props);
     return (
       <Component
         params={params}
@@ -18,6 +19,7 @@ function Hooks(Component) {
         setSearchParams={setSearchParams}
         navigate={navigate}
         location={useLocation()}
+        {...props}
       />
     );
   }

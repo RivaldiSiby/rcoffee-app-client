@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import "./index.css";
 import Swal from "sweetalert2";
 import Hooks from "../../helper/Hooks";
+import GenerateToken from "../../helper/GenerateToken";
 
 // img
 import staf from "../../asset/img/homePage/userv.svg";
@@ -29,6 +30,7 @@ import arrowleft from "../../asset/img/homePage/arrowleft.svg";
 import arrowright from "../../asset/img/homePage/arrowright.svg";
 import border from "../../asset/img/homePage/border.png";
 import loadingImg from "../../asset/img/loading.gif";
+import { connect } from "react-redux";
 // img
 
 // cek token
@@ -53,37 +55,13 @@ class index extends Component {
         Swal.fire("Success", "Logout Success", "success");
       }
     }
+
     try {
       this.setState({ loading: true });
-      const haveToken =
-        localStorage.getItem("tokenkey") !== undefined
-          ? localStorage.getItem("tokenkey")
-          : null;
-      if (haveToken !== null) {
-        const refreshToken = JSON.parse(localStorage.getItem("refreshkey"));
-        // cek token
-
-        const result = await axios.get(
-          `http://localhost:8080/auth/${refreshToken}`
-        );
-
-        console.log(result);
-        if (result.data !== undefined) {
-          await this.setState({ isLogin: true });
-        }
-        await localStorage.setItem(
-          "tokenkey",
-          JSON.stringify(result.data.data.token)
-        );
-      }
-      // tarik data
-      this.setState({ loading: false });
-    } catch (error) {
-      this.setState({ loading: false });
-      console.log(error);
-    }
-    try {
-      this.setState({ loading: true });
+      await GenerateToken();
+      this.setState({
+        isLogin: true,
+      });
       const products = await axios.get(
         `http://localhost:8080/product/favorite?limit=3`
       );
@@ -91,11 +69,16 @@ class index extends Component {
       this.setState({ loading: false });
       return;
     } catch (error) {
-      this.setState({ loading: false });
-      console.log(error);
+      await axios
+        .get(`http://localhost:8080/product/favorite?limit=3`)
+        .then((products) => {
+          this.setState({ products: products.data.data });
+          this.setState({ loading: false });
+        });
     }
   }
   render() {
+    console.log(this.props);
     return (
       <div>
         {this.state.loading === true ? (
@@ -108,7 +91,7 @@ class index extends Component {
           </div>
         ) : (
           <>
-            {this.state.isLogin === true ? (
+            {this.state.isLogin === this.props.login ? (
               <NavbarSignIn navActive={"home"} />
             ) : (
               <Navbar navActive={"home"} />
@@ -685,5 +668,10 @@ class index extends Component {
     );
   }
 }
-
-export default Hooks(index);
+const mapStateToProps = (reduxState) => {
+  const { login } = reduxState;
+  return {
+    login,
+  };
+};
+export default connect(mapStateToProps)(Hooks(index));

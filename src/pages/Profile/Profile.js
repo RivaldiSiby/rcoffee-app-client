@@ -169,18 +169,10 @@ function Profile() {
     const logout = async () => {
       try {
         setLoading(true);
-        // cek token
-        await GenerateToken();
 
         // logout API
         const refreshToken = JSON.parse(localStorage.getItem("refreshkey"));
-        await axios.delete(`http://localhost:8080/auth/${refreshToken}`, {
-          headers: {
-            Authorization: `Bearer ${JSON.parse(
-              localStorage.getItem("tokenkey")
-            )}`,
-          },
-        });
+        await axios.delete(`http://localhost:8080/auth/${refreshToken}`);
       } catch (error) {
         setLoading(false);
       }

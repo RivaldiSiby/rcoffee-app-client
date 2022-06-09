@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import "./index.css";
 import axios from "axios";
 import Swal from "sweetalert2";
+import GenerateToken from "../../helper/GenerateToken";
 
 // img
 import product from "../../asset/img/productsPage/product.png";
@@ -52,33 +53,10 @@ class index extends Component {
     this.props.navigate("/products");
     try {
       this.setState({ loading: true });
-      const haveToken =
-        localStorage.getItem("tokenkey") !== undefined
-          ? localStorage.getItem("tokenkey")
-          : null;
-      if (haveToken !== null) {
-        const refreshToken = JSON.parse(localStorage.getItem("refreshkey"));
-        // cek token
-
-        const result = await axios.get(
-          `http://localhost:8080/auth/${refreshToken}`
-        );
-
-        if (result.data !== undefined) {
-          await this.setState({ isLogin: true });
-        }
-        await localStorage.setItem(
-          "tokenkey",
-          JSON.stringify(result.data.data.token)
-        );
-      }
-      this.setState({ loading: false });
-    } catch (error) {
-      this.setState({ loading: false });
-      console.log(error.response.data.message);
-    }
-    try {
-      this.setState({ loading: true });
+      await GenerateToken();
+      this.setState({
+        isLogin: true,
+      });
       // tarik data
       // product api
       const products = await axios.get(
@@ -104,8 +82,31 @@ class index extends Component {
       });
       this.setState({ loading: false });
     } catch (error) {
-      this.setState({ loading: false });
       console.log(error);
+      await axios
+        .get(`http://localhost:8080/product/favorite?limit=12`)
+        .then((products) => {
+          if (products.data.meta.totalPage > 1) {
+            let number = [];
+            for (let i = 1; i <= products.data.meta.totalPage; i++) {
+              number.push(i);
+            }
+            this.setState({
+              paginationNumber: number,
+            });
+          }
+          this.setState({
+            products: products.data.data,
+            pagination: products.data.meta,
+          });
+          // promo
+          axios.get(`http://localhost:8080/promos?limit=1`).then((promos) => {
+            this.setState({
+              promo: promos.data.data,
+            });
+            this.setState({ loading: false });
+          });
+        });
     }
   }
   async categoryHandler(category) {
@@ -339,10 +340,17 @@ class index extends Component {
   async sortHandler() {
     try {
       this.setState({ load: true });
+      let urlQuery = this.state.linkUrl.split("&");
+      urlQuery = urlQuery[1];
       const products = await axios.get(
-        `${this.state.linkUrl}${
-          this.state.sort !== "" ? "&sort=" + this.state.sort : ""
-        }&order=${this.state.order}`
+        `${
+          urlQuery.split("=")[0] === "search"
+            ? "http://localhost:8080/product?limit=12&name=" +
+              urlQuery.split("=")[1]
+            : this.state.linkUrl
+        }${this.state.sort !== "" ? "&sort=" + this.state.sort : ""}&order=${
+          this.state.order
+        }`
       );
       if (products.data.meta.totalPage > 1) {
         let number = [];
@@ -358,9 +366,6 @@ class index extends Component {
         pagination: products.data.meta,
       });
       // atur url
-      let urlQuery = this.state.linkUrl.split("&");
-      urlQuery = urlQuery[1];
-      console.log(urlQuery);
       this.props.navigate(
         `/products?${urlQuery}${
           this.state.sort !== "" ? "&sort=" + this.state.sort : ""
