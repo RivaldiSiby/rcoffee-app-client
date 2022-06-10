@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Home from "../pages/Home";
 import Profile from "../pages/Profile/Profile";
 import Products from "../pages/Products";
@@ -9,115 +9,88 @@ import History from "../pages/History/History";
 import ForgetPass from "../pages/Forget-pass/FotgetPass";
 import ProductDetails from "../pages/ProductDetails/ProductDetails";
 import PrivateElement from "../components/PrivateElement/PrivateElement";
-import GenerateToken from "../helper/GenerateToken";
 import { Provider as ReduxProvider } from "react-redux";
-import { store } from "../redux/store";
+import { store, persistor } from "../redux/store";
+import { PersistGate } from "redux-persist/integration/react";
 
 // img
-// import loadingImg from "../asset/img/loading.gif";
 // img
 
 function Router() {
-  const [isLogin, setisLogin] = useState(false);
-  // const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    const checkLogin = async () => {
-      try {
-        await GenerateToken();
-        setisLogin(true);
-      } catch (error) {
-        console.log(error);
-        setisLogin(false);
-        return;
-      }
-    };
-
-    checkLogin();
-  }, []);
   return (
     <ReduxProvider store={store}>
-      <BrowserRouter>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <PrivateElement isLogin={isLogin} publicPage={"public"}>
-                <Home />
-              </PrivateElement>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <PrivateElement
-                isLogin={isLogin}
-                publicPage={"private"}
-                redirectedTo="/login"
-              >
-                <Profile />
-              </PrivateElement>
-            }
-          />
-          <Route
-            path="/chart"
-            element={
-              <PrivateElement
-                publicPage={"private"}
-                isLogin={isLogin}
-                redirectedTo="/login"
-              >
-                <Payment />
-              </PrivateElement>
-            }
-          />
-          <Route
-            path="/history"
-            element={
-              <PrivateElement
-                publicPage={"private"}
-                isLogin={isLogin}
-                redirectedTo="/login"
-              >
-                <History />
-              </PrivateElement>
-            }
-          />
-          <Route
-            path="/products"
-            element={
-              <PrivateElement publicPage={"public"} isLogin={isLogin}>
-                <Products />
-              </PrivateElement>
-            }
-          />
-          <Route
-            path="/products/:id/:size"
-            element={
-              <PrivateElement publicPage={"public"} isLogin={isLogin}>
-                <ProductDetails />
-              </PrivateElement>
-            }
-          />
-          <Route
-            path="/login"
-            element={
-              <PrivateElement isLogin={isLogin} publicPage={"sign"}>
-                <Sign pageSign={"login"} />
-              </PrivateElement>
-            }
-          />
-          <Route
-            path="/regis"
-            element={
-              <PrivateElement isLogin={isLogin} publicPage={"sign"}>
-                <Sign pageSign={"regis"} />
-              </PrivateElement>
-            }
-          />
+      <PersistGate persistor={persistor}>
+        <BrowserRouter>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <PrivateElement publicPage={"public"}>
+                  <Home />
+                </PrivateElement>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <PrivateElement publicPage={"private"} redirectedTo="/login">
+                  <Profile />
+                </PrivateElement>
+              }
+            />
+            <Route
+              path="/chart"
+              element={
+                <PrivateElement publicPage={"private"} redirectedTo="/login">
+                  <Payment />
+                </PrivateElement>
+              }
+            />
+            <Route
+              path="/history"
+              element={
+                <PrivateElement publicPage={"private"} redirectedTo="/login">
+                  <History />
+                </PrivateElement>
+              }
+            />
+            <Route
+              path="/products"
+              element={
+                <PrivateElement publicPage={"public"}>
+                  <Products />
+                </PrivateElement>
+              }
+            />
+            <Route
+              path="/products/:id/:size"
+              element={
+                <PrivateElement publicPage={"public"}>
+                  <ProductDetails />
+                </PrivateElement>
+              }
+            />
+            <Route
+              path="/login"
+              element={
+                <PrivateElement publicPage={"sign"}>
+                  <Sign pageSign={"login"} />
+                </PrivateElement>
+              }
+            />
+            <Route
+              path="/regis"
+              element={
+                <PrivateElement publicPage={"sign"}>
+                  <Sign pageSign={"regis"} />
+                </PrivateElement>
+              }
+            />
 
-          <Route path="/forgetPassword" element={<ForgetPass />} />
-        </Routes>
-      </BrowserRouter>
+            <Route path="/forgetPassword" element={<ForgetPass />} />
+          </Routes>
+        </BrowserRouter>
+      </PersistGate>
     </ReduxProvider>
   );
 }

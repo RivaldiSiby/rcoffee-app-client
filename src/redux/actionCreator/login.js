@@ -1,6 +1,7 @@
-export const successLogin = () => {
+export const successLogin = (auth) => {
   return {
     type: "SUCCESS_LOGIN",
+    payload: { ...auth },
   };
 };
 export const failLogin = () => {

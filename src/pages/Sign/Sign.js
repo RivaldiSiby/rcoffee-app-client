@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "./index.css";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+
 import axios from "axios";
 import swal from "sweetalert2";
-
+import { successLogin } from "../../redux/actionCreator/login";
 // img
 import bgsign from "../../asset/img/signPage//robert-bye-95vx5QVl9x4-unsplash 2.png";
 import logo from "../../asset/img/signPage/coffee icon.png";
@@ -19,8 +20,7 @@ import iconShow from "../../asset/img/signPage/iconShow.jpg";
 
 function Sign(props) {
   // login
-  const state = useSelector((state) => state);
-  console.log(state);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [Email, setEmail] = useState("");
   const [Pass, setPass] = useState("");
@@ -62,14 +62,14 @@ function Sign(props) {
         email: Email,
         password: Pass,
       });
-      localStorage.setItem("tokenkey", JSON.stringify(result.data.data.token));
-      localStorage.setItem("datauser", JSON.stringify(result.data.data.img));
-      localStorage.setItem(
-        "refreshkey",
-        JSON.stringify(result.data.data.refreshToken)
-      );
       setMsg("");
-      navigate("/", { state: { loginSuccess: true } });
+      navigate("/", { state: { loginSuccess: true }, replace: true });
+      const authData = {
+        tokenkey: result.data.data.token,
+        refreshkey: result.data.data.refreshToken,
+        datauser: result.data.data.img,
+      };
+      dispatch(successLogin(authData));
     } catch (error) {
       setMsg("Failed Login. " + error.response.data.message);
       setInput("form-control form-input-sign border-danger");

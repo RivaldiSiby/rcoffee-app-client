@@ -4,10 +4,11 @@ import { Link } from "react-router-dom";
 import logo from "../../asset/img/homePage/coffee icon.png";
 import search from "../../asset/img/profilePage/search.svg";
 import chat from "../../asset/img/profilePage/chat.svg";
+import { useSelector } from "react-redux";
 
 function Navbar(props) {
-  const img =
-    "http://localhost:8080" + JSON.parse(localStorage.getItem("datauser"));
+  const login = useSelector((state) => state.login);
+  const img = "http://localhost:8080" + login.auth["datauser"];
   const [profile] = useState(img);
   const activeHome =
     props.navActive === "home" ? "nav-text-nav text-active" : "nav-text-nav";

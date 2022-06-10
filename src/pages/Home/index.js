@@ -8,7 +8,8 @@ import "./index.css";
 import Swal from "sweetalert2";
 import Hooks from "../../helper/Hooks";
 import GenerateToken from "../../helper/GenerateToken";
-
+import { connect } from "react-redux";
+import { failLogin, successLogin } from "../../redux/actionCreator/login";
 // img
 import staf from "../../asset/img/homePage/userv.svg";
 import store from "../../asset/img/homePage/locv.svg";
@@ -30,7 +31,6 @@ import arrowleft from "../../asset/img/homePage/arrowleft.svg";
 import arrowright from "../../asset/img/homePage/arrowright.svg";
 import border from "../../asset/img/homePage/border.png";
 import loadingImg from "../../asset/img/loading.gif";
-import { connect } from "react-redux";
 // img
 
 // cek token
@@ -40,13 +40,11 @@ class index extends Component {
     super();
 
     this.state = {
-      isLogin: false,
       products: [],
       loading: false,
     };
   }
   async componentDidMount() {
-    // cek pesan login
     if (this.props.location.state !== null) {
       if (this.props.location.state.loginSuccess === true) {
         Swal.fire("Success", "Success Login", "success");
@@ -55,13 +53,18 @@ class index extends Component {
         Swal.fire("Success", "Logout Success", "success");
       }
     }
-
     try {
+      // cek pesan login
+
       this.setState({ loading: true });
-      await GenerateToken();
-      this.setState({
-        isLogin: true,
-      });
+      if (this.props.auth["refreshkey"] === undefined) {
+        this.props.dispatch(failLogin());
+      }
+      if (this.props.auth["refreshkey"] !== undefined) {
+        await GenerateToken(this.props.auth, (Data) => {
+          this.props.dispatch(successLogin(Data));
+        });
+      }
       const products = await axios.get(
         `http://localhost:8080/product/favorite?limit=3`
       );
@@ -69,16 +72,17 @@ class index extends Component {
       this.setState({ loading: false });
       return;
     } catch (error) {
-      await axios
+      axios
         .get(`http://localhost:8080/product/favorite?limit=3`)
         .then((products) => {
           this.setState({ products: products.data.data });
           this.setState({ loading: false });
+          this.props.dispatch(failLogin());
         });
+      return;
     }
   }
   render() {
-    console.log(this.props);
     return (
       <div>
         {this.state.loading === true ? (
@@ -91,7 +95,7 @@ class index extends Component {
           </div>
         ) : (
           <>
-            {this.state.isLogin === this.props.login ? (
+            {this.props.status === true ? (
               <NavbarSignIn navActive={"home"} />
             ) : (
               <Navbar navActive={"home"} />
@@ -669,9 +673,12 @@ class index extends Component {
   }
 }
 const mapStateToProps = (reduxState) => {
-  const { login } = reduxState;
+  const {
+    login: { status, auth },
+  } = reduxState;
   return {
-    login,
+    status,
+    auth,
   };
 };
 export default connect(mapStateToProps)(Hooks(index));

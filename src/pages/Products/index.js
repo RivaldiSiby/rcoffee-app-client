@@ -5,6 +5,8 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import GenerateToken from "../../helper/GenerateToken";
 
+import { failLogin, successLogin } from "../../redux/actionCreator/login";
+
 // img
 import product from "../../asset/img/productsPage/product.png";
 import loadingImg from "../../asset/img/loading.gif";
@@ -14,13 +16,13 @@ import Navbar from "../../components/Navbar/Navbar";
 import NavbarSignIn from "../../components/NavbarSignIn/Navbar";
 import Footer from "../../components/Footer/Footer";
 import Hooks from "../../helper/Hooks";
+import { connect } from "react-redux";
 
 class index extends Component {
   constructor() {
     super();
 
     this.state = {
-      isLogin: false,
       loading: false,
       load: false,
       promo: [],
@@ -45,23 +47,28 @@ class index extends Component {
     };
   }
   async componentDidMount() {
+    // console.log(this.props.searchParams.get("search"));
+    // console.log(this.props.searchParams.get("coffee"));
     if (this.props.location.state !== null) {
       if (this.props.location.state.successToPay === true) {
         Swal.fire("Success", "Payment Success", "success");
       }
     }
-    this.props.navigate("/products");
+
     try {
       this.setState({ loading: true });
-      await GenerateToken();
-      this.setState({
-        isLogin: true,
-      });
+      if (this.props.auth["refreshkey"] === undefined) {
+        this.props.dispatch(failLogin());
+      }
+      if (this.props.auth["refreshkey"] !== undefined) {
+        await GenerateToken(this.props.auth, (Data) => {
+          this.props.dispatch(successLogin(Data));
+        });
+      }
       // tarik data
       // product api
-      const products = await axios.get(
-        `http://localhost:8080/product/favorite?limit=12`
-      );
+      let url = `http://localhost:8080/product/favorite?limit=12`;
+      const products = await axios.get(url);
       if (products.data.meta.totalPage > 1) {
         let number = [];
         for (let i = 1; i <= products.data.meta.totalPage; i++) {
@@ -107,6 +114,7 @@ class index extends Component {
             this.setState({ loading: false });
           });
         });
+      this.props.dispatch(failLogin());
     }
   }
   async categoryHandler(category) {
@@ -389,7 +397,7 @@ class index extends Component {
           </div>
         ) : (
           <>
-            {this.state.isLogin === true ? (
+            {this.props.status === true ? (
               <NavbarSignIn navActive={"products"} />
             ) : (
               <Navbar navActive={"products"} />
@@ -695,4 +703,13 @@ class index extends Component {
   }
 }
 
-export default Hooks(index);
+const mapStateToProps = (reduxState) => {
+  const {
+    login: { status, auth },
+  } = reduxState;
+  return {
+    status,
+    auth,
+  };
+};
+export default connect(mapStateToProps)(Hooks(index));

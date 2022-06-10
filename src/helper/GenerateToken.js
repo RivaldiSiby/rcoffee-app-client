@@ -1,11 +1,16 @@
 import axios from "axios";
 
-export default async function GenerateToken() {
-  const refreshToken = JSON.parse(localStorage.getItem("refreshkey"));
-
-  const result = await axios.get(`http://localhost:8080/auth/${refreshToken}`);
+export default async function GenerateToken(auth, cb) {
+  const result = await axios.get(
+    `http://localhost:8080/auth/${auth["refreshkey"]}`
+  );
   if (result.data.data.token !== undefined) {
-    localStorage.setItem("tokenkey", JSON.stringify(result.data.data.token));
-    return;
+    const authData = {
+      datauser: auth["datauser"],
+      tokenkey: result.data.data.token,
+      refreshkey: auth["refreshkey"],
+    };
+    cb(authData, result.data.data.token);
+    return result.data.data.token;
   }
 }

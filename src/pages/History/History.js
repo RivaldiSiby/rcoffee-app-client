@@ -5,13 +5,17 @@ import { useNavigate, Link } from "react-router-dom";
 import "./History.css";
 import axios from "axios";
 import GenerateToken from "../../helper/GenerateToken";
-
+import { useSelector, useDispatch } from "react-redux";
+import { failLogin, successLogin } from "../../redux/actionCreator/login";
 // img
 import loadingImg from "../../asset/img/loading.gif";
 import icon from "../../asset/img/historyPage/icon.png";
+
 // img
 
 function History() {
+  const dispatch = useDispatch();
+  const login = useSelector((state) => state.login);
   const Navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [select, setSelect] = useState(false);
@@ -23,24 +27,23 @@ function History() {
     const getTransaction = async () => {
       try {
         setLoading(true);
-
-        if (JSON.parse(localStorage.getItem("tokenkey")) !== undefined) {
-          await GenerateToken();
-          const data = await axios.get("http://localhost:8080/transaction", {
-            headers: {
-              Authorization: `Bearer ${JSON.parse(
-                localStorage.getItem("tokenkey")
-              )}`,
-            },
-          });
-          if (data !== undefined) {
-            setHistory(data.data.data);
-            setLoading(false);
-          }
+        const token = await GenerateToken(login.auth, (Data) => {
+          dispatch(successLogin(Data));
+        });
+        const data = await axios.get("http://localhost:8080/transaction", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (data !== undefined) {
+          setHistory(data.data.data);
+          setLoading(false);
         }
       } catch (error) {
         setLoading(false);
-        Navigate("/login");
+        console.log(error);
+        dispatch(failLogin());
+        Navigate("/login", { replace: true });
       }
     };
     getTransaction();

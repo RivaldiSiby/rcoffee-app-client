@@ -10,10 +10,12 @@ import loadingImg from "../../asset/img/loading.gif";
 import iconHide from "../../asset/img/signPage/iconHide.png";
 import iconShow from "../../asset/img/signPage/iconShow.jpg";
 // img
-
+import { useSelector, useDispatch } from "react-redux";
 import NavbarSignIn from "../../components/NavbarSignIn/Navbar";
 import Footer from "../../components/Footer/Footer";
 import GenerateToken from "../../helper/GenerateToken";
+import { failLogin, successLogin } from "../../redux/actionCreator/login";
+import { clearChart } from "../../redux/actionCreator/chart";
 
 function Profile() {
   const [loading, setLoading] = useState(false);
@@ -24,10 +26,11 @@ function Profile() {
   const [iconPass, setIconPass] = useState(iconShow);
   const [UpdateSuccess, setUpdateSuccess] = useState(false);
   const Navigate = useNavigate();
-
+  const dispatch = useDispatch();
+  const login = useSelector((state) => state.login);
+  const chart = useSelector((state) => state.chart);
   // user data
-  const img =
-    "http://localhost:8080" + JSON.parse(localStorage.getItem("datauser"));
+  const img = "http://localhost:8080" + login.auth["datauser"];
   const [profileImg, setProfileImg] = useState(img);
   const [profile, setProfile] = useState([]);
   const [Email, setEmail] = useState("");
@@ -51,12 +54,12 @@ function Profile() {
     const getProfileData = async () => {
       setLoading(true);
       try {
-        await GenerateToken();
+        const token = await GenerateToken(login.auth, (Data) => {
+          dispatch(successLogin(Data));
+        });
         const profile = await axios.get(`http://localhost:8080/users/profile`, {
           headers: {
-            Authorization: `Bearer ${JSON.parse(
-              localStorage.getItem("tokenkey")
-            )}`,
+            Authorization: `Bearer ${token}`,
           },
         });
         profile.data.data.address !== null
@@ -82,13 +85,12 @@ function Profile() {
         setPhone(profile.data.data.phone);
         setProfile(profile.data.data);
         // cek checked user gender
-        console.log();
-        document
-          .getElementById(`${profile.data.data.gender}`)
-          .setAttribute("checked", "");
         setLoading(false);
       } catch (error) {
+        console.log(error);
         setLoading(false);
+        dispatch(failLogin());
+        Navigate("/login", { replace: true });
       }
     };
     getProfileData();
@@ -118,6 +120,7 @@ function Profile() {
       for (let i = 0; i < radio.length; i++) {
         radio[i].removeAttribute("disabled");
       }
+      document.getElementById(`${Gender}`).setAttribute("checked", "");
       area.removeAttribute("disabled");
       setDisable(false);
     }
@@ -171,16 +174,17 @@ function Profile() {
         setLoading(true);
 
         // logout API
-        const refreshToken = JSON.parse(localStorage.getItem("refreshkey"));
+        const refreshToken = login.auth["refreshkey"];
         await axios.delete(`http://localhost:8080/auth/${refreshToken}`);
       } catch (error) {
         setLoading(false);
       }
       // clear storage
 
-      localStorage.clear();
+      dispatch(failLogin());
+      dispatch(clearChart());
       setLoading(false);
-      Navigate("/", { state: { logoutSuccess: true } });
+      Navigate("/", { state: { logoutSuccess: true }, replace: true });
     };
     swal
       .fire({
@@ -201,19 +205,18 @@ function Profile() {
   const getUserData = async () => {
     setLoading(true);
     try {
+      const token = await GenerateToken(login.auth, (Data) => {
+        dispatch(successLogin(Data));
+      });
       const profile = await axios.get(`http://localhost:8080/users/profile`, {
         headers: {
-          Authorization: `Bearer ${JSON.parse(
-            localStorage.getItem("tokenkey")
-          )}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 
       if (file !== "") {
         localStorage.setItem("datauser", JSON.stringify(profile.data.data.img));
-        const img =
-          "http://localhost:8080" +
-          JSON.parse(localStorage.getItem("datauser"));
+        const img = "http://localhost:8080" + login.auth["datauser"];
         setProfileImg(img);
       }
 
@@ -287,13 +290,13 @@ function Profile() {
       setMsgCPass("");
       setMsgPass("");
       // cek token
-      await GenerateToken();
+      const token = await GenerateToken(login.auth, (Data) => {
+        dispatch(successLogin(Data));
+      });
       // post data
       await axios.patch("http://localhost:8080/users", formData, {
         headers: {
-          Authorization: `Bearer ${JSON.parse(
-            localStorage.getItem("tokenkey")
-          )}`,
+          Authorization: `Bearer ${token}`,
           "Content-type": "multipart/form-data",
         },
       });
@@ -643,7 +646,7 @@ function Profile() {
                               <div className="col-md-5">
                                 <div className="form-check form-gender d-flex justify-content-end">
                                   <input
-                                    className="form-check-input input-radio"
+                                    className="form-check-input input-radio male"
                                     type="radio"
                                     name="flexRadioDefault"
                                     id="male"
@@ -661,7 +664,7 @@ function Profile() {
                               <div className="col-md-7">
                                 <div className="form-check form-gender d-flex justify-content-center align-items-center">
                                   <input
-                                    className="form-check-input input-radio"
+                                    className="form-check-input input-radio female"
                                     type="radio"
                                     name="flexRadioDefault"
                                     id="female"

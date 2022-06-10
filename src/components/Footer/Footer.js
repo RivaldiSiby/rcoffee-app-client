@@ -6,7 +6,6 @@ import twiter from "../../asset/img/signPage/vtw.svg";
 import instagram from "../../asset/img/signPage/vig.svg";
 
 function Footer(props) {
-  console.log(props.foot);
   return (
     <div>
       <footer

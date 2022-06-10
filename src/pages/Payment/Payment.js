@@ -12,24 +12,27 @@ import loadingImg from "../../asset/img/loading.gif";
 import noorder from "../../asset/img/bgchart.png";
 import Main from "../../components/Payment/Main";
 // img
+import { useSelector, useDispatch } from "react-redux";
+import { successLogin } from "../../redux/actionCreator/login";
+import { clearChart } from "../../redux/actionCreator/chart";
 
 function Payment() {
+  const dispatch = useDispatch();
+  const login = useSelector((state) => state.login);
+  const chart = useSelector((state) => state.chart);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [chart, setChart] = useState(null);
   const [subtotal, setSubtotal] = useState(0);
   const [tax, setTax] = useState(null);
   const [delivery, setDelivery] = useState(null);
   const [payment, setPayment] = useState(null);
   const [coupon, setCoupon] = useState(null);
   useEffect(() => {
-    if (localStorage.getItem("chart") !== null) {
+    if (chart.chart.length > 0) {
       setLoading(true);
-      const dataChart = JSON.parse(localStorage.getItem("chart"));
-      setChart(dataChart);
       // jumlahkan sub total
       let subtotal = [];
-      dataChart.map((item) => subtotal.push(item.quantity * item.price));
+      chart.chart.map((item) => subtotal.push(item.quantity * item.price));
       setSubtotal(subtotal.reduce((total, value) => total + value));
 
       // atur pajak dan ongkos kirim
@@ -45,10 +48,12 @@ function Payment() {
     try {
       setLoading(true);
       // cek token
-      await GenerateToken();
+      const token = await GenerateToken(login.auth, (Data) => {
+        dispatch(successLogin(Data));
+      });
       // jalankan operasi
       let products = [];
-      chart.map((item) =>
+      chart.chart.map((item) =>
         products.push({ stock_id: item.id, quantity: item.quantity })
       );
       const data = {
@@ -60,13 +65,11 @@ function Payment() {
       };
       await axios.post("http://localhost:8080/transaction", data, {
         headers: {
-          Authorization: `Bearer ${JSON.parse(
-            localStorage.getItem("tokenkey")
-          )}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       // hapus local storage chart
-      localStorage.removeItem("chart");
+      dispatch(clearChart());
       setLoading(false);
       return navigate("/products", {
         replace: true,
@@ -87,10 +90,10 @@ function Payment() {
       ) : (
         <>
           <NavbarSignIn navActive={"chart"} />
-          {chart !== null ? (
+          {chart.chart !== null ? (
             <>
               <Main
-                chart={chart}
+                chart={chart.chart}
                 subtotal={subtotal}
                 delivery={delivery}
                 tax={tax}

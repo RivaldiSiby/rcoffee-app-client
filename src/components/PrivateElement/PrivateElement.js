@@ -1,14 +1,14 @@
 import React, { Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function PrivateElement({
   children,
-  isLogin = false,
   redirectedTo = "/",
   publicPage = "private",
   isRouteReplaced = true,
   extraData = null,
 }) {
-  console.log(publicPage);
+  const isLogin = useSelector((state) => state.login.status);
 
   if (publicPage === "sign") {
     return children;
@@ -18,6 +18,15 @@ function PrivateElement({
   }
   if (publicPage === "private" && isLogin === true) {
     return children;
+  }
+  if (isLogin === false) {
+    return (
+      <Navigate
+        to={redirectedTo}
+        replace={isRouteReplaced}
+        extraData={extraData}
+      />
+    );
   }
 }
 

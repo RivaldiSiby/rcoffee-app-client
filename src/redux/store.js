@@ -1,19 +1,17 @@
 import { legacy_createStore as createStore } from "redux";
+import reducers from "./reducers";
+// persist redux
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 
-const initialState = {
-  login: false,
+const persistConfig = {
+  key: "root",
+  storage,
+  whitelist: ["login", "chart"],
 };
 
-const reducer = (prevState = initialState, action) => {
-  // action
-  switch (action.type) {
-    case "SUCCESS_LOGIN":
-      return { login: true };
-    case "FAIL_LOGIN":
-      return { login: false };
-    default:
-      return prevState;
-  }
-};
+const persistedReducer = persistReducer(persistConfig, reducers);
 
-export const store = createStore(reducer);
+let store = createStore(persistedReducer);
+let persistor = persistStore(store);
+export { store, persistor };

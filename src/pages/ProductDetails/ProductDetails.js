@@ -15,8 +15,15 @@ import iconCek from "../../asset/img/productsDetailPage/iconCek.svg";
 import GenerateToken from "../../helper/GenerateToken";
 // img
 
+import { useSelector, useDispatch } from "react-redux";
+import { successLogin } from "../../redux/actionCreator/login";
+import { addChart } from "../../redux/actionCreator/chart";
+
 function ProductDetails() {
   let params = useParams();
+  const dispatch = useDispatch();
+  const login = useSelector((state) => state.login);
+  const chart = useSelector((state) => state.chart);
   const navigate = useNavigate();
   const [isLogin, setisLogin] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -32,17 +39,13 @@ function ProductDetails() {
     const getProduct = async () => {
       try {
         setLoading(true);
-        await GenerateToken();
+        await GenerateToken(login.auth, (Data) => {
+          dispatch(successLogin(Data));
+        });
         setisLogin(true);
         const product = await axios.get(
           `http://localhost:8080/product/${params.id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${JSON.parse(
-                localStorage.getItem("tokenkey")
-              )}`,
-            },
-          }
+          {}
         );
         setProducts(product.data.data);
         // get product detail
@@ -54,13 +57,7 @@ function ProductDetails() {
       } catch (error) {
         console.log(error);
         axios
-          .get(`http://localhost:8080/product/${params.id}`, {
-            headers: {
-              Authorization: `Bearer ${JSON.parse(
-                localStorage.getItem("tokenkey")
-              )}`,
-            },
-          })
+          .get(`http://localhost:8080/product/${params.id}`, {})
           .then((product) => {
             setProducts(product.data.data);
             // get product detail
@@ -106,7 +103,9 @@ function ProductDetails() {
   const addChartHandler = async (e) => {
     e.preventDefault();
     try {
-      await GenerateToken();
+      await GenerateToken(login.auth, (Data) => {
+        dispatch(successLogin(Data));
+      });
       // add data ke card locastorage
       const dataProduct = {
         id: productDetail.stock_id,
@@ -117,29 +116,41 @@ function ProductDetails() {
         quantity: quantity,
       };
       setQuantity(1);
-      if (localStorage.getItem("chart") !== null) {
-        const oldData = JSON.parse(localStorage.getItem("chart"));
-        const data = [...oldData, dataProduct];
-        localStorage.setItem("chart", JSON.stringify(data));
-
+      if (chart.chart.length > 0) {
+        const checkProduct = chart.chart.findIndex(
+          (item) => item.id === dataProduct.id
+        );
+        if (checkProduct !== -1) {
+          chart.chart[checkProduct].quantity =
+            chart.chart[checkProduct].quantity + dataProduct.quantity;
+          const data = [...chart.chart];
+          dispatch(addChart(data));
+          return setIsadd(true);
+        }
+        const data = [...chart.chart, dataProduct];
+        dispatch(addChart(data));
         return setIsadd(true);
       }
 
-      localStorage.setItem("chart", JSON.stringify([dataProduct]));
+      dispatch(addChart([dataProduct]));
       return setIsadd(true);
     } catch (error) {
       navigate("/login", { replace: true });
     }
   };
   const checkoutHandler = async (e) => {
+    e.preventDefault();
     try {
-      await GenerateToken();
+      await GenerateToken(login.auth, (Data) => {
+        dispatch(successLogin(Data));
+      });
       addChartHandler(e);
       Navigate("/chart");
     } catch (error) {
       navigate("/login", { replace: true });
     }
   };
+
   return (
     <div>
       {loading === true ? (
