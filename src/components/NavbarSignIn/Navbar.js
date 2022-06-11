@@ -4,9 +4,11 @@ import { Link } from "react-router-dom";
 import logo from "../../asset/img/homePage/coffee icon.png";
 import search from "../../asset/img/profilePage/search.svg";
 import chat from "../../asset/img/profilePage/chat.svg";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addSearch } from "../../redux/actionCreator/search";
 
 function Navbar(props) {
+  const dispatch = useDispatch();
   const login = useSelector((state) => state.login);
   const img = "http://localhost:8080" + login.auth["datauser"];
   const [profile] = useState(img);
@@ -66,13 +68,31 @@ function Navbar(props) {
           <div className="collapse navbar-collapse nav-sign-in" id="navbarNav">
             <ul className="navbar-nav profile-menu-sign d-flex">
               <li className="nav-item icon-menu">
-                <Link to="/" className="nav-link">
-                  <img
-                    src={search}
-                    alt="search"
-                    className="icon-nav icon-find"
-                  />
-                </Link>
+                {props.navActive === "products" ? (
+                  <>
+                    <Link
+                      onClick={() => dispatch(addSearch())}
+                      to={`/products?search=""`}
+                      className="nav-link"
+                    >
+                      <img
+                        src={search}
+                        alt="search"
+                        className="icon-nav icon-find"
+                      />
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Link to={`/products?search=""`} className="nav-link">
+                      <img
+                        src={search}
+                        alt="search"
+                        className="icon-nav icon-find"
+                      />
+                    </Link>
+                  </>
+                )}
               </li>
               <li className="nav-item icon-menu">
                 <Link to="/" className="nav-link icon-chat">

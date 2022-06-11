@@ -5,15 +5,7 @@ import bank from "../../asset/img/paymentPage/bank.svg";
 import deliv from "../../asset/img/paymentPage/deliv.svg";
 // img
 
-function Main({
-  chart,
-  subtotal,
-  delivery,
-  tax,
-  user,
-  setPayment,
-  confirmPayment,
-}) {
+function Detail({ data, user }) {
   return (
     <>
       <main className="payment-body">
@@ -21,7 +13,7 @@ function Main({
           <div className="row payment-box d-flex justify-content-between">
             <div className="col-lg-5 payment-order ">
               <section className="order-head ">
-                <h5>Checkout your item now!</h5>
+                <h5>Detail your Transcation item </h5>
               </section>
               <section className="order-body">
                 <div className="container">
@@ -30,27 +22,31 @@ function Main({
                   </section>
                   <section className="order-body-list ">
                     <div className="row d-flex justify-content-center">
-                      {chart.map((product) => (
+                      {data.products.map((product) => (
                         <>
-                          <section className="col-md-11 box-order-list p-0">
-                            <section className="order-product-img">
-                              <img
-                                src={"http://localhost:8080" + product.img}
-                                alt="product-list"
-                              />
-                            </section>
-                            <section className="order-info">
-                              <section className="order-products-info">
-                                <p>{product.name}</p>
-                                <p>x {product.quantity}</p>
-                                <p>{product.size}</p>
+                          {product.name !== undefined ? (
+                            <section className="col-md-11 box-order-list p-0">
+                              <section className="order-product-img">
+                                <img
+                                  src={"http://localhost:8080" + product.img}
+                                  alt="product-list"
+                                />
                               </section>
+                              <section className="order-info">
+                                <section className="order-products-info">
+                                  <p>{product.name}</p>
+                                  <p>x {product.quantity}</p>
+                                  <p>{product.size}</p>
+                                </section>
 
-                              <section className="order-price  d-flex align-items-center">
-                                <p>IDR {product.price}</p>
+                                <section className="order-price  d-flex align-items-center">
+                                  <p>IDR {product.price}</p>
+                                </section>
                               </section>
                             </section>
-                          </section>
+                          ) : (
+                            ""
+                          )}
                         </>
                       ))}
                     </div>
@@ -62,14 +58,21 @@ function Main({
                       <p>SHIPPING</p>
                     </section>
                     <section className="price-order-cost">
-                      <p>IDR {subtotal}</p>
-                      <p>IDR {subtotal * tax}</p>
-                      <p>IDR {delivery}</p>
+                      <p>
+                        IDR {data.products[data.products.length - 1].item_total}
+                      </p>
+                      <p>
+                        IDR{" "}
+                        {parseInt(
+                          data.products[data.products.length - 1].item_total
+                        ) * parseFloat(data.tax)}
+                      </p>
+                      <p>IDR {data.delivery_cost}</p>
                     </section>
                   </section>
                   <section className="order-body-foot">
                     <h5>TOTAL</h5>
-                    <h5>IDR {delivery + subtotal + subtotal * tax}</h5>
+                    <h5>IDR {data.total}</h5>
                   </section>
                 </div>
               </section>
@@ -78,7 +81,7 @@ function Main({
               <section className="option-address">
                 <section className="option-address-head d-flex justify-content-between">
                   <h5>Address details</h5>
-                  <p className="d-flex align-items-center">edit</p>
+                  <p className="d-flex align-items-center"></p>
                 </section>
                 <section className="option-address-body">
                   <div className="container">
@@ -103,15 +106,30 @@ function Main({
                 <section className="option-method-body d-flex justify-content-center align-items-center">
                   <div className="container ">
                     <div className="form-check form-method-option">
-                      <input
-                        onChange={() => setPayment("card")}
-                        className="form-check-input input-radio-method "
-                        type="radio"
-                        name="exampleRadios"
-                        id="exampleRadios1"
-                        value="option1"
-                        checked
-                      />
+                      {data.payment_method === "card" ? (
+                        <>
+                          <input
+                            className="form-check-input input-radio-method "
+                            type="radio"
+                            disabled
+                            name="exampleRadios"
+                            id="exampleRadios1"
+                            value="option1"
+                            defaultChecked
+                          />
+                        </>
+                      ) : (
+                        <>
+                          <input
+                            className="form-check-input input-radio-method "
+                            type="radio"
+                            disabled
+                            name="exampleRadios"
+                            id="exampleRadios1"
+                            value="option1"
+                          />
+                        </>
+                      )}
                       <label
                         className="form-check-label label-method-payment label-method-payment"
                         htmlFor="exampleRadios1"
@@ -123,14 +141,30 @@ function Main({
                       </label>
                     </div>
                     <div className="form-check form-method-option">
-                      <input
-                        onChange={() => setPayment("bank account")}
-                        className="form-check-input input-radio-method"
-                        type="radio"
-                        name="exampleRadios"
-                        id="exampleRadios2"
-                        value="option2"
-                      />
+                      {data.payment_method === "bank account" ? (
+                        <>
+                          <input
+                            className="form-check-input input-radio-method "
+                            type="radio"
+                            disabled
+                            name="exampleRadios"
+                            id="exampleRadios2"
+                            value="option2"
+                            defaultChecked
+                          />
+                        </>
+                      ) : (
+                        <>
+                          <input
+                            className="form-check-input input-radio-method "
+                            type="radio"
+                            disabled
+                            name="exampleRadios"
+                            id="exampleRadios2"
+                            value="option2"
+                          />
+                        </>
+                      )}
                       <label
                         className="form-check-label label-method-payment"
                         htmlFor="exampleRadios2"
@@ -142,14 +176,30 @@ function Main({
                       </label>
                     </div>
                     <div className="form-check form-method-option">
-                      <input
-                        onChange={() => setPayment("cash on delivery")}
-                        className="form-check-input input-radio-method"
-                        type="radio"
-                        name="exampleRadios"
-                        id="exampleRadios3"
-                        value="option3"
-                      />
+                      {data.payment_method === "cash on delivery" ? (
+                        <>
+                          <input
+                            className="form-check-input input-radio-method "
+                            type="radio"
+                            disabled
+                            name="exampleRadios"
+                            id="exampleRadios3"
+                            value="option3"
+                            defaultChecked
+                          />
+                        </>
+                      ) : (
+                        <>
+                          <input
+                            className="form-check-input input-radio-method "
+                            type="radio"
+                            disabled
+                            name="exampleRadios"
+                            id="exampleRadios3"
+                            value="option3"
+                          />
+                        </>
+                      )}
                       <label
                         className="form-check-label label-method-payment "
                         htmlFor="exampleRadios3"
@@ -163,9 +213,6 @@ function Main({
                   </div>
                 </section>
               </section>
-              <section className="option-foot d-flex justify-content-center ">
-                <button onClick={confirmPayment}>Confirm and Pay</button>
-              </section>
             </div>
           </div>
         </div>
@@ -174,4 +221,4 @@ function Main({
   );
 }
 
-export default Main;
+export default Detail;

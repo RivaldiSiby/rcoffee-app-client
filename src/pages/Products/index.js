@@ -17,6 +17,8 @@ import NavbarSignIn from "../../components/NavbarSignIn/Navbar";
 import Footer from "../../components/Footer/Footer";
 import Hooks from "../../helper/Hooks";
 import { connect } from "react-redux";
+import { addProducts, clearProducts } from "../../redux/actionCreator/products";
+import { addSearch, clearSearch } from "../../redux/actionCreator/search";
 
 class index extends Component {
   constructor() {
@@ -31,8 +33,8 @@ class index extends Component {
       paginationNumber: [],
       coffeeBtn: "list-menu",
       coffeeList: "",
-      favoriteBtn: "list-menu menu-active",
-      favoriteList: "list-active",
+      favoriteBtn: "list-menu",
+      favoriteList: "",
       foodBtn: "list-menu",
       foodList: "",
       allBtn: "list-menu",
@@ -43,18 +45,74 @@ class index extends Component {
       searchKey: "",
       sort: "",
       order: "asc",
-      linkUrl: "http://localhost:8080/product?limit=12",
+      linkUrl: process.env.REACT_APP_HOST + "/product?limit=12",
     };
   }
   async componentDidMount() {
-    // console.log(this.props.searchParams.get("search"));
-    // console.log(this.props.searchParams.get("coffee"));
+    this.props.dispatch(clearSearch());
     if (this.props.location.state !== null) {
       if (this.props.location.state.successToPay === true) {
         Swal.fire("Success", "Payment Success", "success");
       }
     }
+    // cek search
 
+    if (this.props.searchParams.get("search") !== null) {
+      this.setState({
+        allList: "list-active",
+        allBtn: "list-menu menu-active",
+      });
+    }
+    if (
+      this.props.searchParams.get("search") === "" ||
+      this.props.searchParams.get("search") === `""`
+    ) {
+      this.props.dispatch(
+        addProducts(`${process.env.REACT_APP_HOST}/product?limit=12`)
+      );
+      this.props.dispatch(addSearch());
+      this.setState({
+        allList: "list-active",
+        allBtn: "list-menu menu-active",
+      });
+    }
+    // cek category
+    if (this.props.searchParams.get("category") !== null) {
+      if (this.props.searchParams.get("category") === "coffee") {
+        this.setState({
+          coffeeList: "list-active",
+          coffeeBtn: "list-menu menu-active",
+        });
+      }
+      if (this.props.searchParams.get("category") === "noncoffee") {
+        this.setState({
+          noncoffeeList: "list-active",
+          noncoffeeBtn: "list-menu menu-active",
+        });
+      }
+      if (this.props.searchParams.get("category") === "food") {
+        this.setState({
+          foodList: "list-active",
+          foodBtn: "list-menu menu-active",
+        });
+      }
+      if (this.props.searchParams.get("category") === "favorite") {
+        this.setState({
+          favoriteList: "list-active",
+          favoriteBtn: "list-menu menu-active",
+        });
+      }
+    }
+    if (
+      this.props.searchParams.get("search") === null &&
+      this.props.searchParams.get("category") === null
+    ) {
+      this.setState({
+        favoriteList: "list-active",
+        favoriteBtn: "list-menu menu-active",
+      });
+      this.props.dispatch(clearProducts());
+    }
     try {
       this.setState({ loading: true });
       if (this.props.auth["refreshkey"] === undefined) {
@@ -67,7 +125,7 @@ class index extends Component {
       }
       // tarik data
       // product api
-      let url = `http://localhost:8080/product/favorite?limit=12`;
+      let url = `${this.props.url}`;
       const products = await axios.get(url);
       if (products.data.meta.totalPage > 1) {
         let number = [];
@@ -83,37 +141,39 @@ class index extends Component {
         pagination: products.data.meta,
       });
       // promo
-      const promos = await axios.get(`http://localhost:8080/promos?limit=1`);
+      const promos = await axios.get(
+        `${process.env.REACT_APP_HOST}/promos?limit=1`
+      );
       this.setState({
         promo: promos.data.data,
       });
       this.setState({ loading: false });
     } catch (error) {
       console.log(error);
-      await axios
-        .get(`http://localhost:8080/product/favorite?limit=12`)
-        .then((products) => {
-          if (products.data.meta.totalPage > 1) {
-            let number = [];
-            for (let i = 1; i <= products.data.meta.totalPage; i++) {
-              number.push(i);
-            }
-            this.setState({
-              paginationNumber: number,
-            });
+      await axios.get(`${this.props.url}`).then((products) => {
+        if (products.data.meta.totalPage > 1) {
+          let number = [];
+          for (let i = 1; i <= products.data.meta.totalPage; i++) {
+            number.push(i);
           }
           this.setState({
-            products: products.data.data,
-            pagination: products.data.meta,
+            paginationNumber: number,
           });
-          // promo
-          axios.get(`http://localhost:8080/promos?limit=1`).then((promos) => {
+        }
+        this.setState({
+          products: products.data.data,
+          pagination: products.data.meta,
+        });
+        // promo
+        axios
+          .get(`${process.env.REACT_APP_HOST}/promos?limit=1`)
+          .then((promos) => {
             this.setState({
               promo: promos.data.data,
             });
             this.setState({ loading: false });
           });
-        });
+      });
       this.props.dispatch(failLogin());
     }
   }
@@ -124,7 +184,7 @@ class index extends Component {
     try {
       this.setState({ load: true });
       const products = await axios.get(
-        `http://localhost:8080/product?limit=12&category=${category}`
+        `${process.env.REACT_APP_HOST}/product?limit=12&category=${category}`
       );
       if (products.data.meta.totalPage > 1) {
         let number = [];
@@ -136,7 +196,7 @@ class index extends Component {
         });
       }
       this.setState({
-        linkUrl: `http://localhost:8080/product?limit=12&category=${category}`,
+        linkUrl: `${process.env.REACT_APP_HOST}/product?limit=12&category=${category}`,
         products: products.data.data,
         pagination: products.data.meta,
         coffeeBtn: "list-menu",
@@ -151,6 +211,11 @@ class index extends Component {
         noncoffeeList: "",
         search: "",
       });
+      this.props.dispatch(
+        addProducts(
+          `${process.env.REACT_APP_HOST}/product?limit=12&category=${category}`
+        )
+      );
       if (category === "coffee") {
         this.setState({
           coffeeList: "list-active",
@@ -184,7 +249,7 @@ class index extends Component {
     try {
       this.setState({ load: true });
       const products = await axios.get(
-        `http://localhost:8080/product/favorite?limit=12`
+        `${process.env.REACT_APP_HOST}/product/favorite?limit=12`
       );
       if (products.data.meta.totalPage > 1) {
         let number = [];
@@ -196,7 +261,7 @@ class index extends Component {
         });
       }
       this.setState({
-        linkUrl: `http://localhost:8080/product?limit=12`,
+        linkUrl: `${process.env.REACT_APP_HOST}/product?limit=12`,
         products: products.data.data,
         pagination: products.data.meta,
         coffeeBtn: "list-menu",
@@ -230,7 +295,12 @@ class index extends Component {
       this.setState({ load: true });
       if (this.state.search !== "") {
         const products = await axios.get(
-          `http://localhost:8080/product?limit=12&name=${this.state.search}`
+          `${process.env.REACT_APP_HOST}/product?limit=12&name=${this.state.search}`
+        );
+        this.props.dispatch(
+          addProducts(
+            `${process.env.REACT_APP_HOST}/product?limit=12&name=${this.state.search}`
+          )
         );
         if (products.data.meta.totalPage > 1) {
           let number = [];
@@ -242,7 +312,7 @@ class index extends Component {
           });
         }
         this.setState({
-          linkUrl: `http://localhost:8080/product?limit=12&search=${this.state.search}`,
+          linkUrl: `${process.env.REACT_APP_HOST}/product?limit=12&search=${this.state.search}`,
           products: products.data.data,
           pagination: products.data.meta,
           coffeeBtn: "list-menu",
@@ -262,11 +332,23 @@ class index extends Component {
         this.setState({ load: false });
         return;
       }
+      throw new Error("not found");
     } catch (error) {
       this.setState({
         load: false,
         products: [],
+        pagination: [],
         searchKey: this.state.search,
+        coffeeBtn: "list-menu",
+        coffeeList: "",
+        favoriteBtn: "list-menu",
+        favoriteList: "",
+        foodBtn: "list-menu",
+        foodList: "",
+        noncoffeeBtn: "list-menu",
+        noncoffeeList: "",
+        allList: "list-active",
+        allBtn: "list-menu menu-active",
       });
       this.props.navigate(`/products?search=${this.state.search}`);
     }
@@ -278,7 +360,10 @@ class index extends Component {
     try {
       this.setState({ load: true });
       const products = await axios.get(
-        `http://localhost:8080/product?limit=12`
+        `${process.env.REACT_APP_HOST}/product?limit=12`
+      );
+      this.props.dispatch(
+        addProducts(`${process.env.REACT_APP_HOST}/product?limit=12`)
       );
       if (products.data.meta.totalPage > 1) {
         let number = [];
@@ -290,7 +375,7 @@ class index extends Component {
         });
       }
       this.setState({
-        linkUrl: `http://localhost:8080/product?limit=12`,
+        linkUrl: `${process.env.REACT_APP_HOST}/product?limit=12`,
         products: products.data.data,
         pagination: products.data.meta,
         coffeeBtn: "list-menu",
@@ -322,7 +407,7 @@ class index extends Component {
     });
     try {
       this.setState({ load: true });
-      const products = await axios.get(`http://localhost:8080${page}`);
+      const products = await axios.get(`${process.env.REACT_APP_HOST}${page}`);
       if (products.data.meta.totalPage > 1) {
         let number = [];
         for (let i = 1; i <= products.data.meta.totalPage; i++) {
@@ -333,10 +418,11 @@ class index extends Component {
         });
       }
       this.setState({
-        linkUrl: `http://localhost:8080${page}`,
+        linkUrl: `${process.env.REACT_APP_HOST}${page}`,
         products: products.data.data,
         pagination: products.data.meta,
       });
+      this.props.dispatch(addProducts(`${process.env.REACT_APP_HOST}${page}`));
       // pecahkan link
       const pageNow = page.split("&");
       this.props.navigate(`/products?${pageNow[1]}`);
@@ -348,17 +434,20 @@ class index extends Component {
   async sortHandler() {
     try {
       this.setState({ load: true });
-      let urlQuery = this.state.linkUrl.split("&");
-      urlQuery = urlQuery[1];
+      let urlQuery = this.props.url.split("&");
+
       const products = await axios.get(
-        `${
-          urlQuery.split("=")[0] === "search"
-            ? "http://localhost:8080/product?limit=12&name=" +
-              urlQuery.split("=")[1]
-            : this.state.linkUrl
-        }${this.state.sort !== "" ? "&sort=" + this.state.sort : ""}&order=${
-          this.state.order
-        }`
+        `${urlQuery[0] + "&" + urlQuery[1]}${
+          this.state.sort !== "" ? "&sort=" + this.state.sort : ""
+        }&order=${this.state.order}`
+      );
+      // input data kedalam redux
+      this.props.dispatch(
+        addProducts(
+          `${urlQuery[0] + "&" + urlQuery[1]}${
+            this.state.sort !== "" ? "&sort=" + this.state.sort : ""
+          }&order=${this.state.order}`
+        )
       );
       if (products.data.meta.totalPage > 1) {
         let number = [];
@@ -375,12 +464,13 @@ class index extends Component {
       });
       // atur url
       this.props.navigate(
-        `/products?${urlQuery}${
+        `/products?${urlQuery[1]}${
           this.state.sort !== "" ? "&sort=" + this.state.sort : ""
         }&order=${this.state.order}`
       );
       this.setState({ load: false });
     } catch (error) {
+      console.log(error);
       this.setState({ load: false });
     }
   }
@@ -498,26 +588,38 @@ class index extends Component {
                     </div>
                     <section className="products-options ">
                       <div className="row m-2 ms-5 me-5">
-                        <div className="col-md-6 d-flex mb-4 options-product-list">
-                          <input
-                            className="form-control me-2 select-form-sort"
-                            type="search"
-                            placeholder="Search"
-                            aria-label="Search"
-                            onChange={(e) =>
-                              this.setState({
-                                search: e.target.value,
-                              })
-                            }
-                          />
-                          <button
-                            className="products-options-btn fw-bold"
-                            type="submit"
-                            onClick={() => this.searchHandler()}
-                          >
-                            Search
-                          </button>
-                        </div>
+                        {this.props.search === true ? (
+                          <>
+                            <section className="col-md-12 mb-3 text-center w-100 fw-bold d-flex justify-content-center align-items-center">
+                              <p className=" d-flex align-items-center">
+                                You Can search Products By Name
+                              </p>
+                            </section>
+                            <div className="col-md-6 d-flex mb-4 options-product-list">
+                              <input
+                                className="form-control me-2 select-form-sort"
+                                type="search"
+                                placeholder="Search"
+                                aria-label="Search"
+                                onChange={(e) =>
+                                  this.setState({
+                                    search: e.target.value,
+                                  })
+                                }
+                              />
+                              <button
+                                className="products-options-btn fw-bold"
+                                type="submit"
+                                onClick={() => this.searchHandler()}
+                              >
+                                Search
+                              </button>
+                            </div>
+                          </>
+                        ) : (
+                          ""
+                        )}
+
                         <div className="col-md-6 d-flex mb-4 options-product-list">
                           <select
                             className="form-select select-form-sort fw-bold me-2 mb-2"
@@ -584,7 +686,9 @@ class index extends Component {
                                   <div className="box-head text-center">
                                     <img
                                       src={
-                                        "http://localhost:8080" + product.img
+                                        process.env.REACT_APP_HOST +
+                                        "" +
+                                        product.img
                                       }
                                       alt="products"
                                     />
@@ -706,10 +810,14 @@ class index extends Component {
 const mapStateToProps = (reduxState) => {
   const {
     login: { status, auth },
+    products: { url },
+    search: { search },
   } = reduxState;
   return {
     status,
     auth,
+    url,
+    search,
   };
 };
 export default connect(mapStateToProps)(Hooks(index));

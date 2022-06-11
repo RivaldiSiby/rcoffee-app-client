@@ -47,6 +47,14 @@ function Router() {
               }
             />
             <Route
+              path="/history/:id"
+              element={
+                <PrivateElement publicPage={"private"} redirectedTo="/login">
+                  <Payment detailTrans={true} />
+                </PrivateElement>
+              }
+            />
+            <Route
               path="/history"
               element={
                 <PrivateElement publicPage={"private"} redirectedTo="/login">

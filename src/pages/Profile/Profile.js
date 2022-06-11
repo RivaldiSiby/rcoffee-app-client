@@ -16,6 +16,7 @@ import Footer from "../../components/Footer/Footer";
 import GenerateToken from "../../helper/GenerateToken";
 import { failLogin, successLogin } from "../../redux/actionCreator/login";
 import { clearChart } from "../../redux/actionCreator/chart";
+import { addUser, clearUser } from "../../redux/actionCreator/user";
 
 function Profile() {
   const [loading, setLoading] = useState(false);
@@ -28,7 +29,7 @@ function Profile() {
   const Navigate = useNavigate();
   const dispatch = useDispatch();
   const login = useSelector((state) => state.login);
-  const chart = useSelector((state) => state.chart);
+  const user = useSelector((state) => state.user);
   // user data
   const img = "http://localhost:8080" + login.auth["datauser"];
   const [profileImg, setProfileImg] = useState(img);
@@ -54,36 +55,29 @@ function Profile() {
     const getProfileData = async () => {
       setLoading(true);
       try {
-        const token = await GenerateToken(login.auth, (Data) => {
+        await GenerateToken(login.auth, (Data) => {
           dispatch(successLogin(Data));
         });
-        const profile = await axios.get(`http://localhost:8080/users/profile`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        profile.data.data.address !== null
-          ? setAddress(profile.data.data.address)
+        user.user.address !== undefined
+          ? setAddress(user.user.address)
           : setAddress("");
-        profile.data.data.name !== null
-          ? setName(profile.data.data.name)
-          : setName("");
-        profile.data.data.first_name !== null
-          ? setFirstName(profile.data.data.first_name)
+        user.user.name !== undefined ? setName(user.user.name) : setName("");
+        user.user.first_name !== undefined
+          ? setFirstName(user.user.first_name)
           : setFirstName("");
-        profile.data.data.last_name !== null
-          ? setLastName(profile.data.data.last_name)
+        user.user.last_name !== undefined
+          ? setLastName(user.user.last_name)
           : setLastName("");
-        profile.data.data.date_birth !== null
-          ? setDate(profile.data.data.date_birth)
+        user.user.date_birth !== undefined
+          ? setDate(user.user.date_birth)
           : setDate("");
-        profile.data.data.gender !== null
-          ? setGender(profile.data.data.gender)
+        user.user.gender !== undefined
+          ? setGender(user.user.gender)
           : setGender("");
 
-        setEmail(profile.data.data.email);
-        setPhone(profile.data.data.phone);
-        setProfile(profile.data.data);
+        setEmail(user.user.email);
+        setPhone(user.user.phone);
+        setProfile(user.user);
         // cek checked user gender
         setLoading(false);
       } catch (error) {
@@ -183,6 +177,7 @@ function Profile() {
 
       dispatch(failLogin());
       dispatch(clearChart());
+      dispatch(clearUser());
       setLoading(false);
       Navigate("/", { state: { logoutSuccess: true }, replace: true });
     };
@@ -215,27 +210,33 @@ function Profile() {
       });
 
       if (file !== "") {
-        localStorage.setItem("datauser", JSON.stringify(profile.data.data.img));
+        const authData = {
+          tokenkey: token,
+          refreshkey: login.auth.refreshkey,
+          datauser: profile.data.data.img,
+        };
+        dispatch(successLogin(authData));
         const img = "http://localhost:8080" + login.auth["datauser"];
         setProfileImg(img);
       }
+      dispatch(addUser(profile.data.data));
 
-      profile.data.data.address !== null
+      profile.data.data.address !== undefined
         ? setAddress(profile.data.data.address)
         : setAddress("");
-      profile.data.data.name !== null
+      profile.data.data.name !== undefined
         ? setName(profile.data.data.name)
         : setName("");
-      profile.data.data.first_name !== null
+      profile.data.data.first_name !== undefined
         ? setFirstName(profile.data.data.first_name)
         : setFirstName("");
-      profile.data.data.last_name !== null
+      profile.data.data.last_name !== undefined
         ? setLastName(profile.data.data.last_name)
         : setLastName("");
-      profile.data.data.date_birth !== null
+      profile.data.data.date_birth !== undefined
         ? setDate(profile.data.data.date_birth)
         : setDate("");
-      profile.data.data.gender !== null
+      profile.data.data.gender !== undefined
         ? setGender(profile.data.data.gender)
         : setGender("");
 

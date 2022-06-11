@@ -15,6 +15,7 @@ import twiter from "../../asset/img/signPage/vtw.svg";
 import instagram from "../../asset/img/signPage/vig.svg";
 import iconHide from "../../asset/img/signPage/iconHide.png";
 import iconShow from "../../asset/img/signPage/iconShow.jpg";
+import { addUser } from "../../redux/actionCreator/user";
 
 // img
 
@@ -70,6 +71,7 @@ function Sign(props) {
         datauser: result.data.data.img,
       };
       dispatch(successLogin(authData));
+      dispatch(addUser(result.data.data.datauser));
     } catch (error) {
       setMsg("Failed Login. " + error.response.data.message);
       setInput("form-control form-input-sign border-danger");
