@@ -12,6 +12,7 @@ import PrivateElement from "../components/PrivateElement/PrivateElement";
 import { Provider as ReduxProvider } from "react-redux";
 import { store, persistor } from "../redux/store";
 import { PersistGate } from "redux-persist/integration/react";
+import Dashboard from "../pages/Dahsboard/Dashboard";
 
 // img
 // img
@@ -94,7 +95,7 @@ function Router() {
                 </PrivateElement>
               }
             />
-
+            <Route path="/Dashboard" element={<Dashboard />} />
             <Route path="/forgetPassword" element={<ForgetPass />} />
           </Routes>
         </BrowserRouter>
