@@ -120,11 +120,11 @@ function Payment({ detailTrans = false }) {
         </div>
       ) : (
         <>
-          <NavbarSignIn navActive={"chart"} />
           {detailTrans === true ? (
             <>
               {detail !== false ? (
                 <>
+                  <NavbarSignIn navActive={"history"} />
                   <Detail data={detail} user={user} />
                 </>
               ) : (
@@ -139,6 +139,7 @@ function Payment({ detailTrans = false }) {
             <>
               {chart.chart.length > 0 ? (
                 <>
+                  <NavbarSignIn navActive={"chart"} />
                   <Main
                     chart={chart.chart}
                     subtotal={subtotal}

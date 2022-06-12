@@ -168,7 +168,7 @@
   font-size: 12px;
   line-height: 14px;
   color: #4f5665;
-  padding-top: 100px;
+  margin-top: 112px;
   margin-left: 20px;
 }
 .promo-foot-text > ul {
@@ -176,6 +176,38 @@
 }
 .promo-foot-text > ul > span {
   margin-left: -13px;
+}
+.btn-add-new-promo {
+  margin: 0 auto;
+  margin-left: 5%;
+  margin-bottom: 115px;
+  width: 85%;
+  height: 90px;
+  background: #ffba33;
+  border-radius: 20px;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 25px;
+  line-height: 30px;
+  color: #6a4029;
+  border: none;
+  margin-top: 158px;
+}
+.box-icon-edit-section {
+  position: absolute;
+  z-index: 3;
+}
+.edit-icon-promo {
+  width: 30px;
+  height: 30px;
+  background: #6a4029;
+  border-radius: 50%;
+  margin: 11px;
+}
+.edit-icon-promo > img {
+  width: 12px;
+  height: 13px;
 }
 
 /* products */
@@ -300,6 +332,21 @@
 .box-products > span {
   font-family: "Poppins";
 }
+.box-edit-product {
+  width: 12.5%;
+  margin-top: -35px;
+}
+.edit-icon-product {
+  width: 30px;
+  height: 30px;
+  background: #6a4029;
+  border-radius: 50%;
+  z-index: 4;
+}
+.edit-icon-product > img {
+  width: 12px;
+  height: 13px;
+}
 .not-found-error > h5 {
   font-family: "Poppins";
   font-style: normal;
@@ -319,6 +366,23 @@
   color: #6a4029;
 }
 /* products */
+/* foot */
+.btn-add-new-product {
+  margin: 0 auto;
+  margin-left: 5%;
+  margin-bottom: 115px;
+  width: 85%;
+  height: 90px;
+  background: #6a4029;
+  border-radius: 20px;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 25px;
+  line-height: 30px;
+  color: #ffffff;
+  border: none;
+}
 /* products-body */
 
 /* table responsiv */

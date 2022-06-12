@@ -49,7 +49,7 @@ const stem_outcome_6 = {
 function Dashboard() {
   return (
     <>
-      <Navbar />
+      <Navbar navActive={"dashboard"} />
       <main className="dashboard-body">
         <div className="container">
           <div className="row">

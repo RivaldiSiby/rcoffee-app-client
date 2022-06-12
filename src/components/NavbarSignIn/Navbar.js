@@ -10,6 +10,7 @@ import { addSearch } from "../../redux/actionCreator/search";
 function Navbar(props) {
   const dispatch = useDispatch();
   const login = useSelector((state) => state.login);
+  const role = useSelector((state) => state.user.user.role);
   const img = "http://localhost:8080" + login.auth["datauser"];
   const [profile] = useState(img);
   const activeHome =
@@ -22,6 +23,12 @@ function Navbar(props) {
     props.navActive === "chart" ? "nav-text-nav text-active" : "nav-text-nav";
   const activeHistory =
     props.navActive === "history" ? "nav-text-nav text-active" : "nav-text-nav";
+  const activeOrders =
+    props.navActive === "orders" ? "nav-text-nav text-active" : "nav-text-nav";
+  const activeDashboard =
+    props.navActive === "dashboard"
+      ? "nav-text-nav text-active"
+      : "nav-text-nav";
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-light bg-white navbar-menu shadow-sm">
@@ -53,16 +60,33 @@ function Navbar(props) {
                   <span className={activeProducts}>Product </span>
                 </Link>
               </li>
-              <li className="nav-item">
-                <Link to="/chart" className="nav-link">
-                  <span className={activeChart}>Your Chart</span>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link to="/history" className="nav-link">
-                  <span className={activeHistory}>History</span>
-                </Link>
-              </li>
+              {role === "admin" ? (
+                <>
+                  <li className="nav-item">
+                    <Link to="/" className="nav-link">
+                      <span className={activeOrders}>Your Orders</span>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/dashboard" className="nav-link">
+                      <span className={activeDashboard}>Dashboard</span>
+                    </Link>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li className="nav-item">
+                    <Link to="/chart" className="nav-link">
+                      <span className={activeChart}>Your Chart</span>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/history" className="nav-link">
+                      <span className={activeHistory}>History</span>
+                    </Link>
+                  </li>
+                </>
+              )}
             </ul>
           </div>
           <div className="collapse navbar-collapse nav-sign-in" id="navbarNav">

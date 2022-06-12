@@ -9,6 +9,7 @@ import { failLogin, successLogin } from "../../redux/actionCreator/login";
 
 // img
 import product from "../../asset/img/productsPage/product.png";
+import editIcon from "../../asset/img/productsPage/iconedit.svg";
 import loadingImg from "../../asset/img/loading.gif";
 import loadImg from "../../asset/img/load.gif";
 // img
@@ -140,6 +141,11 @@ class index extends Component {
         products: products.data.data,
         pagination: products.data.meta,
       });
+      // if (products.data.data !== undefined) {
+      //   this.props.dispatch(
+      //     addProducts(`${process.env.REACT_APP_HOST}/product?limit=12`)
+      //   );
+      // }
       // promo
       const promos = await axios.get(
         `${process.env.REACT_APP_HOST}/promos?limit=1`
@@ -434,12 +440,17 @@ class index extends Component {
   async sortHandler() {
     try {
       this.setState({ load: true });
+      console.log(this.props.url);
       let urlQuery = this.props.url.split("&");
-
+      console.log(urlQuery.length);
       const products = await axios.get(
-        `${urlQuery[0] + "&" + urlQuery[1]}${
-          this.state.sort !== "" ? "&sort=" + this.state.sort : ""
-        }&order=${this.state.order}`
+        `${
+          urlQuery.length > 1
+            ? urlQuery[0] + "&" + urlQuery[1]
+            : process.env.REACT_APP_HOST + "/product?limit=12"
+        }${this.state.sort !== "" ? "&sort=" + this.state.sort : ""}&order=${
+          this.state.order
+        }`
       );
       // input data kedalam redux
       this.props.dispatch(
@@ -464,7 +475,7 @@ class index extends Component {
       });
       // atur url
       this.props.navigate(
-        `/products?${urlQuery[1]}${
+        `/products?${urlQuery[1] === undefined ? "" : urlQuery[1]}${
           this.state.sort !== "" ? "&sort=" + this.state.sort : ""
         }&order=${this.state.order}`
       );
@@ -505,6 +516,17 @@ class index extends Component {
                     <section className="promo-body d-flex justify-content-center align-items-center">
                       {this.state.promo.map((item) => (
                         <section className="promo-info">
+                          {this.props.user.role === "admin" ? (
+                            <>
+                              <section className="box-icon-edit-section w-100 d-flex justify-content-end ">
+                                <section className="edit-icon-promo text-center">
+                                  <img src={editIcon} alt="edit-icon" />
+                                </section>
+                              </section>
+                            </>
+                          ) : (
+                            ""
+                          )}
                           <div className="promo-info-head d-flex flex-column align-items-center justify-content-center">
                             <img src={product} alt="product" />
                             <h5>{item.name}</h5>
@@ -540,6 +562,17 @@ class index extends Component {
                         </ul>
                       </div>
                     </section>
+
+                    {this.props.user.role === "admin" ? (
+                      <>
+                        {" "}
+                        <button className="btn-add-new-promo">
+                          Add new promo
+                        </button>
+                      </>
+                    ) : (
+                      ""
+                    )}
                   </div>
                   <div className="col-lg-8 products-container">
                     <div className="products-favorite-head">
@@ -698,6 +731,17 @@ class index extends Component {
                                     {product.size}
                                   </span>
                                   <p>IDR {product.price}</p>
+                                  {this.props.user.role === "admin" ? (
+                                    <>
+                                      <section className="box-icon-edit-section box-edit-product d-flex justify-content-end ">
+                                        <section className="edit-icon-product">
+                                          <img src={editIcon} alt="edit-icon" />
+                                        </section>
+                                      </section>
+                                    </>
+                                  ) : (
+                                    ""
+                                  )}
                                 </Link>
                               ))}
                             </>
@@ -793,6 +837,16 @@ class index extends Component {
                         ) : (
                           ""
                         )}
+
+                        {this.props.user.role === "admin" ? (
+                          <>
+                            <button className="btn-add-new-product">
+                              Add new product
+                            </button>
+                          </>
+                        ) : (
+                          ""
+                        )}
                       </>
                     )}
                   </div>
@@ -812,12 +866,14 @@ const mapStateToProps = (reduxState) => {
     login: { status, auth },
     products: { url },
     search: { search },
+    user: { user },
   } = reduxState;
   return {
     status,
     auth,
     url,
     search,
+    user,
   };
 };
 export default connect(mapStateToProps)(Hooks(index));

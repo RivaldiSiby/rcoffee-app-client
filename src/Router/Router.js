@@ -13,6 +13,7 @@ import { Provider as ReduxProvider } from "react-redux";
 import { store, persistor } from "../redux/store";
 import { PersistGate } from "redux-persist/integration/react";
 import Dashboard from "../pages/Dahsboard/Dashboard";
+import Form from "../pages/Form/Form";
 
 // img
 // img
@@ -23,14 +24,34 @@ function Router() {
       <PersistGate persistor={persistor}>
         <BrowserRouter>
           <Routes>
+            {/* admin route */}
             <Route
-              path="/"
+              path="/dashboard"
               element={
-                <PrivateElement publicPage={"public"}>
-                  <Home />
+                <PrivateElement publicPage={"admin"} redirectedTo="/">
+                  <Dashboard />
                 </PrivateElement>
               }
             />
+            <Route
+              path="/products/add"
+              element={
+                <PrivateElement publicPage={"admin"} redirectedTo="/">
+                  <Form form={"add_product"} />
+                </PrivateElement>
+              }
+            />
+            <Route
+              path="/promos/add"
+              element={
+                <PrivateElement publicPage={"admin"} redirectedTo="/">
+                  <Form form={"add_promo"} />
+                </PrivateElement>
+              }
+            />
+            {/* admin route */}
+
+            {/* user route */}
             <Route
               path="/profile"
               element={
@@ -60,6 +81,17 @@ function Router() {
               element={
                 <PrivateElement publicPage={"private"} redirectedTo="/login">
                   <History />
+                </PrivateElement>
+              }
+            />
+            {/* user route */}
+
+            {/* public route */}
+            <Route
+              path="/"
+              element={
+                <PrivateElement publicPage={"public"}>
+                  <Home />
                 </PrivateElement>
               }
             />
@@ -95,8 +127,9 @@ function Router() {
                 </PrivateElement>
               }
             />
-            <Route path="/Dashboard" element={<Dashboard />} />
+
             <Route path="/forgetPassword" element={<ForgetPass />} />
+            {/* public route */}
           </Routes>
         </BrowserRouter>
       </PersistGate>
