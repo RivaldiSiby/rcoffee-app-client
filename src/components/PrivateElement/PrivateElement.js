@@ -1,5 +1,7 @@
 import React, { Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { clearUser } from "../../redux/actionCreator/user";
+import { clearChart } from "../../redux/actionCreator/chart";
 
 function PrivateElement({
   children,
@@ -8,9 +10,15 @@ function PrivateElement({
   isRouteReplaced = true,
   extraData = null,
 }) {
+  const dispatch = useDispatch();
   const isLogin = useSelector((state) => state.login.status);
   const role = useSelector((state) => state.user.user.role);
-  if (publicPage === "sign " && isLogin === false) {
+  if (isLogin === false) {
+    dispatch(clearUser());
+    dispatch(clearChart());
+  }
+
+  if (publicPage === "sign" && isLogin === false) {
     return children;
   }
   if (publicPage === "public") {

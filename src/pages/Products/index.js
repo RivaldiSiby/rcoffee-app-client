@@ -8,7 +8,6 @@ import GenerateToken from "../../helper/GenerateToken";
 import { failLogin, successLogin } from "../../redux/actionCreator/login";
 
 // img
-import product from "../../asset/img/productsPage/product.png";
 import editIcon from "../../asset/img/productsPage/iconedit.svg";
 import loadingImg from "../../asset/img/loading.gif";
 import loadImg from "../../asset/img/load.gif";
@@ -54,6 +53,12 @@ class index extends Component {
     if (this.props.location.state !== null) {
       if (this.props.location.state.successToPay === true) {
         Swal.fire("Success", "Payment Success", "success");
+      }
+      if (this.props.location.state.successAddProduct === true) {
+        Swal.fire("Success", "Add Product success", "success");
+      }
+      if (this.props.location.state.successAddPromo === true) {
+        Swal.fire("Success", "Add Promo success", "success");
       }
     }
     // cek search
@@ -528,7 +533,10 @@ class index extends Component {
                             ""
                           )}
                           <div className="promo-info-head d-flex flex-column align-items-center justify-content-center">
-                            <img src={product} alt="product" />
+                            <img
+                              src={process.env.REACT_APP_HOST + item.img}
+                              alt="product"
+                            />
                             <h5>{item.name}</h5>
                             <h5>{parseFloat(item.discount) * 100}% OFF</h5>
                             <p className="text-center">{item.description}</p>

@@ -4,7 +4,7 @@ import "./Form.css";
 // img
 
 import loadingImg from "../../asset/img/loading.gif";
-// import loadImg from "../../asset/img/load.gif";
+import loadImg from "../../asset/img/load.gif";
 import imgicon from "../../asset/img/formPage/imgicon.png";
 // img
 
@@ -31,14 +31,14 @@ function Form({ form }) {
           <NavbarSignIn navActive={"products"} />
           {form === "add_product" ? (
             <>
-              <AddProduct imgicon={imgicon} />
+              <AddProduct imgicon={imgicon} load={loadImg} />
             </>
           ) : (
             <></>
           )}
           {form === "add_promo" ? (
             <>
-              <AddPromo imgicon={imgicon} />
+              <AddPromo imgicon={imgicon} load={loadImg} />
             </>
           ) : (
             <></>

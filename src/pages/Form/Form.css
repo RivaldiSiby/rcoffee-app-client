@@ -16,6 +16,13 @@
   font-family: "Nunito Sans";
   src: url("/src/asset/font/Nunito_Sans/NunitoSans-Regular.ttf");
 }
+.img-load-absolute {
+  position: absolute;
+  margin: 0 37.5%;
+  z-index: 11;
+  top: 25vh;
+  width: 25%;
+}
 
 .form-main-body {
   height: 1458px;

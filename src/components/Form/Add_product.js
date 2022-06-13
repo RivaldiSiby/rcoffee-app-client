@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import GenerateToken from "../../helper/GenerateToken";
 import { successLogin } from "../../redux/actionCreator/login";
 
-function Add_product({ imgicon }) {
+function Add_product({ imgicon, load }) {
   const login = useSelector((state) => state.login);
   const dispatch = useDispatch();
   const navigate = useNavigate("");
@@ -14,6 +14,7 @@ function Add_product({ imgicon }) {
   const [description, setDescription] = useState("");
   const [size, setSize] = useState("");
   const [category, setCategory] = useState("");
+  const [loading, setLoading] = useState(false);
   // const [categoryhour, setCategoryhour] = useState();
   const [hourstart, setHourstart] = useState(false);
   const [hourend, setHourend] = useState(false);
@@ -35,6 +36,7 @@ function Add_product({ imgicon }) {
   // add handler
   const addHandler = async () => {
     let FormProduct = new FormData();
+    setLoading(true);
     try {
       // cek token
       const token = await GenerateToken(login.auth, (Data) => {
@@ -61,7 +63,6 @@ function Add_product({ imgicon }) {
         }
       );
       // stock
-      console.log(product.data.data);
       if (product.data.data !== undefined) {
         let FormStock = {
           product_id: product.data.data.id,
@@ -82,8 +83,10 @@ function Add_product({ imgicon }) {
           state: { successAddProduct: true },
         });
       }
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
   // size handler
@@ -132,6 +135,14 @@ function Add_product({ imgicon }) {
   };
   return (
     <div>
+      {loading === true ? (
+        <>
+          {" "}
+          <img src={load} className="img-load-absolute" alt="load" />
+        </>
+      ) : (
+        ""
+      )}
       <main className="form-main-body">
         <div className="container">
           <div className="row box-form-primary">
