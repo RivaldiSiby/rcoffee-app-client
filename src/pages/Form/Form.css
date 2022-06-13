@@ -70,6 +70,7 @@
   font-size: 25px;
   line-height: 30px;
   border: none;
+  cursor: pointer;
 }
 .btn-take-style {
   color: white;
@@ -192,6 +193,23 @@
   color: #000000;
   cursor: pointer;
 }
+.bullet-size-form-left {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: #ffba33;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 45px;
+  text-align: center;
+  color: #000000;
+  cursor: pointer;
+}
+.bullet-size-form-left-active {
+  border: #000000 2px solid;
+}
 .bullet-size-form-right {
   width: 70px;
   height: 70px;
@@ -205,6 +223,10 @@
   text-align: center;
   color: #4f5665;
   cursor: pointer;
+}
+
+.bullet-size-form-right-active {
+  border: #4f5665 2px solid;
 }
 .delivery-select-form-box {
   margin-bottom: 88px;

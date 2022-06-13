@@ -1,10 +1,66 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Add_promo({ imgicon }) {
   const [datestart, setDatestart] = useState(false);
   const [dateend, setDateend] = useState(false);
+  const navigate = useNavigate();
+  // data
+  const [sizeS, setSizeS] = useState(false);
+  const [sizeR, setSizeR] = useState(false);
+  const [sizeL, setSizeL] = useState(false);
+  const [size, setSize] = useState("");
+  const [delivery1, setDelivery1] = useState(false);
+  const [delivery2, setDelivery2] = useState(false);
+  const [delivery3, setDelivery3] = useState(false);
+  const [delivery, setDelivery] = useState(false);
 
+  // size handler
+  // size handler
+  const smallHandler = () => {
+    setSizeS(true);
+    setSizeR(false);
+    setSizeL(false);
+    setSize("small");
+    return;
+  };
+  const regulerHandler = () => {
+    setSizeR(true);
+    setSizeL(false);
+    setSizeS(false);
+    setSize("reguler");
+    return;
+  };
+  const largeHandler = () => {
+    setSizeL(true);
+    setSizeS(false);
+    setSizeR(false);
+    setSize("large");
+    return;
+  };
+
+  // delivery method handler
+  const delivery1Handler = () => {
+    setDelivery1(true);
+    setDelivery2(false);
+    setDelivery3(false);
+    setDelivery("home delivery");
+    return;
+  };
+  const delivery2Handler = () => {
+    setDelivery2(true);
+    setDelivery1(false);
+    setDelivery3(false);
+    setDelivery("dine in");
+    return;
+  };
+  const delivery3Handler = () => {
+    setDelivery3(true);
+    setDelivery2(false);
+    setDelivery1(false);
+    setDelivery("take away");
+    return;
+  };
   return (
     <div>
       <main className="form-main-body">
@@ -23,9 +79,13 @@ function Add_promo({ imgicon }) {
               <button className="btn-form-left-box mx-auto btn-take-style">
                 Take a picture
               </button>
-              <button className="btn-form-left-box mx-auto btn-gallery-style">
+              <label
+                htmlFor="img-promo"
+                className="btn-form-left-box mx-auto btn-gallery-style d-flex justify-content-center align-items-center"
+              >
                 Choose from gallery
-              </button>
+              </label>
+              <input type="file" className="d-none" name="img" id="img-promo" />
               <section className="section-discount-form">
                 <label className="label-box-input-form">
                   Enter the discount :
@@ -102,32 +162,62 @@ function Add_promo({ imgicon }) {
                 <section className="size-select-form-box">
                   <div className="row">
                     <div className="col-2 text-center">
-                      <section className="bullet-size-form-left d-flex justify-content-center align-items-center">
+                      <section
+                        onClick={() => smallHandler()}
+                        className={`bullet-size-form-left d-flex justify-content-center align-items-center ${
+                          sizeS === true ? "bullet-size-form-left-active" : ""
+                        }`}
+                      >
                         S
                       </section>
                     </div>
                     <div className="col-2 text-center">
-                      <section className="bullet-size-form-left d-flex justify-content-center align-items-center">
+                      <section
+                        onClick={() => regulerHandler()}
+                        className={`bullet-size-form-left d-flex justify-content-center align-items-center ${
+                          sizeR === true ? "bullet-size-form-left-active" : ""
+                        }`}
+                      >
                         R
                       </section>
                     </div>
                     <div className="col-2 text-center">
-                      <section className="bullet-size-form-left d-flex justify-content-center align-items-center">
+                      <section
+                        onClick={() => largeHandler()}
+                        className={`bullet-size-form-left d-flex justify-content-center align-items-center ${
+                          sizeL === true ? "bullet-size-form-left-active" : ""
+                        }`}
+                      >
                         L
                       </section>
                     </div>
                     <div className="col-2 text-center">
-                      <section className="bullet-size-form-right d-flex justify-content-center align-items-center">
+                      <section
+                        onClick={() => smallHandler()}
+                        className={`bullet-size-form-right d-flex justify-content-center align-items-center ${
+                          sizeS === true ? "bullet-size-form-right-active" : ""
+                        }`}
+                      >
                         Small
                       </section>
                     </div>
                     <div className="col-2 text-center">
-                      <section className="bullet-size-form-right d-flex justify-content-center align-items-center">
+                      <section
+                        onClick={() => regulerHandler()}
+                        className={`bullet-size-form-right d-flex justify-content-center align-items-center ${
+                          sizeR === true ? "bullet-size-form-right-active" : ""
+                        }`}
+                      >
                         Reguler
                       </section>
                     </div>
                     <div className="col-2 text-center">
-                      <section className="bullet-size-form-right d-flex justify-content-center align-items-center">
+                      <section
+                        onClick={() => largeHandler()}
+                        className={`bullet-size-form-right d-flex justify-content-center align-items-center ${
+                          sizeL === true ? "bullet-size-form-right-active" : ""
+                        }`}
+                      >
                         Large
                       </section>
                     </div>
@@ -138,19 +228,45 @@ function Add_promo({ imgicon }) {
                 </label>
                 <p>Click methods you want to use for this promo</p>
                 <section className="delivery-select-form-box">
-                  <section className="d-flex justify-content-center align-items-center btn-delivery-style1">
+                  <section
+                    onClick={() => delivery1Handler()}
+                    className={`d-flex justify-content-center align-items-center ${
+                      delivery1 === true
+                        ? "btn-delivery-style2"
+                        : "btn-delivery-style1"
+                    }`}
+                  >
                     Home Delivery
                   </section>
-                  <section className="d-flex justify-content-center align-items-center btn-delivery-style1">
+                  <section
+                    onClick={() => delivery2Handler()}
+                    className={`d-flex justify-content-center align-items-center ${
+                      delivery2 === true
+                        ? "btn-delivery-style2"
+                        : "btn-delivery-style1"
+                    }`}
+                  >
                     Dine in
                   </section>
-                  <section className="d-flex justify-content-center align-items-center btn-delivery-style2">
+                  <section
+                    onClick={() => delivery3Handler()}
+                    className={`d-flex justify-content-center align-items-center ${
+                      delivery3 === true
+                        ? "btn-delivery-style2"
+                        : "btn-delivery-style1"
+                    }`}
+                  >
                     Take away
                   </section>
                 </section>
 
                 <button className="btn-right-form-save">Save Promo</button>
-                <button className="btn-right-form-cancel">Cancel</button>
+                <button
+                  onClick={() => navigate("/products")}
+                  className="btn-right-form-cancel"
+                >
+                  Cancel
+                </button>
               </section>
             </section>
           </div>

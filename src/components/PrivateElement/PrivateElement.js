@@ -10,7 +10,7 @@ function PrivateElement({
 }) {
   const isLogin = useSelector((state) => state.login.status);
   const role = useSelector((state) => state.user.user.role);
-  if (publicPage === "sign") {
+  if (publicPage === "sign " && isLogin === false) {
     return children;
   }
   if (publicPage === "public") {
@@ -23,6 +23,15 @@ function PrivateElement({
     return children;
   }
   if (publicPage === "admin" && isLogin === true) {
+    return (
+      <Navigate
+        to={redirectedTo}
+        replace={isRouteReplaced}
+        extraData={extraData}
+      />
+    );
+  }
+  if (publicPage === "sign" && isLogin === true) {
     return (
       <Navigate
         to={redirectedTo}

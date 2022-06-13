@@ -566,7 +566,10 @@ class index extends Component {
                     {this.props.user.role === "admin" ? (
                       <>
                         {" "}
-                        <button className="btn-add-new-promo">
+                        <button
+                          onClick={() => this.props.navigate("/promos/add")}
+                          className="btn-add-new-promo"
+                        >
                           Add new promo
                         </button>
                       </>
@@ -840,7 +843,12 @@ class index extends Component {
 
                         {this.props.user.role === "admin" ? (
                           <>
-                            <button className="btn-add-new-product">
+                            <button
+                              onClick={() =>
+                                this.props.navigate("/products/add")
+                              }
+                              className="btn-add-new-product"
+                            >
                               Add new product
                             </button>
                           </>
