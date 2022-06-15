@@ -26,9 +26,12 @@ function Add_product({ imgicon, load }) {
   const [category1, setCategory1] = useState(false);
   const [category2, setCategory2] = useState(false);
   const [category3, setCategory3] = useState(false);
+  const [previewImg, setPreviewImage] = useState(null);
 
   // img handler
   const imgHandler = (e) => {
+    const toPreview = URL.createObjectURL(e.target.files[0]);
+    setPreviewImage(toPreview);
     const img = e.target.files[0];
     setImg(img);
     console.log(img);
@@ -146,16 +149,29 @@ function Add_product({ imgicon, load }) {
       <main className="form-main-body">
         <div className="container">
           <div className="row box-form-primary">
-            <section className="col-md-5 left-box-form">
+            <section className="col-lg-5 left-box-form">
               <section className="text-left-form d-flex">
                 <Link className="link-text-form-left" to={"/products"}>
                   Favorite & Promo
                 </Link>
                 <p>{"> Add new product"}</p>
               </section>
-              <section className="img-left-form d-flex justify-content-center align-items-center mx-auto">
-                <img src={imgicon} alt="img-prototype" />
-              </section>
+              {previewImg === null ? (
+                <>
+                  <section className="img-left-form d-flex justify-content-center align-items-center mx-auto">
+                    <img src={imgicon} alt="img-prototype" />
+                  </section>
+                </>
+              ) : (
+                <>
+                  <img
+                    src={previewImg}
+                    className="img-left-form d-flex justify-content-center align-items-center mx-auto"
+                    alt="img-preview"
+                  />
+                </>
+              )}
+
               <button className="btn-form-left-box mx-auto btn-take-style">
                 Take a picture
               </button>
@@ -198,7 +214,7 @@ function Add_product({ imgicon, load }) {
                 />
               </section>
             </section>
-            <section className="col-md-6 right-box-form">
+            <section className="col-lg-6 right-box-form">
               <section className="group-form-input-right-up">
                 <div className="mb-3">
                   <label className="form-label label-box-input-form">

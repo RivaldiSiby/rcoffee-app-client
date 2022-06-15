@@ -48,6 +48,7 @@ function Profile() {
   const [showPass, setShowPass] = useState(false);
   const [type, setType] = useState("password");
   // const [Password, setPassword] = useState("");
+  const [previewImg, setPreviewImage] = useState(null);
 
   // update data
 
@@ -150,6 +151,8 @@ function Profile() {
     setShowPass(false);
   };
   const fileHandler = (e) => {
+    const toPreview = URL.createObjectURL(e.target.files[0]);
+    setPreviewImage(toPreview);
     const file = e.target.files[0];
     const remove = document.getElementById("remove-img");
     setfile(file);
@@ -347,7 +350,10 @@ function Profile() {
                   <div className="row">
                     <div className="col-md-4 profile-info d-flex flex-column align-items-center">
                       <div className="profile-head">
-                        <img src={profileImg} alt="profile" />
+                        <img
+                          src={previewImg === null ? profileImg : previewImg}
+                          alt="profile"
+                        />
                         <h5>
                           {profile.name}
                           <br />
@@ -359,11 +365,6 @@ function Profile() {
                           id="edit-photo"
                           className="d-flex flex-column align-items-center d-none"
                         >
-                          <p className="fw-bold">
-                            {file.name !== undefined
-                              ? `Img : ${file.name}`
-                              : ""}
-                          </p>
                           <label
                             htmlFor="img-file"
                             className="btn-photo c-yellow"

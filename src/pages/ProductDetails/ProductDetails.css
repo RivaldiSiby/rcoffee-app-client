@@ -271,6 +271,9 @@
   .step-order-product-text {
     column-gap: 15%;
   }
+  .product-detail-left-body {
+    height: 350px;
+  }
 }
 /* responsive mobile */
 @media only screen and (max-width: 470px) {
