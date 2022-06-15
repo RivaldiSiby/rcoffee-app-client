@@ -2,7 +2,7 @@ import axios from "axios";
 
 export default async function GenerateToken(auth, cb) {
   const result = await axios.get(
-    `http://localhost:8080/auth/${auth["refreshkey"]}`
+    `${process.env.REACT_APP_HOST}/auth/${auth["refreshkey"]}`
   );
   if (result.data.data.token !== undefined) {
     const authData = {

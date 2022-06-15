@@ -66,14 +66,14 @@ class index extends Component {
         });
       }
       const products = await axios.get(
-        `http://localhost:8080/product/favorite?limit=3`
+        `${process.env.REACT_APP_HOST}/product/favorite?limit=3`
       );
       this.setState({ products: products.data.data });
       this.setState({ loading: false });
       return;
     } catch (error) {
       axios
-        .get(`http://localhost:8080/product/favorite?limit=3`)
+        .get(`${process.env.REACT_APP_HOST}/product/favorite?limit=3`)
         .then((products) => {
           this.setState({ products: products.data.data });
           this.setState({ loading: false });
@@ -239,7 +239,7 @@ class index extends Component {
                     <div className="col-lg-3 products-list d-flex flex-column justify-content-center align-items-center">
                       <div className="products-head text-center ">
                         <img
-                          src={"http://localhost:8080" + product.img}
+                          src={process.env.REACT_APP_HOST + product.img}
                           alt="product"
                         />
                         <p>{product.name}</p>

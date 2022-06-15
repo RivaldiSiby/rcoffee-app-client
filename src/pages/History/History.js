@@ -30,11 +30,14 @@ function History() {
         const token = await GenerateToken(login.auth, (Data) => {
           dispatch(successLogin(Data));
         });
-        const data = await axios.get("http://localhost:8080/transaction", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const data = await axios.get(
+          `${process.env.REACT_APP_HOST}/transaction`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         if (data !== undefined) {
           setHistory(data.data.data);
           setLoading(false);

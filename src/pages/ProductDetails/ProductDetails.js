@@ -44,7 +44,7 @@ function ProductDetails() {
         });
         setisLogin(true);
         const product = await axios.get(
-          `http://localhost:8080/product/${params.id}`,
+          `${process.env.REACT_APP_HOST}/product/${params.id}`,
           {}
         );
         setProducts(product.data.data);
@@ -57,7 +57,7 @@ function ProductDetails() {
       } catch (error) {
         console.log(error);
         axios
-          .get(`http://localhost:8080/product/${params.id}`, {})
+          .get(`${process.env.REACT_APP_HOST}/product/${params.id}`, {})
           .then((product) => {
             setProducts(product.data.data);
             // get product detail
@@ -185,7 +185,7 @@ function ProductDetails() {
                   <section className="product-detail-left-body d-flex justify-content-end">
                     <img
                       className="product-detail-img"
-                      src={"http://localhost:8080" + productDetail.img}
+                      src={process.env.REACT_APP_HOST + productDetail.img}
                       alt="product-img"
                     />
                     <section className="d-flex justify-content-center align-items-center">

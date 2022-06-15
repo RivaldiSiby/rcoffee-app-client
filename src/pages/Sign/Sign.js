@@ -59,7 +59,7 @@ function Sign(props) {
   const loginHandler = async (e) => {
     try {
       e.preventDefault();
-      const result = await axios.post("http://localhost:8080/auth", {
+      const result = await axios.post(`${process.env.REACT_APP_HOST}/auth`, {
         email: Email,
         password: Pass,
       });
@@ -84,7 +84,7 @@ function Sign(props) {
   const regisHandler = async (e) => {
     try {
       e.preventDefault();
-      await axios.post("http://localhost:8080/auth/register", {
+      await axios.post(`${process.env.REACT_APP_HOST}/auth/register`, {
         email: Email,
         password: Pass,
         phone: Phone,

@@ -95,7 +95,7 @@ function Payment({ detailTrans = false }) {
         tax: `${tax}`,
         payment_method: payment,
       };
-      await axios.post("http://localhost:8080/transaction", data, {
+      await axios.post(`${process.env.REACT_APP_HOST}/transaction`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

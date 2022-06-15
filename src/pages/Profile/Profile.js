@@ -31,7 +31,7 @@ function Profile() {
   const login = useSelector((state) => state.login);
   const user = useSelector((state) => state.user);
   // user data
-  const img = "http://localhost:8080" + login.auth["datauser"];
+  const img = process.env.REACT_APP_HOST + login.auth["datauser"];
   const [profileImg, setProfileImg] = useState(img);
   const [profile, setProfile] = useState([]);
   const [Email, setEmail] = useState("");
@@ -169,7 +169,9 @@ function Profile() {
 
         // logout API
         const refreshToken = login.auth["refreshkey"];
-        await axios.delete(`http://localhost:8080/auth/${refreshToken}`);
+        await axios.delete(
+          `${process.env.REACT_APP_HOST}/auth/${refreshToken}`
+        );
       } catch (error) {
         setLoading(false);
       }
@@ -203,11 +205,14 @@ function Profile() {
       const token = await GenerateToken(login.auth, (Data) => {
         dispatch(successLogin(Data));
       });
-      const profile = await axios.get(`http://localhost:8080/users/profile`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const profile = await axios.get(
+        `${process.env.REACT_APP_HOST}/users/profile`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (file !== "") {
         const authData = {
@@ -216,7 +221,7 @@ function Profile() {
           datauser: profile.data.data.img,
         };
         dispatch(successLogin(authData));
-        const img = "http://localhost:8080" + login.auth["datauser"];
+        const img = process.env.REACT_APP_HOST + login.auth["datauser"];
         setProfileImg(img);
       }
       dispatch(addUser(profile.data.data));
@@ -295,7 +300,7 @@ function Profile() {
         dispatch(successLogin(Data));
       });
       // post data
-      await axios.patch("http://localhost:8080/users", formData, {
+      await axios.patch(`${process.env.REACT_APP_HOST}/users`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-type": "multipart/form-data",

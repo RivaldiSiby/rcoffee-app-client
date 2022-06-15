@@ -21,6 +21,7 @@ function Dashboard() {
   const login = useSelector((state) => state.login);
   // const navigate = useNavigate();
   const [dailyDate, setDailyDate] = useState(false);
+  const [dailyTotal, setDailyTotal] = useState(false);
 
   // data daily
   // income
@@ -54,7 +55,15 @@ function Dashboard() {
               },
             }
           );
-          console.log(data.data.data);
+          // console.log(data.data.data.totalDay1.total);
+          // console.log(data.data.data.totalDay1.date);
+          // console.log(data.data.data.totalDay1.total.toString().slice(0, 3));
+          // console.log(data.data.data.totalDay2.total.toString().slice(0, 3));
+          // //  atur total penjualan dengan
+          // data.data.data.map((item) => {
+          //   console.log(item.total);
+          // });
+
           if (data.data.data !== false) {
             const stemincome1 = {
               height: `${(data.data.data.totalDay0.total / 1000000) * 100}%`,
@@ -172,20 +181,20 @@ function Dashboard() {
                   <h5>See how your store progress so far</h5>
                   <section className="row list-bullet-dashboard d-flex justify-content-center">
                     <section className="col-3  d-flex justify-content-center ">
-                      <section className="bullet-dashboard"></section>
+                      <section className="bullet-dashboard bullet-dashboard-active"></section>
                     </section>
                     <section className="col-3  d-flex justify-content-center">
-                      <section className="bullet-dashboard bullet-dashboard-active"></section>
+                      <section className="bullet-dashboard "></section>
                     </section>
                     <section className="col-3  d-flex justify-content-center">
                       <section className="bullet-dashboard"></section>
                     </section>
                   </section>
                   <section className="row list-bullet-dashboard d-flex justify-content-center">
-                    <section className="col-3  text-center">Daily</section>
                     <section className="col-3  text-center bullet-text-active">
-                      Weekly
+                      Daily
                     </section>
+                    <section className="col-3  text-center ">Weekly</section>
                     <section className="col-3  text-center">Monthly</section>
                   </section>
                 </section>
@@ -194,7 +203,7 @@ function Dashboard() {
                   <div className="container">
                     <section className="body-chart-head d-flex">
                       <div className="text-head-chart">
-                        <h5>Weekly Report</h5>
+                        <h5>Daily Report</h5>
                         <p>Last 6 days</p>
                       </div>
                       <div className="bullet-list-chart d-flex justify-content-end">
@@ -208,22 +217,22 @@ function Dashboard() {
                         <section className="col-3 side-text-chart">
                           <section className="chart-text-income">
                             <section>
-                              <p>IDR</p>
+                              <p className="id-rupiah-text">IDR</p>
                               <p>1M</p>
                             </section>
                             <section>
-                              <p>IDR</p>
+                              <p className="id-rupiah-text">IDR</p>
                               <p>600k</p>
                             </section>
                             <section>
-                              <p>IDR</p>
+                              <p className="id-rupiah-text">IDR</p>
                               <p>0k</p>
                             </section>
                           </section>
                           <section className="chart-text-outcome">
                             -
                             <section>
-                              <p>IDR</p>
+                              <p className="id-rupiah-text">IDR</p>
                               <p>400k</p>
                             </section>
                           </section>
@@ -313,22 +322,22 @@ function Dashboard() {
                           </section>
                           <section className="main-graphic-text">
                             <div className="row info-graph-text">
-                              <section className="col-2 text-center">
+                              <section className="col-2 ">
                                 <p>{dailyDate[5]}</p>
                               </section>
-                              <section className="col-2 text-center">
+                              <section className="col-2 ">
                                 <p>{dailyDate[4]}</p>
                               </section>
-                              <section className="col-2 text-center">
+                              <section className="col-2 ">
                                 <p>{dailyDate[3]}</p>
                               </section>
-                              <section className="col-2 text-center">
+                              <section className="col-2 ">
                                 <p>{dailyDate[2]}</p>
                               </section>
-                              <section className="col-2 text-center">
+                              <section className="col-2 ">
                                 <p>{dailyDate[1]}</p>
                               </section>
-                              <section className="col-2 text-center">
+                              <section className="col-2 ">
                                 <p>{dailyDate[0]}</p>
                               </section>
                             </div>
@@ -395,10 +404,10 @@ function Dashboard() {
                 </section>
                 <section className="col-md-12  dashboard-body-foot">
                   <div className="row d-flex">
-                    <section className="col-md-8">
+                    <section className="col-sm-8">
                       <button className="w-100">Download Report</button>
                     </section>
-                    <section className="col-md-4">
+                    <section className="col-sm-4">
                       <button className="share-btn-report">Share Report</button>
                     </section>
                   </div>
