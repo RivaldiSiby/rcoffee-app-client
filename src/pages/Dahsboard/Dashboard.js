@@ -21,7 +21,7 @@ function Dashboard() {
   const login = useSelector((state) => state.login);
   // const navigate = useNavigate();
   const [dailyDate, setDailyDate] = useState(false);
-  const [dailyTotal, setDailyTotal] = useState(false);
+  // const [dailyTotal, setDailyTotal] = useState(false);
 
   // data daily
   // income
@@ -41,129 +41,132 @@ function Dashboard() {
 
   // tarik data product
   useEffect(() => {
-    setLoading(true);
-    GenerateToken(login.auth, (Data) => {
-      dispatch(successLogin(Data));
-    })
-      .then(async (token) => {
-        try {
-          const data = await axios.get(
-            `${process.env.REACT_APP_HOST}/transaction/daily`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
+    const getDaily = async () => {
+      setLoading(true);
+      GenerateToken(login.auth, (Data) => {
+        dispatch(successLogin(Data));
+      })
+        .then(async (token) => {
+          try {
+            const data = await axios.get(
+              `${process.env.REACT_APP_HOST}/transaction/daily`,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
+            // console.log(data.data.data.totalDay1.total);
+            // console.log(data.data.data.totalDay1.date);
+            // console.log(data.data.data.totalDay1.total.toString().slice(0, 3));
+            // console.log(data.data.data.totalDay2.total.toString().slice(0, 3));
+            // //  atur total penjualan dengan
+            // data.data.data.map((item) => {
+            //   console.log(item.total);
+            // });
+
+            if (data.data.data !== false) {
+              const stemincome1 = {
+                height: `${(data.data.data.totalDay0.total / 1000000) * 100}%`,
+              };
+              const stemincome2 = {
+                height: `${(data.data.data.totalDay1.total / 1000000) * 100}%`,
+              };
+              const stemincome3 = {
+                height: `${(data.data.data.totalDay2.total / 1000000) * 100}%`,
+              };
+              const stemincome4 = {
+                height: `${(data.data.data.totalDay3.total / 1000000) * 100}%`,
+              };
+              const stemincome5 = {
+                height: `${(data.data.data.totalDay4.total / 1000000) * 100}%`,
+              };
+              const stemincome6 = {
+                height: `${(data.data.data.totalDay5.total / 1000000) * 100}%`,
+              };
+
+              setStem_income_1(stemincome6);
+              setStem_income_2(stemincome5);
+              setStem_income_3(stemincome4);
+              setStem_income_4(stemincome3);
+              setStem_income_5(stemincome2);
+              setStem_income_6(stemincome1);
+
+              // outcome
+              const stemoutcome1 = {
+                height: "5%",
+              };
+              const stemoutcome2 = {
+                height: "5%",
+              };
+              const stemoutcome3 = {
+                height: "5%",
+              };
+              const stemoutcome4 = {
+                height: "5%",
+              };
+              const stemoutcome5 = {
+                height: "5%",
+              };
+              const stemoutcome6 = {
+                height: "5%",
+              };
+              setStem_outcome_1(stemoutcome6);
+              setStem_outcome_2(stemoutcome5);
+              setStem_outcome_3(stemoutcome4);
+              setStem_outcome_4(stemoutcome3);
+              setStem_outcome_5(stemoutcome2);
+              setStem_outcome_6(stemoutcome1);
+
+              // date daily
+              const monthStr = [
+                "Jan",
+                "Feb",
+                "Mar",
+                "Apr",
+                "May",
+                "Jun",
+                "Jul",
+                "Aug",
+                "Sep",
+                "Oct",
+                "Nov",
+                "Dec",
+              ];
+              const dateDaily = [
+                `${new Date(data.data.data.totalDay0.date).getDate()} ${
+                  monthStr[new Date(data.data.data.totalDay0.date).getMonth()]
+                }`,
+                `${new Date(data.data.data.totalDay1.date).getDate()} ${
+                  monthStr[new Date(data.data.data.totalDay1.date).getMonth()]
+                }`,
+                `${new Date(data.data.data.totalDay2.date).getDate()} ${
+                  monthStr[new Date(data.data.data.totalDay2.date).getMonth()]
+                }`,
+                `${new Date(data.data.data.totalDay3.date).getDate()} ${
+                  monthStr[new Date(data.data.data.totalDay3.date).getMonth()]
+                }`,
+                `${new Date(data.data.data.totalDay4.date).getDate()} ${
+                  monthStr[new Date(data.data.data.totalDay4.date).getMonth()]
+                }`,
+                `${new Date(data.data.data.totalDay5.date).getDate()} ${
+                  monthStr[new Date(data.data.data.totalDay5.date).getMonth()]
+                }`,
+              ];
+              setDailyDate(dateDaily);
             }
-          );
-          // console.log(data.data.data.totalDay1.total);
-          // console.log(data.data.data.totalDay1.date);
-          // console.log(data.data.data.totalDay1.total.toString().slice(0, 3));
-          // console.log(data.data.data.totalDay2.total.toString().slice(0, 3));
-          // //  atur total penjualan dengan
-          // data.data.data.map((item) => {
-          //   console.log(item.total);
-          // });
-
-          if (data.data.data !== false) {
-            const stemincome1 = {
-              height: `${(data.data.data.totalDay0.total / 1000000) * 100}%`,
-            };
-            const stemincome2 = {
-              height: `${(data.data.data.totalDay1.total / 1000000) * 100}%`,
-            };
-            const stemincome3 = {
-              height: `${(data.data.data.totalDay2.total / 1000000) * 100}%`,
-            };
-            const stemincome4 = {
-              height: `${(data.data.data.totalDay3.total / 1000000) * 100}%`,
-            };
-            const stemincome5 = {
-              height: `${(data.data.data.totalDay4.total / 1000000) * 100}%`,
-            };
-            const stemincome6 = {
-              height: `${(data.data.data.totalDay5.total / 1000000) * 100}%`,
-            };
-
-            setStem_income_1(stemincome6);
-            setStem_income_2(stemincome5);
-            setStem_income_3(stemincome4);
-            setStem_income_4(stemincome3);
-            setStem_income_5(stemincome2);
-            setStem_income_6(stemincome1);
-
-            // outcome
-            const stemoutcome1 = {
-              height: "5%",
-            };
-            const stemoutcome2 = {
-              height: "5%",
-            };
-            const stemoutcome3 = {
-              height: "5%",
-            };
-            const stemoutcome4 = {
-              height: "5%",
-            };
-            const stemoutcome5 = {
-              height: "5%",
-            };
-            const stemoutcome6 = {
-              height: "5%",
-            };
-            setStem_outcome_1(stemoutcome6);
-            setStem_outcome_2(stemoutcome5);
-            setStem_outcome_3(stemoutcome4);
-            setStem_outcome_4(stemoutcome3);
-            setStem_outcome_5(stemoutcome2);
-            setStem_outcome_6(stemoutcome1);
-
-            // date daily
-            const monthStr = [
-              "Jan",
-              "Feb",
-              "Mar",
-              "Apr",
-              "May",
-              "Jun",
-              "Jul",
-              "Aug",
-              "Sep",
-              "Oct",
-              "Nov",
-              "Dec",
-            ];
-            const dateDaily = [
-              `${new Date(data.data.data.totalDay0.date).getDate()} ${
-                monthStr[new Date(data.data.data.totalDay0.date).getMonth()]
-              }`,
-              `${new Date(data.data.data.totalDay1.date).getDate()} ${
-                monthStr[new Date(data.data.data.totalDay1.date).getMonth()]
-              }`,
-              `${new Date(data.data.data.totalDay2.date).getDate()} ${
-                monthStr[new Date(data.data.data.totalDay2.date).getMonth()]
-              }`,
-              `${new Date(data.data.data.totalDay3.date).getDate()} ${
-                monthStr[new Date(data.data.data.totalDay3.date).getMonth()]
-              }`,
-              `${new Date(data.data.data.totalDay4.date).getDate()} ${
-                monthStr[new Date(data.data.data.totalDay4.date).getMonth()]
-              }`,
-              `${new Date(data.data.data.totalDay5.date).getDate()} ${
-                monthStr[new Date(data.data.data.totalDay5.date).getMonth()]
-              }`,
-            ];
-            setDailyDate(dateDaily);
+            setLoading(false);
+          } catch (error) {
+            setLoading(false);
+            console.log(error);
           }
-          setLoading(false);
-        } catch (error) {
+        })
+        .catch((error) => {
           setLoading(false);
           console.log(error);
-        }
-      })
-      .catch((error) => {
-        setLoading(false);
-        console.log(error);
-      });
+        });
+    };
+    getDaily();
   }, []);
   return (
     <>

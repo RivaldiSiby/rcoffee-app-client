@@ -1,5 +1,5 @@
 const initialState = {
-  url: "http://localhost:8080/product/favorite?limit=12",
+  url: `${process.env.REACT_APP_HOST}/product/favorite?limit=12`,
 };
 
 const products = (prevState = initialState, action) => {
@@ -8,7 +8,7 @@ const products = (prevState = initialState, action) => {
     case "ADD_PRODUCTS":
       return { url: action.url };
     case "CLEAR_PRODUCTS":
-      return { url: "http://localhost:8080/product/favorite?limit=12" };
+      return { url: `${process.env.REACT_APP_HOST}/product/favorite?limit=12` };
     default:
       return prevState;
   }
