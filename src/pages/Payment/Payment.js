@@ -152,6 +152,7 @@ function Payment({ detailTrans = false }) {
                 </>
               ) : (
                 <>
+                  <NavbarSignIn navActive={"chart"} />
                   <section className="no-order-chart text-center">
                     <img src={noorder} alt="no-order" />
                     <h5>no order for checkout</h5>

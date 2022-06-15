@@ -17,7 +17,7 @@
   src: url("/src/asset/font/Nunito_Sans/NunitoSans-Regular.ttf");
 }
 .img-load-absolute {
-  position: absolute;
+  position: fixed;
   margin: 0 37.5%;
   z-index: 11;
   top: 25vh;
@@ -284,23 +284,35 @@
 
 @media only screen and (max-width: 950px) {
   .form-main-body {
-    min-height: 1458px;
+    min-height: auto;
     height: auto;
   }
   .right-box-form {
-    min-height: 1458px;
+    min-height: auto;
     height: auto;
   }
   .group-form-input-right-up {
     margin-top: 50px;
   }
   .left-box-form {
-    min-height: 1458px;
+    min-height: auto;
     height: auto;
+  }
+  .section-delivery-form {
+    margin-top: 50px;
+  }
+  .section-stock-form {
+    margin-top: 50px;
   }
 }
 
 @media only screen and (max-width: 650px) {
+  .link-text-form-left {
+    font-size: 16px;
+  }
+  .text-left-form > p {
+    font-size: 16px;
+  }
   .size-select-form-box > div {
     display: flex;
     justify-content: center;
@@ -308,6 +320,16 @@
   .size-select-form-box > div > div {
     width: 27%;
     margin-bottom: 20px;
+  }
+  .select-input-form-left {
+    width: 100%;
+    font-size: 18px;
+    height: 63px;
+  }
+  .input-box-form-right {
+    width: 100%;
+    font-size: 18px;
+    height: 63px;
   }
 }
 @media only screen and (max-width: 450px) {
