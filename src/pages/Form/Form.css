@@ -67,6 +67,100 @@
   height: 83px;
 }
 
+.promo-preview-edit {
+  height: 771px;
+  background: #ffcb65;
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.35);
+  border-radius: 20px;
+  margin-top: 87px;
+}
+.promo-preview-edit-head {
+  height: 279px;
+  padding-top: 52px;
+  padding-bottom: 31px;
+}
+.promo-preview-edit-head > label {
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  background: #6a4029;
+  position: relative;
+  z-index: 5;
+  left: 60%;
+  bottom: 36px;
+  border-radius: 50%;
+}
+
+.preview-promo-head {
+  width: 186.99px;
+  height: 196px;
+  border-radius: 50%;
+}
+.icon-edit-preview-promo {
+  width: 16px;
+  height: 16px;
+}
+.promo-preview-edit-body {
+  height: 268px;
+  border-bottom: 1px dashed #000000;
+}
+.promo-preview-edit-body:nth-child(1) {
+  margin-bottom: 31px;
+}
+.promo-preview-edit-body > h5 {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 101.34%;
+  text-align: center;
+  color: #000000;
+}
+.promo-preview-edit-body > p {
+  margin-top: 51px;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 25px;
+  line-height: 101.34%;
+  /* or 25px */
+  text-align: center;
+  color: #000000;
+  padding: 0 35px;
+}
+.promo-preview-edit-foot {
+  height: 224px;
+}
+.promo-preview-edit-foot > h5 {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 101.34%;
+  text-align: center;
+  color: #000000;
+  margin-top: 31px;
+}
+.title-promo-coupon {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 25px;
+  line-height: 101.34%;
+  text-align: center;
+  color: #000000;
+  margin-top: 27px;
+}
+.token-expire-promo {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 101.34%;
+  text-align: center;
+  color: #000000;
+  margin-top: 32px;
+}
 .btn-form-left-box {
   width: 100%;
   height: 88px;
@@ -96,7 +190,7 @@
   margin-bottom: 45px;
 }
 .section-expire-form {
-  margin-top: 32px;
+  margin-top: 75px;
 }
 .section-expire-form > label {
   margin-bottom: 24px;
@@ -114,7 +208,7 @@
   margin-bottom: 45px;
 }
 .section-discount-form {
-  margin-top: 95px;
+  margin-top: 55px;
 }
 .section-discount-form > label {
   margin-bottom: 25px;
@@ -139,7 +233,7 @@
   font-size: 20px;
   line-height: 138.84%;
   letter-spacing: 0.03em;
-  color: #9f9f9f;
+  color: #2b2b2b;
   margin-bottom: 20px;
   padding-left: 0;
   padding-left: 33px;
@@ -165,7 +259,7 @@
   font-weight: 400;
   font-size: 20px;
   line-height: 24px;
-  color: #9f9f9f;
+  color: #2b2b2b;
   padding: 20px 0;
   padding-left: 27px;
   margin-bottom: 35px;
@@ -270,7 +364,7 @@
   letter-spacing: 0.03em;
   width: 100%;
   border: none;
-  margin-bottom: 25px;
+  margin: 25px 0;
 }
 .btn-right-form-save {
   background: #6a4029;
@@ -302,6 +396,9 @@
     margin-top: 50px;
   }
   .section-stock-form {
+    margin-top: 50px;
+  }
+  .section-expire-form {
     margin-top: 50px;
   }
 }
