@@ -74,7 +74,6 @@ function Add_product({ imgicon, load }) {
           price: price,
         };
 
-        console.log(FormStock);
         await axios.post(`${process.env.REACT_APP_HOST}/stock`, FormStock, {
           headers: {
             Authorization: `Bearer ${token}`,

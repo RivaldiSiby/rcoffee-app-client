@@ -57,8 +57,14 @@ class index extends Component {
       if (this.props.location.state.successAddProduct === true) {
         Swal.fire("Success", "Add Product success", "success");
       }
+      if (this.props.location.state.successEditProduct === true) {
+        Swal.fire("Success", "Edit Product success", "success");
+      }
       if (this.props.location.state.successAddPromo === true) {
         Swal.fire("Success", "Add Promo success", "success");
+      }
+      if (this.props.location.state.successEditPromo === true) {
+        Swal.fire("Success", "Edit Promo success", "success");
       }
     }
     // cek search
@@ -524,9 +530,12 @@ class index extends Component {
                           {this.props.user.role === "admin" ? (
                             <>
                               <section className="box-icon-edit-section w-100 d-flex justify-content-end ">
-                                <section className="edit-icon-promo text-center">
+                                <Link
+                                  to={"/promos/" + item.id}
+                                  className="edit-icon-promo text-center"
+                                >
                                   <img src={editIcon} alt="edit-icon" />
-                                </section>
+                                </Link>
                               </section>
                             </>
                           ) : (

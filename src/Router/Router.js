@@ -49,6 +49,14 @@ function Router() {
                 </PrivateElement>
               }
             />
+            <Route
+              path="/promos/:id"
+              element={
+                <PrivateElement publicPage={"admin"} redirectedTo="/">
+                  <Form form={"add_promo"} />
+                </PrivateElement>
+              }
+            />
             {/* admin route */}
 
             {/* user route */}

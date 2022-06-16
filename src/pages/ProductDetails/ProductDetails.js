@@ -11,6 +11,7 @@ import Footer from "../../components/Footer/Footer";
 // img
 import loadingImg from "../../asset/img/loading.gif";
 import iconMsg from "../../asset/img/productsDetailPage/iconMsg.png";
+import iconDel from "../../asset/img/productsDetailPage/iconDel.png";
 import iconCek from "../../asset/img/productsDetailPage/iconCek.svg";
 import GenerateToken from "../../helper/GenerateToken";
 // img
@@ -24,15 +25,22 @@ function ProductDetails() {
   const dispatch = useDispatch();
   const login = useSelector((state) => state.login);
   const chart = useSelector((state) => state.chart);
+  const role = useSelector((state) => state.user.user.role);
   const navigate = useNavigate();
   const [isLogin, setisLogin] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isadd, setIsadd] = useState(false);
   const Navigate = useNavigate();
+  const [edit, setEdit] = useState(false);
   // data
   const [products, setProducts] = useState([]);
   const [productDetail, setProductDetail] = useState([]);
   const [quantity, setQuantity] = useState(1);
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
+  const [description, setDescription] = useState("");
+  const [img, setImg] = useState("");
+  const [previewImg, setPreviewImage] = useState(null);
   // data
 
   useEffect(() => {
@@ -52,6 +60,7 @@ function ProductDetails() {
         product.data.data.map((product) =>
           product.size === params.size ? setProductDetail(product) : ""
         );
+
         // get product detail
         setLoading(false);
       } catch (error) {
@@ -96,6 +105,7 @@ function ProductDetails() {
     products.map((product) =>
       product.size === size ? setProductDetail(product) : ""
     );
+    navigate(`/products/${params.id}/${size}`, { replace: true });
     setQuantity(1);
   };
 
@@ -150,7 +160,89 @@ function ProductDetails() {
       navigate("/login", { replace: true });
     }
   };
+  // edit handler
+  const editHandler = (e) => {
+    e.preventDefault();
+    setName(productDetail.name);
+    setPrice(productDetail.price);
+    setDescription(productDetail.description);
+    setEdit(true);
+    return;
+  };
+  // img handler
+  const imgHandler = (e) => {
+    const toPreview = URL.createObjectURL(e.target.files[0]);
+    setPreviewImage(toPreview);
+    const img = e.target.files[0];
+    setImg(img);
+  };
+  // edit product handler
+  const editProductHandler = async (e) => {
+    let FormProduct = new FormData();
+    setLoading(true);
+    try {
+      const token = await GenerateToken(login.auth, (Data) => {
+        dispatch(successLogin(Data));
+      });
+      // product
+      img !== "" ? FormProduct.append("photo", img) : setImg("");
+      name !== "" ? FormProduct.append("name", name) : setName("");
+      description !== ""
+        ? FormProduct.append("description", description)
+        : setDescription("");
+      setLoading(false);
+      await axios.patch(
+        `${process.env.REACT_APP_HOST}/product/${params.id}`,
+        FormProduct,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-type": "multipart/form-data",
+          },
+        }
+      );
+      // update price stock
+      const data = {
+        price: price.toString(),
+      };
+      await axios.patch(
+        `${process.env.REACT_APP_HOST}/stock/${productDetail.stock_id}`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
+      navigate("/products", {
+        replace: true,
+        state: { successEditProduct: true },
+      });
+
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+  // delete product
+  const deleteHandler = async () => {
+    try {
+      const token = await GenerateToken(login.auth, (Data) => {
+        dispatch(successLogin(Data));
+      });
+      await axios.delete(
+        `${process.env.REACT_APP_HOST}/product/${params.id}`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    } catch (error) {}
+  };
   return (
     <div>
       {loading === true ? (
@@ -179,19 +271,49 @@ function ProductDetails() {
                       <Link className="link-products-detail" to="/products">
                         Favorite & Promo
                       </Link>{" "}
-                      <span className="span-product-name">{`> ${productDetail.name}`}</span>
+                      <span className="span-product-name">
+                        {`> ${productDetail.name}`}
+                        {edit === true ? ` > Edit product` : ""}
+                      </span>
                     </p>
                   </section>
                   <section className="product-detail-left-body d-flex justify-content-end">
-                    <img
-                      className="product-detail-img"
-                      src={process.env.REACT_APP_HOST + productDetail.img}
-                      alt="product-img"
-                    />
-                    <section className="d-flex justify-content-center align-items-center">
-                      <img src={iconMsg} alt="iconMsg" />
-                    </section>
+                    {edit === true ? (
+                      <>
+                        <label htmlFor="img-file">
+                          <img
+                            className="product-detail-img"
+                            src={
+                              previewImg === null
+                                ? process.env.REACT_APP_HOST + productDetail.img
+                                : previewImg
+                            }
+                            alt="product-img"
+                          />
+                        </label>
+                        <section className="d-flex justify-content-center align-items-center">
+                          <img src={iconDel} alt="iconMsg" />
+                        </section>
+                      </>
+                    ) : (
+                      <>
+                        <img
+                          className="product-detail-img"
+                          src={process.env.REACT_APP_HOST + productDetail.img}
+                          alt="product-img"
+                        />
+                        <section className="d-flex justify-content-center align-items-center">
+                          <img src={iconMsg} alt="iconMsg" />
+                        </section>
+                      </>
+                    )}
                   </section>
+                  <input
+                    type="file"
+                    id="img-file"
+                    className="d-none"
+                    onChange={imgHandler}
+                  />
                   <section className="product-detail-left-foot">
                     <p>
                       Delivery only on <b>Monday to friday</b> at{" "}
@@ -201,41 +323,82 @@ function ProductDetails() {
                 </div>
                 <div className="col-md product-detail-right">
                   <section className="product-detail-right-head ">
-                    <section className="step-order-product d-flex align-items-center row">
-                      <section className="step-icon col-1">
-                        <img src={iconCek} alt="iconCek" />
-                      </section>
-                      <section className="step-line col-3"></section>
-                      <section className="step-icon col-1">
-                        <img src={iconCek} alt="iconCek" />
-                      </section>
-                      <section className="step-line col-3"></section>
-                      <section className="step-icon col-1"></section>
-                    </section>
-                    <section className="step-order-product-text d-flex row">
-                      <p className="col-2 text-center p-0">Order</p>
-                      <p className="col-2 text-start p-0">Checkout</p>
-                      <p className="col-2 fw-bold text-start p-0">Payment</p>
-                    </section>
+                    {role === "admin" ? (
+                      ""
+                    ) : (
+                      <>
+                        <section className="step-order-product d-flex align-items-center row">
+                          <section className="step-icon col-1">
+                            <img src={iconCek} alt="iconCek" />
+                          </section>
+                          <section className="step-line col-3"></section>
+                          <section className="step-icon col-1">
+                            <img src={iconCek} alt="iconCek" />
+                          </section>
+                          <section className="step-line col-3"></section>
+                          <section className="step-icon col-1"></section>
+                        </section>
+                        <section className="step-order-product-text d-flex row">
+                          <p className="col-2 text-center p-0">Order</p>
+                          <p className="col-2 text-start p-0">Checkout</p>
+                          <p className="col-2 fw-bold text-start p-0">
+                            Payment
+                          </p>
+                        </section>
+                      </>
+                    )}
                   </section>
                   <section className="product-detail-right-body">
-                    <h4>{productDetail.name}</h4>
-                    <h5>IDR {productDetail.price}</h5>
-                    <p>{productDetail.description}</p>
+                    {role === "admin" && edit === true ? (
+                      <>
+                        <input
+                          className="detail-name-product input-edit-detail-product"
+                          value={name}
+                          type="text"
+                          onChange={(e) => setName(e.target.value)}
+                        />
+                        <input
+                          className="detail-price-product input-edit-detail-product"
+                          value={price}
+                          type="number"
+                          onChange={(e) => setPrice(e.target.value)}
+                        />
+                        <textarea
+                          className="detail-desc-product input-edit-detail-product"
+                          value={description}
+                          onChange={(e) => setDescription(e.target.value)}
+                        ></textarea>
+                      </>
+                    ) : (
+                      <>
+                        <h4 className="detail-name-product">
+                          {productDetail.name}
+                        </h4>
+                        <h5 className="detail-price-product">
+                          IDR {productDetail.price}
+                        </h5>
+                        <p className="detail-desc-product">
+                          {productDetail.description}
+                        </p>
+                      </>
+                    )}
                   </section>
                   <section className="product-detail-right-foot">
-                    <form>
+                    <section>
                       <select
                         className="form-select input-form-detail"
                         aria-label="Default select example"
                         onChange={(e) => sizeHandler(e.target.value)}
                       >
-                        <option value="" selected>
-                          Select Size
-                        </option>
-                        {products.map((product) => (
-                          <option value={product.size}>{product.size}</option>
-                        ))}
+                        {products.map((product) =>
+                          product.size === productDetail.size ? (
+                            <option selected value={product.size}>
+                              {product.size}
+                            </option>
+                          ) : (
+                            <option value={product.size}>{product.size}</option>
+                          )
+                        )}
                       </select>
                       <select
                         className="form-select input-form-detail"
@@ -247,46 +410,92 @@ function ProductDetails() {
                         <option value="Pick up">Pick up</option>
                       </select>
                       <div className="row ">
-                        <div className="col-md-4">
-                          <section className="input-number-quantity d-flex justify-content-between align-items-center">
-                            <h5
-                              onClick={() => setQuantity(quantity + 1)}
-                              className="btn-plus-quantity"
-                            >
-                              {" "}
-                              +{" "}
-                            </h5>
-                            <h5 className="quantity-value fw-bold text-dark">
-                              {quantity}
-                            </h5>
-                            <h5
-                              id="btn-min"
-                              onClick={() => setQuantity(quantity - 1)}
-                              className="btn-min-quantity"
-                            >
-                              {" "}
-                              -{" "}
-                            </h5>
-                          </section>
-                        </div>
-                        <div className="col-md-8">
-                          <button
-                            onClick={addChartHandler}
-                            className="btn-product-detail-cart"
-                          >
-                            Add to Cart
-                          </button>
-                        </div>
+                        {role === "admin" ? (
+                          <>
+                            <div className="col-md-4">
+                              <section className="input-number-quantity d-flex justify-content-between align-items-center">
+                                <h5 className="btn-plus-quantity"> + </h5>
+                                <h5 className="quantity-value fw-bold text-dark">
+                                  1
+                                </h5>
+                                <h5 id="btn-min" className="btn-min-quantity">
+                                  {" "}
+                                  -{" "}
+                                </h5>
+                              </section>
+                            </div>
+                            <div className="col-md-8">
+                              <label className="btn-product-detail-cart d-flex justify-content-center align-items-center">
+                                Add to Cart
+                              </label>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div className="col-md-4">
+                              <section className="input-number-quantity d-flex justify-content-between align-items-center">
+                                <h5
+                                  onClick={() => setQuantity(quantity + 1)}
+                                  className="btn-plus-quantity"
+                                >
+                                  {" "}
+                                  +{" "}
+                                </h5>
+                                <h5 className="quantity-value fw-bold text-dark">
+                                  {quantity}
+                                </h5>
+                                <h5
+                                  id="btn-min"
+                                  onClick={() => setQuantity(quantity - 1)}
+                                  className="btn-min-quantity"
+                                >
+                                  {" "}
+                                  -{" "}
+                                </h5>
+                              </section>
+                            </div>
+                            <div className="col-md-8">
+                              <button
+                                onClick={addChartHandler}
+                                className="btn-product-detail-cart"
+                              >
+                                Add to Cart
+                              </button>
+                            </div>
+                          </>
+                        )}
                         <div className="col-md-12">
-                          <button
-                            onClick={checkoutHandler}
-                            className="btn-product-detail-checkout"
-                          >
-                            Checkout
-                          </button>
+                          {role === "admin" ? (
+                            <>
+                              {edit === true ? (
+                                <button
+                                  onClick={editProductHandler}
+                                  className="btn-product-detail-checkout"
+                                >
+                                  Save change
+                                </button>
+                              ) : (
+                                <button
+                                  onClick={editHandler}
+                                  className="btn-product-detail-checkout"
+                                >
+                                  Edit product
+                                </button>
+                              )}
+                            </>
+                          ) : (
+                            <>
+                              <button
+                                onClick={checkoutHandler}
+                                className="btn-product-detail-checkout"
+                              >
+                                Checkout
+                              </button>
+                            </>
+                          )}
                         </div>
                       </div>
-                    </form>
+                    </section>
                   </section>
                 </div>
               </div>
