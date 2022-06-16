@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import GenerateToken from "../../helper/GenerateToken";
 import { successLogin } from "../../redux/actionCreator/login";
 import axios from "axios";
+
+// img
+import editIcon from "../../asset/img/productsPage/iconedit.svg";
 
 function Add_promo({ imgicon, load }) {
   const [datestart, setDatestart] = useState(false);
@@ -12,16 +15,13 @@ function Add_promo({ imgicon, load }) {
   const login = useSelector((state) => state.login);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const params = useParams(false);
   // data
   const [sizeS, setSizeS] = useState(false);
   const [sizeR, setSizeR] = useState(false);
   const [sizeL, setSizeL] = useState(false);
   const [products, setProducts] = useState(false);
   const [size, setSize] = useState("");
-  const [delivery1, setDelivery1] = useState(false);
-  const [delivery2, setDelivery2] = useState(false);
-  const [delivery3, setDelivery3] = useState(false);
-  const [delivery, setDelivery] = useState(false);
   const [name, setName] = useState("");
   const [product, setProduct] = useState("");
   const [description, setDescription] = useState("");
@@ -31,6 +31,7 @@ function Add_promo({ imgicon, load }) {
   const [coupon, setCoupon] = useState("");
   const [img, setImg] = useState("");
   const [previewImg, setPreviewImage] = useState(null);
+  const [promo, setPromo] = useState(false);
 
   // tarik data product
   useEffect(() => {
@@ -40,6 +41,36 @@ function Add_promo({ imgicon, load }) {
     })
       .then(async (token) => {
         try {
+          if (params.id !== undefined) {
+            const promo = await axios.get(
+              `${process.env.REACT_APP_HOST}/promos/${params.id}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
+            setCoupon(promo.data.data.coupon);
+            setName(promo.data.data.name);
+            setDiscount(promo.data.data.discount);
+            setDescription(promo.data.data.description);
+            setExpire(promo.data.data.expire);
+
+            setPromo(promo.data.data);
+            if (promo.data.data.size === "small") {
+              setSizeS(true);
+              setSize(promo.data.data.size);
+            }
+            if (promo.data.data.size === "reguler") {
+              setSizeR(true);
+              setSize(promo.data.data.size);
+            }
+            if (promo.data.data.size === "large") {
+              setSizeL(true);
+              setSize(promo.data.data.size);
+            }
+          }
+
           const product = await axios.get(
             `${process.env.REACT_APP_HOST}/product/product`,
             {
@@ -48,6 +79,7 @@ function Add_promo({ imgicon, load }) {
               },
             }
           );
+
           setProducts(product.data.data);
           setLoading(false);
         } catch (error) {
@@ -69,6 +101,7 @@ function Add_promo({ imgicon, load }) {
         dispatch(successLogin(Data));
       });
       // Promos
+      console.log(img !== "");
       img !== "" ? FormPromo.append("photo", img) : setImg("");
       name !== "" ? FormPromo.append("name", name) : setName("");
       product !== "" ? FormPromo.append("product_id", product) : setProduct("");
@@ -84,13 +117,35 @@ function Add_promo({ imgicon, load }) {
       description !== ""
         ? FormPromo.append("description", description)
         : setDescription("");
-      await axios.post(`${process.env.REACT_APP_HOST}/promos`, FormPromo, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-type": "multipart/form-data",
-        },
-      });
+      if (params.id !== undefined) {
+        await axios.patch(
+          `${process.env.REACT_APP_HOST}/promos/${params.id}`,
+          FormPromo,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-type": "multipart/form-data",
+            },
+          }
+        );
+      } else {
+        await axios.post(`${process.env.REACT_APP_HOST}/promos`, FormPromo, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-type": "multipart/form-data",
+          },
+        });
+      }
+
       setLoading(false);
+      if (params.id !== undefined) {
+        navigate("/products", {
+          replace: true,
+          state: { successEditPromo: true },
+        });
+        return;
+      }
+
       navigate("/products", {
         replace: true,
         state: { successAddPromo: true },
@@ -107,7 +162,6 @@ function Add_promo({ imgicon, load }) {
     setPreviewImage(toPreview);
     const img = e.target.files[0];
     setImg(img);
-    console.log(img);
   };
   // size handler
   const smallHandler = () => {
@@ -132,28 +186,6 @@ function Add_promo({ imgicon, load }) {
     return;
   };
 
-  // delivery method handler
-  const delivery1Handler = () => {
-    setDelivery1(true);
-    setDelivery2(false);
-    setDelivery3(false);
-    setDelivery("home delivery");
-    return;
-  };
-  const delivery2Handler = () => {
-    setDelivery2(true);
-    setDelivery1(false);
-    setDelivery3(false);
-    setDelivery("dine in");
-    return;
-  };
-  const delivery3Handler = () => {
-    setDelivery3(true);
-    setDelivery2(false);
-    setDelivery1(false);
-    setDelivery("take away");
-    return;
-  };
   return (
     <div>
       {loading === true ? (
@@ -174,30 +206,73 @@ function Add_promo({ imgicon, load }) {
                 </Link>
                 <p>{"> Add new promo"}</p>
               </section>
-              {previewImg === null ? (
+              {params.id !== undefined && promo !== false ? (
                 <>
-                  <section className="img-left-form d-flex justify-content-center align-items-center mx-auto">
-                    <img src={imgicon} alt="img-prototype" />
+                  <section className="promo-preview-edit">
+                    <section className="promo-preview-edit-head text-center">
+                      <img
+                        className="preview-promo-head "
+                        src={
+                          previewImg === null
+                            ? process.env.REACT_APP_HOST + promo.img
+                            : previewImg
+                        }
+                        alt="img-promo"
+                      />
+                      <label
+                        htmlFor="img-promo"
+                        className="d-flex justify-content-center align-items-center"
+                      >
+                        <img
+                          className="icon-edit-preview-promo"
+                          src={editIcon}
+                          alt="img-edit-promo"
+                        />
+                      </label>
+                    </section>
+                    <section className="promo-preview-edit-body text-center">
+                      <h5>{promo.name}</h5>
+                      <h5>{parseFloat(promo.discount) * 100}% OFF</h5>
+                      <p>{promo.description}</p>
+                    </section>
+                    <section className="promo-preview-edit-foot">
+                      <p className="title-promo-coupon">COUPON CODE</p>
+                      <h5>{promo.coupon}</h5>
+                      <p className="token-expire-promo">
+                        Valid untill {promo.expire.split("T")[0]}
+                      </p>
+                    </section>
                   </section>
                 </>
               ) : (
                 <>
-                  <img
-                    src={previewImg}
-                    className="img-left-form d-flex justify-content-center align-items-center mx-auto"
-                    alt="img-preview"
-                  />
+                  {previewImg === null ? (
+                    <>
+                      <section className="img-left-form d-flex justify-content-center align-items-center mx-auto">
+                        <img src={imgicon} alt="img-prototype" />
+                      </section>
+                    </>
+                  ) : (
+                    <>
+                      <img
+                        src={previewImg}
+                        className="img-left-form d-flex justify-content-center align-items-center mx-auto"
+                        alt="img-preview"
+                      />
+                    </>
+                  )}
+                  <button className="btn-form-left-box mx-auto btn-take-style">
+                    Take a picture
+                  </button>
+                  <label
+                    htmlFor="img-promo"
+                    className="btn-form-left-box mx-auto btn-gallery-style d-flex justify-content-center align-items-center"
+                  >
+                    Choose from gallery
+                  </label>
                 </>
               )}
-              <button className="btn-form-left-box mx-auto btn-take-style">
-                Take a picture
-              </button>
-              <label
-                htmlFor="img-promo"
-                className="btn-form-left-box mx-auto btn-gallery-style d-flex justify-content-center align-items-center"
-              >
-                Choose from gallery
-              </label>
+
               <input
                 onChange={imgHandler}
                 type="file"
@@ -205,23 +280,14 @@ function Add_promo({ imgicon, load }) {
                 name="img"
                 id="img-promo"
               />
-              <section className="section-discount-form">
-                <label className="label-box-input-form">
-                  Enter the discount :
-                </label>
-                <input
-                  type="number"
-                  onChange={(e) => setDiscount(e.target.value)}
-                  className="form-control select-input-form-left"
-                  placeholder="Input discount"
-                />
-              </section>
+
               <section className="section-expire-form">
                 <label className="label-box-input-form">Expire date :</label>
                 <input
                   type={datestart === true ? "datetime-local" : "text"}
                   className="form-control select-input-form-left"
                   placeholder="Select start date"
+                  value={datestart === true ? periodStart : promo.period_start}
                   onFocus={() => setDatestart(true)}
                   onChange={(e) => setPeriodStart(e.target.value)}
                 />
@@ -229,21 +295,29 @@ function Add_promo({ imgicon, load }) {
                   type={dateend === true ? "datetime-local" : "text"}
                   className="form-control select-input-form-left"
                   placeholder="Select end date"
+                  value={expire}
                   onFocus={() => setDateend(true)}
                   onChange={(e) => setExpire(e.target.value)}
                 />
               </section>
-              <section className="section-coupon-form">
-                <label className="label-box-input-form">
-                  Input coupon code :
-                </label>
-                <input
-                  type="text"
-                  className="form-control select-input-form-left"
-                  placeholder="Input code"
-                  onChange={(e) => setCoupon(e.target.value)}
-                />
-              </section>
+              {params.id === undefined ? (
+                <>
+                  <section className="section-coupon-form">
+                    <label className="label-box-input-form">
+                      Input coupon code :
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control select-input-form-left"
+                      placeholder="Input code"
+                      value={coupon}
+                      onChange={(e) => setCoupon(e.target.value)}
+                    />
+                  </section>
+                </>
+              ) : (
+                ""
+              )}
             </section>
             <section className="col-lg-6 right-box-form">
               <section className="group-form-input-right-up">
@@ -256,6 +330,7 @@ function Add_promo({ imgicon, load }) {
                     onChange={(e) => setName(e.target.value)}
                     className="form-control input-box-form-right"
                     placeholder="Type promo name min. 50 characters"
+                    value={name}
                   />
                 </div>
                 <div className="mb-3">
@@ -267,17 +342,43 @@ function Add_promo({ imgicon, load }) {
                     className="form-select input-box-form-right"
                     aria-label="Default select example"
                   >
-                    <option selected>Select Product</option>
-                    {products !== false ? (
+                    {promo !== false ? (
                       <>
-                        {products.map((item) => (
+                        {products !== false ? (
                           <>
-                            <option value={item.id}>{item.name}</option>
+                            {products.map((item) =>
+                              item.id === promo.product_id ? (
+                                <>
+                                  <option selected value={item.id}>
+                                    {item.name}
+                                  </option>
+                                </>
+                              ) : (
+                                <>
+                                  <option value={item.id}>{item.name}</option>
+                                </>
+                              )
+                            )}
                           </>
-                        ))}
+                        ) : (
+                          ""
+                        )}
                       </>
                     ) : (
-                      ""
+                      <>
+                        <option selected>Select Product</option>
+                        {products !== false ? (
+                          <>
+                            {products.map((item) => (
+                              <>
+                                <option value={item.id}>{item.name}</option>
+                              </>
+                            ))}
+                          </>
+                        ) : (
+                          ""
+                        )}
+                      </>
                     )}
                   </select>
                 </div>
@@ -289,6 +390,7 @@ function Add_promo({ imgicon, load }) {
                     onChange={(e) => setDescription(e.target.value)}
                     className="form-control input-box-form-right"
                     placeholder="Describe your promo min. 150 characters"
+                    value={description}
                   ></textarea>
                 </div>
               </section>
@@ -361,52 +463,54 @@ function Add_promo({ imgicon, load }) {
                     </div>
                   </div>
                 </section>
-                <label className="form-label label-box-input-form">
-                  Input delivery methods :
-                </label>
-                <p>Click methods you want to use for this promo</p>
-                <section className="delivery-select-form-box">
-                  <section
-                    onClick={() => delivery1Handler()}
-                    className={`d-flex justify-content-center align-items-center ${
-                      delivery1 === true
-                        ? "btn-delivery-style2"
-                        : "btn-delivery-style1"
-                    }`}
-                  >
-                    Home Delivery
-                  </section>
-                  <section
-                    onClick={() => delivery2Handler()}
-                    className={`d-flex justify-content-center align-items-center ${
-                      delivery2 === true
-                        ? "btn-delivery-style2"
-                        : "btn-delivery-style1"
-                    }`}
-                  >
-                    Dine in
-                  </section>
-                  <section
-                    onClick={() => delivery3Handler()}
-                    className={`d-flex justify-content-center align-items-center ${
-                      delivery3 === true
-                        ? "btn-delivery-style2"
-                        : "btn-delivery-style1"
-                    }`}
-                  >
-                    Take away
-                  </section>
-                </section>
 
+                <section className="section-discount-form">
+                  <label className="label-box-input-form">
+                    Enter the discount :
+                  </label>
+                  <input
+                    type="number"
+                    value={
+                      promo.id !== undefined ? parseFloat(discount) : discount
+                    }
+                    onChange={(e) => setDiscount(e.target.value)}
+                    className="form-control select-input-form-left"
+                    placeholder="Input discount"
+                  />
+                </section>
+                {params.id !== undefined ? (
+                  <>
+                    <section className="section-coupon-form">
+                      <label className="label-box-input-form">
+                        Input coupon code :
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control select-input-form-left"
+                        placeholder="Input code"
+                        value={coupon}
+                        onChange={(e) => setCoupon(e.target.value)}
+                      />
+                    </section>
+                  </>
+                ) : (
+                  ""
+                )}
                 <button onClick={addHandler} className="btn-right-form-save">
                   Save Promo
                 </button>
-                <button
-                  onClick={() => navigate("/products")}
-                  className="btn-right-form-cancel"
-                >
-                  Cancel
-                </button>
+                {params.id === undefined ? (
+                  <>
+                    <button
+                      onClick={() => navigate("/products")}
+                      className="btn-right-form-cancel"
+                    >
+                      Cancel
+                    </button>
+                  </>
+                ) : (
+                  ""
+                )}
               </section>
             </section>
           </div>
