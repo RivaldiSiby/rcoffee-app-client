@@ -63,6 +63,7 @@
   border: 6px solid #ffba33;
   position: absolute;
   z-index: 3;
+  cursor: pointer;
 }
 .product-detail-left-body > section > img {
   width: 50%;

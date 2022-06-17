@@ -232,16 +232,18 @@ function ProductDetails() {
       const token = await GenerateToken(login.auth, (Data) => {
         dispatch(successLogin(Data));
       });
-      await axios.delete(
-        `${process.env.REACT_APP_HOST}/product/${params.id}`,
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-    } catch (error) {}
+      await axios.delete(`${process.env.REACT_APP_HOST}/product/${params.id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      navigate("/products", {
+        replace: true,
+        state: { successDelProduct: true },
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div>
@@ -291,7 +293,25 @@ function ProductDetails() {
                             alt="product-img"
                           />
                         </label>
-                        <section className="d-flex justify-content-center align-items-center">
+                        <section
+                          onClick={() =>
+                            Swal.fire({
+                              title:
+                                "Are you sure want to delete this product?",
+                              text: "",
+                              icon: "warning",
+                              showCancelButton: true,
+                              confirmButtonColor: "#3085d6",
+                              cancelButtonColor: "#d33",
+                              confirmButtonText: "Yes, Delete!",
+                            }).then((result) => {
+                              if (result.isConfirmed) {
+                                deleteHandler();
+                              }
+                            })
+                          }
+                          className="d-flex justify-content-center align-items-center"
+                        >
                           <img src={iconDel} alt="iconMsg" />
                         </section>
                       </>
