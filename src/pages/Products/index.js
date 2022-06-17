@@ -60,6 +60,9 @@ class index extends Component {
       if (this.props.location.state.successEditProduct === true) {
         Swal.fire("Success", "Edit Product success", "success");
       }
+      if (this.props.location.state.successDelProduct === true) {
+        Swal.fire("Success", "Delete Product success", "success");
+      }
       if (this.props.location.state.successAddPromo === true) {
         Swal.fire("Success", "Add Promo success", "success");
       }
