@@ -9,6 +9,7 @@ import loadingImg from "../../asset/img/loading.gif";
 
 import iconHide from "../../asset/img/signPage/iconHide.png";
 import iconShow from "../../asset/img/signPage/iconShow.jpg";
+import iconUser from "../../asset/img/usericon.png";
 // img
 import { useSelector, useDispatch } from "react-redux";
 import NavbarSignIn from "../../components/NavbarSignIn/Navbar";
@@ -31,7 +32,10 @@ function Profile() {
   const login = useSelector((state) => state.login);
   const user = useSelector((state) => state.user);
   // user data
-  const img = process.env.REACT_APP_HOST + login.auth["datauser"];
+  const img =
+    login.auth["datauser"] === false
+      ? iconUser
+      : process.env.REACT_APP_HOST + login.auth["datauser"];
   const [profileImg, setProfileImg] = useState(img);
   const [profile, setProfile] = useState([]);
   const [Email, setEmail] = useState("");
@@ -48,7 +52,7 @@ function Profile() {
   const [showPass, setShowPass] = useState(false);
   const [type, setType] = useState("password");
   // const [Password, setPassword] = useState("");
-  const [previewImg, setPreviewImage] = useState(null);
+  const [previewImg, setPreviewImage] = useState("");
 
   // update data
 
@@ -94,8 +98,9 @@ function Profile() {
   useEffect(() => {
     if (UpdateSuccess === true) {
       swal.fire("Success", "Profile Update success", "success");
-
-      document.getElementById(`${Gender}`).setAttribute("checked", "");
+      if (Gender !== "") {
+        document.getElementById(`${Gender}`).setAttribute("checked", "");
+      }
     }
 
     setUpdateSuccess(false);
@@ -105,9 +110,8 @@ function Profile() {
     const edit = document.getElementById("edit-data");
     const editPhoto = document.getElementById("edit-photo");
     const input = document.querySelectorAll(".form-input");
-    const area = document.querySelector(".area-input");
     const radio = document.querySelectorAll(".input-radio");
-
+    document.querySelector(".area-input").toggleAttribute("disabled");
     if (disable === true) {
       for (let i = 0; i < input.length; i++) {
         input[i].removeAttribute("disabled");
@@ -115,8 +119,10 @@ function Profile() {
       for (let i = 0; i < radio.length; i++) {
         radio[i].removeAttribute("disabled");
       }
-      document.getElementById(`${Gender}`).setAttribute("checked", "");
-      area.removeAttribute("disabled");
+      if (Gender !== "") {
+        document.getElementById(`${Gender}`).setAttribute("checked", "");
+      }
+
       setDisable(false);
     }
     if (disable === false) {
@@ -126,7 +132,6 @@ function Profile() {
       for (let i = 0; i < radio.length; i++) {
         radio[i].setAttribute("disabled", "");
       }
-      area.setAttribute("disabled", "");
       setDisable(true);
     }
 
@@ -317,6 +322,7 @@ function Profile() {
       setLoading(false);
       setUpdateSuccess(true);
     } catch (error) {
+      console.log(error);
       setLoading(false);
     }
   };
@@ -351,7 +357,7 @@ function Profile() {
                     <div className="col-md-4 profile-info d-flex flex-column align-items-center">
                       <div className="profile-head">
                         <img
-                          src={previewImg === null ? profileImg : previewImg}
+                          src={previewImg === "" ? profileImg : previewImg}
                           alt="profile"
                         />
                         <h5>

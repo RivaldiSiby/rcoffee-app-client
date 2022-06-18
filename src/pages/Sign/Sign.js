@@ -70,6 +70,7 @@ function Sign(props) {
         refreshkey: result.data.data.refreshToken,
         datauser: result.data.data.img,
       };
+      console.log(result.data.data.img);
       dispatch(successLogin(authData));
       dispatch(addUser(result.data.data.datauser));
     } catch (error) {

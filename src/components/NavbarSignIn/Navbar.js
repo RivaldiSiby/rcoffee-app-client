@@ -7,11 +7,17 @@ import chat from "../../asset/img/profilePage/chat.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { addSearch } from "../../redux/actionCreator/search";
 
+// img
+import iconUser from "../../asset/img/usericon.png";
+
 function Navbar(props) {
   const dispatch = useDispatch();
   const login = useSelector((state) => state.login);
   const role = useSelector((state) => state.user.user.role);
-  const img = process.env.REACT_APP_HOST + login.auth["datauser"];
+  const img =
+    login.auth["datauser"] === false
+      ? iconUser
+      : process.env.REACT_APP_HOST + login.auth["datauser"];
   const [profile] = useState(img);
   const activeHome =
     props.navActive === "home" ? "nav-text-nav text-active" : "nav-text-nav";
