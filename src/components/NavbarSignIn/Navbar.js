@@ -17,7 +17,9 @@ function Navbar(props) {
   const img =
     login.auth["datauser"] === false
       ? iconUser
-      : process.env.REACT_APP_HOST + login.auth["datauser"];
+      : process.env.REACT_APP_STATUS !== "production"
+      ? process.env.REACT_APP_HOST + login.auth["datauser"]
+      : login.auth["datauser"];
   const [profile] = useState(img);
   const activeHome =
     props.navActive === "home" ? "nav-text-nav text-active" : "nav-text-nav";

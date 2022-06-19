@@ -13,40 +13,25 @@ import NavbarSignIn from "../../components/NavbarSignIn/Navbar";
 import AddPromo from "../../components/Form/Add_promo";
 
 function Form({ form }) {
-  const [loading, setLoading] = useState(false);
   return (
     <>
-      {loading === true ? (
+      <NavbarSignIn navActive={"products"} />
+      {form === "add_product" ? (
         <>
-          <div className="w-100 ">
-            <img
-              className="img-loading mx-auto"
-              src={loadingImg}
-              alt="loading"
-            />
-          </div>
+          <AddProduct imgicon={imgicon} load={loadImg} />
         </>
       ) : (
-        <>
-          <NavbarSignIn navActive={"products"} />
-          {form === "add_product" ? (
-            <>
-              <AddProduct imgicon={imgicon} load={loadImg} />
-            </>
-          ) : (
-            <></>
-          )}
-          {form === "add_promo" ? (
-            <>
-              <AddPromo imgicon={imgicon} load={loadImg} />
-            </>
-          ) : (
-            <></>
-          )}
-
-          <Footer />
-        </>
+        <></>
       )}
+      {form === "add_promo" ? (
+        <>
+          <AddPromo imgicon={imgicon} load={loadImg} />
+        </>
+      ) : (
+        <></>
+      )}
+
+      <Footer />
     </>
   );
 }

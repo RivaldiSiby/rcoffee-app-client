@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import ErrorsHandler from "../../helper/ErrorsHandler";
 import GenerateToken from "../../helper/GenerateToken";
 import { successLogin } from "../../redux/actionCreator/login";
 
@@ -89,6 +90,9 @@ function Add_product({ imgicon, load }) {
     } catch (error) {
       console.log(error);
       setLoading(false);
+      if (error.request.status !== 400) {
+        ErrorsHandler(error.request.status);
+      }
     }
   };
   // size handler

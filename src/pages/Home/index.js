@@ -239,7 +239,11 @@ class index extends Component {
                     <div className="col-lg-3 products-list d-flex flex-column justify-content-center align-items-center">
                       <div className="products-head text-center ">
                         <img
-                          src={process.env.REACT_APP_HOST + product.img}
+                          src={
+                            process.env.REACT_APP_STATUS !== "production"
+                              ? process.env.REACT_APP_HOST + product.img
+                              : product.img
+                          }
                           alt="product"
                         />
                         <p>{product.name}</p>
@@ -272,9 +276,13 @@ class index extends Component {
                       </div>
                       <div className="products-foot">
                         <p className="price-text">IDR {product.price}</p>
-                        <section href="#" className="btn-product">
+                        <Link
+                          to={`/products/${product.id}/${product.size}`}
+                          href="#"
+                          className="btn-product"
+                        >
                           Select
-                        </section>
+                        </Link>
                       </div>
                     </div>
                   ))}
@@ -659,7 +667,9 @@ class index extends Component {
                       <p>Let's see the deals and pick yours!</p>
                     </div>
                     <div className="col-sm-6 btn-promo d-flex flex-column justify-content-center align-items-center">
-                      <section href="#">See Promo</section>
+                      <Link to={"/products"} className="btn-promo-link">
+                        See Promo
+                      </Link>
                     </div>
                   </div>
                 </div>

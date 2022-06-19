@@ -17,6 +17,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { successLogin } from "../../redux/actionCreator/login";
 import { clearChart } from "../../redux/actionCreator/chart";
 import Detail from "../../components/Payment/Detail";
+import ErrorsHandler from "../../helper/ErrorsHandler";
 
 function Payment({ detailTrans = false }) {
   let params = useParams();
@@ -49,10 +50,8 @@ function Payment({ detailTrans = false }) {
           );
           setDetail(data.data.data);
         } catch (error) {
-          if (error.status === 401) {
-            return navigate("/", {
-              replace: true,
-            });
+          if (error.request.status !== 400) {
+            ErrorsHandler(error.request.status);
           }
         }
       };
@@ -110,6 +109,9 @@ function Payment({ detailTrans = false }) {
     } catch (error) {
       console.log(error);
       setLoading(false);
+      if (error.request.status !== 400) {
+        ErrorsHandler(error.request.status);
+      }
     }
   };
   return (

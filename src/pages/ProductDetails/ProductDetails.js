@@ -19,6 +19,7 @@ import GenerateToken from "../../helper/GenerateToken";
 import { useSelector, useDispatch } from "react-redux";
 import { successLogin } from "../../redux/actionCreator/login";
 import { addChart } from "../../redux/actionCreator/chart";
+import ErrorsHandler from "../../helper/ErrorsHandler";
 
 function ProductDetails() {
   let params = useParams();
@@ -224,6 +225,9 @@ function ProductDetails() {
     } catch (error) {
       console.log(error);
       setLoading(false);
+      if (error.request.status !== 400) {
+        ErrorsHandler(error.request.status);
+      }
     }
   };
   // delete product
@@ -243,6 +247,9 @@ function ProductDetails() {
       });
     } catch (error) {
       console.log(error);
+      if (error.request.status !== 400) {
+        ErrorsHandler(error.request.status);
+      }
     }
   };
   return (
@@ -287,7 +294,10 @@ function ProductDetails() {
                             className="product-detail-img"
                             src={
                               previewImg === null
-                                ? process.env.REACT_APP_HOST + productDetail.img
+                                ? process.env.REACT_APP_STATUS !== "production"
+                                  ? process.env.REACT_APP_HOST +
+                                    productDetail.img
+                                  : productDetail.img
                                 : previewImg
                             }
                             alt="product-img"
@@ -319,7 +329,11 @@ function ProductDetails() {
                       <>
                         <img
                           className="product-detail-img"
-                          src={process.env.REACT_APP_HOST + productDetail.img}
+                          src={
+                            process.env.REACT_APP_STATUS !== "production"
+                              ? process.env.REACT_APP_HOST + productDetail.img
+                              : productDetail.img
+                          }
                           alt="product-img"
                         />
                         <section className="d-flex justify-content-center align-items-center">

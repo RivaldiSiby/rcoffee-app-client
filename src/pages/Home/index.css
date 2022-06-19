@@ -494,7 +494,7 @@ body {
   align-items: center;
   color: #4f5665;
 }
-.btn-promo > section {
+.btn-promo-link {
   width: 250px;
   height: 60px;
   display: flex;

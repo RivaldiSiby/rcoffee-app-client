@@ -7,6 +7,7 @@ import axios from "axios";
 
 // img
 import editIcon from "../../asset/img/productsPage/iconedit.svg";
+import ErrorsHandler from "../../helper/ErrorsHandler";
 
 function Add_promo({ imgicon, load }) {
   const [datestart, setDatestart] = useState(false);
@@ -85,11 +86,17 @@ function Add_promo({ imgicon, load }) {
         } catch (error) {
           setLoading(false);
           console.log(error);
+          if (error.request.status !== 400) {
+            ErrorsHandler(error.request.status);
+          }
         }
       })
       .catch((error) => {
         setLoading(false);
         console.log(error);
+        if (error.request.status !== 400) {
+          ErrorsHandler(error.request.status);
+        }
       });
   }, []);
   // add handler
@@ -153,6 +160,9 @@ function Add_promo({ imgicon, load }) {
     } catch (error) {
       console.log(error);
       setLoading(false);
+      if (error.request.status !== 400) {
+        ErrorsHandler(error.request.status);
+      }
     }
   };
 

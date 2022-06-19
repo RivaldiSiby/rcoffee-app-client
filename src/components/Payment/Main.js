@@ -35,7 +35,11 @@ function Main({
                           <section className="col-md-11 box-order-list p-0">
                             <section className="order-product-img">
                               <img
-                                src={process.env.REACT_APP_HOST + product.img}
+                                src={
+                                  process.env.REACT_APP_STATUS !== "production"
+                                    ? process.env.REACT_APP_HOST + product.img
+                                    : product.img
+                                }
                                 alt="product-list"
                               />
                             </section>
