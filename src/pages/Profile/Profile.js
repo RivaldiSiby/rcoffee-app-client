@@ -18,6 +18,7 @@ import GenerateToken from "../../helper/GenerateToken";
 import { failLogin, successLogin } from "../../redux/actionCreator/login";
 import { clearChart } from "../../redux/actionCreator/chart";
 import { addUser, clearUser } from "../../redux/actionCreator/user";
+import ErrorsHandler from "../../helper/ErrorsHandler";
 
 function Profile() {
   const [loading, setLoading] = useState(false);
@@ -35,7 +36,9 @@ function Profile() {
   const img =
     login.auth["datauser"] === false
       ? iconUser
-      : process.env.REACT_APP_HOST + login.auth["datauser"];
+      : process.env.REACT_APP_STATUS !== "production"
+      ? process.env.REACT_APP_HOST + login.auth["datauser"]
+      : login.auth["datauser"];
   const [profileImg, setProfileImg] = useState(img);
   const [profile, setProfile] = useState([]);
   const [Email, setEmail] = useState("");
@@ -88,8 +91,9 @@ function Profile() {
       } catch (error) {
         console.log(error);
         setLoading(false);
-        dispatch(failLogin());
-        Navigate("/login", { replace: true });
+        if (error.request.status !== 400) {
+          ErrorsHandler(error.request.status);
+        }
       }
     };
     getProfileData();
@@ -229,7 +233,10 @@ function Profile() {
           datauser: profile.data.data.img,
         };
         dispatch(successLogin(authData));
-        const img = process.env.REACT_APP_HOST + login.auth["datauser"];
+        const img =
+          process.env.REACT_APP_STATUS !== "production"
+            ? process.env.REACT_APP_HOST + login.auth["datauser"]
+            : login.auth["datauser"];
         setProfileImg(img);
       }
       dispatch(addUser(profile.data.data));
@@ -261,6 +268,9 @@ function Profile() {
       setLoading(false);
     } catch (error) {
       setLoading(false);
+      if (error.request.status !== 400) {
+        ErrorsHandler(error.request.status);
+      }
     }
   };
 
@@ -324,6 +334,9 @@ function Profile() {
     } catch (error) {
       console.log(error);
       setLoading(false);
+      if (error.request.status !== 400) {
+        ErrorsHandler(error.request.status);
+      }
     }
   };
   const showPassHandler = (e) => {

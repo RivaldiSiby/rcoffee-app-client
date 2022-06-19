@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { successLogin } from "../../redux/actionCreator/login";
 import GenerateToken from "../../helper/GenerateToken";
 import axios from "axios";
+import ErrorsHandler from "../../helper/ErrorsHandler";
 // img
 
 function Dashboard() {
@@ -159,11 +160,17 @@ function Dashboard() {
           } catch (error) {
             setLoading(false);
             console.log(error);
+            if (error.request.status !== 400) {
+              ErrorsHandler(error.request.status);
+            }
           }
         })
         .catch((error) => {
           setLoading(false);
           console.log(error);
+          if (error.request.status !== 400) {
+            ErrorsHandler(error.request.status);
+          }
         });
     };
     getDaily();

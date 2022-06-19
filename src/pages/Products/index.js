@@ -546,7 +546,11 @@ class index extends Component {
                           )}
                           <div className="promo-info-head d-flex flex-column align-items-center justify-content-center">
                             <img
-                              src={process.env.REACT_APP_HOST + item.img}
+                              src={
+                                process.env.REACT_APP_STATUS !== "production"
+                                  ? process.env.REACT_APP_HOST + item.img
+                                  : item.img
+                              }
                               alt="product"
                             />
                             <h5>{item.name}</h5>
@@ -742,9 +746,11 @@ class index extends Component {
                                   <div className="box-head text-center">
                                     <img
                                       src={
-                                        process.env.REACT_APP_HOST +
-                                        "" +
-                                        product.img
+                                        process.env.REACT_APP_STATUS !==
+                                        "production"
+                                          ? process.env.REACT_APP_HOST +
+                                            product.img
+                                          : product.img
                                       }
                                       alt="products"
                                     />
