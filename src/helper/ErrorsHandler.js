@@ -16,8 +16,8 @@ export default function ErrorsHandler(status) {
   if (status === 403) {
     Navigate("/", { replace: true });
   }
-  //   notfound error
-  //   if (status === 404) {
-  //     Navigate("/", { replace: true });
-  //   }
+  // notfound error
+  if (status === 404) {
+    Navigate("*", { replace: true });
+  }
 }
