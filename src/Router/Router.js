@@ -14,6 +14,7 @@ import { store, persistor } from "../redux/store";
 import { PersistGate } from "redux-persist/integration/react";
 import Dashboard from "../pages/Dahsboard/Dashboard";
 import Form from "../pages/Form/Form";
+import NotFound from "../pages/NotFound/NotFound";
 
 // img
 // img
@@ -138,6 +139,7 @@ function Router() {
 
             <Route path="/forgetPassword" element={<ForgetPass />} />
             {/* public route */}
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </PersistGate>
