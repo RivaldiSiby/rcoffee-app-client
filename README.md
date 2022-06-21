@@ -1,70 +1,101 @@
-# Getting Started with Create React App
+<h1 style="text-align:center">Rcoffee Store App</h1>
+<hr>
+<br>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Built With
 
-## Available Scripts
+![html](https://img.shields.io/badge/html-5-blue)
+![css](https://img.shields.io/badge/css-3-green)
+![reactjs](https://img.shields.io/badge/React%20-Js-blue)
+![bootstrap5](https://img.shields.io/badge/Bootstrap-5-purple)
 
-In the project directory, you can run:
+## How to Instal
 
-### `npm start`
+1.  Instal React App
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+        $ npx create-react-app rcoffee-app
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+2.  Clone git repository
 
-### `npm test`
+        $ git clone https://github.com/RivaldiSiby/Rcoffee-client.git
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+3.  Open [VS Code](https://code.visualstudio.com/download)
+4.  Set .env
 
-### `npm run build`
+        REACT_APP_HOST=https://rcoffee-app.herokuapp.com
+        REACT_APP_STATUS=production
+        <!-- development for local and production for publish -->
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+5.  start react app
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+        $ npm start
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Preview
 
-### `npm run eject`
+<h3>Public Page</h3>
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+<li>INDEX </li>
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+![index](https://res.cloudinary.com/rivaldev/image/upload/v1655828774/screen%20shot/public_index_syyipx.png)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+<li>LOGIN </li>
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+![index](https://res.cloudinary.com/rivaldev/image/upload/v1655828520/screen%20shot/login_xl8are.png)
 
-## Learn More
+<li>SIGN UP </li>
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+![index](https://res.cloudinary.com/rivaldev/image/upload/v1655828515/screen%20shot/regis_bht93y.png)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+<h3>User Page</h3>
 
-### Code Splitting
+<li>INDEX</li>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+![index](https://res.cloudinary.com/rivaldev/image/upload/v1655828515/screen%20shot/index_plcuxy.png)
 
-### Analyzing the Bundle Size
+<li>PROFILE </li>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+![index](https://res.cloudinary.com/rivaldev/image/upload/v1655828522/screen%20shot/profile_ygeujp.png)
 
-### Making a Progressive Web App
+<li>PRODUCTS </li>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+![index](https://res.cloudinary.com/rivaldev/image/upload/v1655828519/screen%20shot/products_costumer_ggjycv.png)
 
-### Advanced Configuration
+<li>PRODUCTS DETAIL</li>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+![index](https://res.cloudinary.com/rivaldev/image/upload/v1655828521/screen%20shot/product_detail_bnsw0s.png)
 
-### Deployment
+<li>PAYMENT</li>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+![index](https://res.cloudinary.com/rivaldev/image/upload/v1655828513/screen%20shot/payment_oklcog.png)
 
-### `npm run build` fails to minify
+<li>HISTORY</li>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+![index](https://res.cloudinary.com/rivaldev/image/upload/v1655828511/screen%20shot/history_bi93ha.png)
+
+<li>HISTORY DETAIL</li>
+
+![index](https://res.cloudinary.com/rivaldev/image/upload/v1655828511/screen%20shot/history_detail_aquqmw.png)
+
+<h3>Admin Page</h3>
+
+<li>DASHBOARD</li>
+
+![index](https://res.cloudinary.com/rivaldev/image/upload/v1655828456/screen%20shot/dashboard_zmqz71.png)
+
+<li>PRODUCTS ADMIN</li>
+
+![index](https://res.cloudinary.com/rivaldev/image/upload/v1655828520/screen%20shot/products_admin_rdt3ic.png)
+
+<li>ADD PRODUCT</li>
+
+![index](https://res.cloudinary.com/rivaldev/image/upload/v1655829838/screen%20shot/addproduct_hqqvjd.png)
+
+<li>EDIT PRODUCT</li>
+
+![index](https://res.cloudinary.com/rivaldev/image/upload/v1655828470/screen%20shot/editproduct_kmpb1e.png)
+
+<li>ADD PROMO</li>
+
+![index](https://res.cloudinary.com/rivaldev/image/upload/v1655829837/screen%20shot/addpromo_jju4wy.png)
+
+## Related Project
