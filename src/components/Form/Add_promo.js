@@ -441,36 +441,6 @@ function Add_promo({ imgicon, load }) {
                         L
                       </section>
                     </div>
-                    <div className="col-2 text-center">
-                      <section
-                        onClick={() => smallHandler()}
-                        className={`bullet-size-form-right d-flex justify-content-center align-items-center ${
-                          sizeS === true ? "bullet-size-form-right-active" : ""
-                        }`}
-                      >
-                        Small
-                      </section>
-                    </div>
-                    <div className="col-2 text-center">
-                      <section
-                        onClick={() => regulerHandler()}
-                        className={`bullet-size-form-right d-flex justify-content-center align-items-center ${
-                          sizeR === true ? "bullet-size-form-right-active" : ""
-                        }`}
-                      >
-                        Reguler
-                      </section>
-                    </div>
-                    <div className="col-2 text-center">
-                      <section
-                        onClick={() => largeHandler()}
-                        className={`bullet-size-form-right d-flex justify-content-center align-items-center ${
-                          sizeL === true ? "bullet-size-form-right-active" : ""
-                        }`}
-                      >
-                        Large
-                      </section>
-                    </div>
                   </div>
                 </section>
 

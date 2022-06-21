@@ -65,7 +65,7 @@ function Dashboard() {
             // data.data.data.map((item) => {
             //   console.log(item.total);
             // });
-
+            console.log(data.data.data);
             if (data.data.data !== false) {
               const stemincome1 = {
                 height: `${(data.data.data.totalDay0.total / 1000000) * 100}%`,

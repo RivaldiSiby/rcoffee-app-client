@@ -83,12 +83,14 @@ function ProductDetails() {
   }, []);
 
   useEffect(() => {
-    const btn = document.getElementById("btn-min");
-    if (quantity <= 1) {
-      btn.classList.add("d-none");
-    }
-    if (quantity > 1) {
-      btn.classList.remove("d-none");
+    if (role !== "admin") {
+      const btn = document.getElementById("btn-min");
+      if (quantity <= 1) {
+        btn.classList.add("d-none");
+      }
+      if (quantity > 1) {
+        btn.classList.remove("d-none");
+      }
     }
   }, [quantity]);
 
@@ -445,39 +447,11 @@ function ProductDetails() {
                       </select>
                       <div className="row ">
                         {role === "admin" ? (
-                          <>
-                            <div className="col-md-4">
-                              <section className="input-number-quantity d-flex justify-content-between align-items-center">
-                                <h5 className="btn-plus-quantity"> + </h5>
-                                <h5 className="quantity-value fw-bold text-dark">
-                                  1
-                                </h5>
-                                <h5 id="btn-min" className="btn-min-quantity">
-                                  {" "}
-                                  -{" "}
-                                </h5>
-                              </section>
-                            </div>
-                            <div className="col-md-8">
-                              <label className="btn-product-detail-cart d-flex justify-content-center align-items-center">
-                                Add to Cart
-                              </label>
-                            </div>
-                          </>
+                          ""
                         ) : (
                           <>
                             <div className="col-md-4">
                               <section className="input-number-quantity d-flex justify-content-between align-items-center">
-                                <h5
-                                  onClick={() => setQuantity(quantity + 1)}
-                                  className="btn-plus-quantity"
-                                >
-                                  {" "}
-                                  +{" "}
-                                </h5>
-                                <h5 className="quantity-value fw-bold text-dark">
-                                  {quantity}
-                                </h5>
                                 <h5
                                   id="btn-min"
                                   onClick={() => setQuantity(quantity - 1)}
@@ -485,6 +459,16 @@ function ProductDetails() {
                                 >
                                   {" "}
                                   -{" "}
+                                </h5>
+                                <h5 className="quantity-value fw-bold text-dark">
+                                  {quantity}
+                                </h5>
+                                <h5
+                                  onClick={() => setQuantity(quantity + 1)}
+                                  className="btn-plus-quantity"
+                                >
+                                  {" "}
+                                  +{" "}
                                 </h5>
                               </section>
                             </div>
