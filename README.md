@@ -17,7 +17,7 @@
 
 2.  Clone git repository
 
-        $ git clone https://github.com/RivaldiSiby/Rcoffee-client.git
+        $ git clone https://github.com/RivaldiSiby/rcoffee-app-client
 
 3.  Open [VS Code](https://code.visualstudio.com/download)
 4.  Set .env
