@@ -102,4 +102,12 @@
 
 ![index](https://res.cloudinary.com/rivaldev/image/upload/v1655829837/screen%20shot/addpromo_jju4wy.png)
 
-## Related Project
+## RELATED PROJECT
+
+[Rcoffeestore-Rest-API](https://github.com/RivaldiSiby/Rcoffee-rest-API)
+
+## DEPLOYED PROJECT
+
+[Rcoffee-API](https://rcoffee-app.herokuapp.com/product)
+
+[Rcoffee-Store](https://rcofffee-store.netlify.app/)
