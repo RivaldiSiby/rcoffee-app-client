@@ -298,36 +298,19 @@
   width: 70px;
   height: 70px;
   border-radius: 50%;
-  background: #ffba33;
+  background: rgba(186, 186, 186, 0.35);
   font-family: "Poppins";
   font-style: normal;
   font-weight: 700;
   font-size: 30px;
   line-height: 45px;
   text-align: center;
-  color: #000000;
-  cursor: pointer;
-}
-.bullet-size-form-left-active {
-  border: #000000 2px solid;
-}
-.bullet-size-form-right {
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  background: rgba(186, 186, 186, 0.35);
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 700;
-  font-size: 15px;
-  line-height: 22px;
-  text-align: center;
   color: #4f5665;
   cursor: pointer;
 }
-
-.bullet-size-form-right-active {
-  border: #4f5665 2px solid;
+.bullet-size-form-left-active {
+  color: #000000;
+  background: #ffba33;
 }
 .delivery-select-form-box {
   margin-bottom: 88px;
@@ -346,12 +329,12 @@
   cursor: pointer;
 }
 .btn-delivery-style1 {
-  background-color: #ffba33;
-  color: #6a4029;
-}
-.btn-delivery-style2 {
   background: rgba(186, 186, 186, 0.35);
   color: #4f5665;
+}
+.btn-delivery-style2 {
+  background-color: #ffba33;
+  color: #6a4029;
 }
 .group-form-input-right-down > button {
   height: 98px;
