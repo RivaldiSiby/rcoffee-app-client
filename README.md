@@ -17,16 +17,20 @@
 
 2.  Clone git repository
 
-        $ git clone https://github.com/RivaldiSiby/Rcoffee-client.git
+        $ git clone https://github.com/RivaldiSiby/rcoffee-app-client
 
 3.  Open [VS Code](https://code.visualstudio.com/download)
-4.  Set .env
+4.  Install package
+
+        npm i bootstrap axios react-router-dom sweetalert2 react-redux
+
+5.  Set .env
 
         REACT_APP_HOST=https://rcoffee-app.herokuapp.com
         REACT_APP_STATUS=production
         <!-- development for local and production for publish -->
 
-5.  start react app
+6.  start react app
 
         $ npm start
 
