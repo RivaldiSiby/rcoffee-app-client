@@ -62,6 +62,7 @@ function Sign(props) {
       const result = await axios.post(`${process.env.REACT_APP_HOST}/auth`, {
         email: Email,
         password: Pass,
+        device: "web",
       });
       setMsg("");
       navigate("/", { state: { loginSuccess: true }, replace: true });
