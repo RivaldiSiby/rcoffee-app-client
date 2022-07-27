@@ -222,11 +222,7 @@ function Add_promo({ imgicon, load }) {
                     <section className="promo-preview-edit-head text-center">
                       <img
                         className="preview-promo-head "
-                        src={
-                          previewImg === null
-                            ? process.env.REACT_APP_HOST + promo.img
-                            : previewImg
-                        }
+                        src={previewImg === null ? promo.img : previewImg}
                         alt="img-promo"
                       />
                       <label
