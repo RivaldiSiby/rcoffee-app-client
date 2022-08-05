@@ -43,7 +43,7 @@ function Navbar(props) {
         <div className="container">
           <section className="navbar-brand d-flex align-items-center">
             <img className="logo-img-nav" src={logo} alt="iconcoffe" />
-            <p className="logo-text-nav">Coffee Shop</p>
+            <p className="logo-text-nav">Rcoffee Shop</p>
           </section>
           <button
             className="navbar-toggler"

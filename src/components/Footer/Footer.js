@@ -16,11 +16,11 @@ function Footer(props) {
         <section className="info-left">
           <section className="info-left-head">
             <img className="logo-img" src={logo} alt="iconcoffe" />
-            <p className="logo-text">Coffee Shop</p>
+            <p className="logo-text">Rcoffee Shop</p>
           </section>
           <section className="info-left-body">
             <p className="info-left-text">
-              Coffee Shop is a store that sells some good meals, and especially
+              Rcoffee Shop is a store that sells some good meals, and especially
               coffee. We provide high quality beans
             </p>
           </section>
